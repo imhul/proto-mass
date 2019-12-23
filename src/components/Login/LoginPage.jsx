@@ -19,7 +19,8 @@ const LoginForm = (props) => {
   const isHasCookies = props.cookies.HAS_DOCUMENT_COOKIE;
 
   users.map(unit => {
-    if (!isAuthenticated && isHasCookies && cookies.userId && cookies.userId === unit.id) {
+    // if (!isAuthenticated && isHasCookies && cookies.userId && cookies.userId === unit.id) {
+    if (!isAuthenticated) { // mock
 
       dispatch({ 
         type: 'SET_AUTH_LOGIN', 
