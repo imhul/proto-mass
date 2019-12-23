@@ -1,0 +1,104 @@
+@font-face {
+    font-family: 'NK221';
+    src: url('../fonts/subset-NK221.eot');
+    src: url('../fonts/subset-NK221.eot?#iefix') format('embedded-opentype'),
+        url('../fonts/subset-NK221.woff') format('woff'),
+        url('../fonts/subset-NK221.ttf') format('truetype'),
+        url('../fonts/subset-NK221.svg#NK221') format('svg');
+    font-weight: 500;
+    font-style: normal;
+}
+
+
+body {
+    background: url('../img/bg.jpg') no-repeat 50% 50%;
+    background-size: cover;
+    #root {
+        .Output {
+            background: $transparent;
+            main {
+                height: calc(100vh - 133px);
+                display: flex;
+                padding: 25px;
+                justify-content: center;
+                align-items: center;
+                .Login {
+                    background-color: #051C5F;
+                    border: 3px solid #33F6F9;
+                    .ant-card-body {
+                        color: #33F6F9;
+                        .ant-checkbox-wrapper {
+                            color: #33F6F9;
+                        }
+                        .ant-input-prefix {
+                            i {
+                                color: #33F6F9 !important;
+                            }
+                        }
+                        .ant-input {
+                            color: #33F6F9;
+                            border: 1px solid #33F6F9;
+                            background-color: #051C5F;
+                            &::-webkit-input-placeholder {
+                                color: #33F6F9;
+                            }
+                        } 
+                    }
+                }
+                section {
+                    &.ant-layout {
+                        background: $transparent;
+                        .hero {
+                            font-family: 'NK221';
+                            font-size: 10rem;
+                            text-align: center;
+                            color: #051C5F;
+                            text-shadow: 2px 2px 0px #F804FB;
+                            margin-bottom: 10px;
+                        }
+                        .hero-desc {
+                            font-family: 'NK221';
+                            font-size: 4rem;
+                            text-align: center;
+                        }
+                    }
+
+                }
+            }
+            header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                .ant-menu {
+                    text-transform: uppercase;
+                    .ant-menu-item {
+                        i {
+                            font-size: 20px;
+                        }
+                        span {
+                            font-size: 20px;
+                        }
+                    }
+                } 
+                .UserMenu {
+                    background-color: rgba(255,255,255,.15);
+                    height: 40px;
+                    min-width: 150px;
+                    display: flex;
+                    justify-content: space-around;
+                    align-items: center;
+                    color: white;
+                    border-radius: 4px;
+                    canvas {
+                        width: 30px !important;
+                        height: 30px !important;
+                        border-radius: 50%;
+                    }
+                }
+            }
+            footer {
+                background: $transparent;
+            }
+        }
+    }
+}

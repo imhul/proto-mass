@@ -1,0 +1,57 @@
+{
+  "name": "proto-mass",
+  "version": "0.1.0",
+  "private": true,
+  "keywords": ["Indirect Control", "Sandbox", "Game", "Pixijs", "React", "Redux"],
+  "author": { 
+    "name" : "Tkachuk Zakhar", 
+    "email" : "blashirk@gmail.com",
+    "url" : "http://weblogic.com.ua/"
+  },
+  "engines": {
+    "node": "^10"
+  },
+  "homepage": "https://github.com/imhul/proto-mass",
+  "description": "Indirect Control Sandbox Game",
+  "bugs": {
+    "url" : "https://github.com/imhul/proto-mass/issues", 
+    "email" : "blashirk@gmail.com"
+  },
+  "dependencies": {
+    "@inlet/react-pixi": "^1.1.11",
+    "antd": "^3.25.2",
+    "connected-react-router": "^6.6.0",
+    "history": "^4.10.1",
+    "lodash": "^4.17.15",
+    "node-sass": "^4.13.0",
+    "pixi.js": "^5.2.0",
+    "react": "^16.10.2",
+    "react-avatar-generator": "^1.0.3",
+    "react-cookie": "^4.0.1",
+    "react-dom": "^16.10.2",
+    "react-moment": "^0.9.6",
+    "react-redux": "^7.1.3",
+    "react-router": "^5.1.2",
+    "react-router-dom": "^5.1.2",
+    "react-scripts": "3.2.0",
+    "redux": "^4.0.4",
+    "redux-logger": "^3.0.6",
+    "uuid": "^3.3.3"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}
