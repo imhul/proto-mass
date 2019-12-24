@@ -1,3 +1,3 @@
-import Game from './Game';
+import Display from './Display';
 
-export default Game;
+export default Display;

@@ -4,11 +4,24 @@ import { initState } from './initState';
 export default function appReducer(state = initState, action) {
     switch (action.type) {
 
-        // Loading
-        case types.LOADING_GAME: {
+        case types.APP_INIT: {
             return {
                 ...state,
-                isLoad: true,
+                isAppInit: true,
+            }
+        }
+
+        case types.START_LOADING_APP: {
+            return {
+                ...state,
+                isAppLoad: true,
+            }
+        }
+
+        case types.LOADING_APP_COMPLETE: {
+            return {
+                ...state,
+                isAppLoad: false,
             }
         }
 

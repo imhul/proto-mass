@@ -6,6 +6,7 @@ export default function authReducer(state = initState, action) {
 
         case types.SET_AUTH_LOGIN: {
             return {
+                ...state,
                 isAuthenticated: true,
                 user: {
                     login: action.payload.login,
@@ -19,6 +20,7 @@ export default function authReducer(state = initState, action) {
 
         case types.SET_AVATAR: {
             return {
+                ...state,
                 user: {
                     avatar: action.payload,
                 },
@@ -27,6 +29,7 @@ export default function authReducer(state = initState, action) {
 
         case types.SET_AUTH_LOGOUT: {
             return {
+                ...state,
                 isAuthenticated: false,
                 user: {},
             }

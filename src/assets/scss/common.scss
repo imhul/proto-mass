@@ -95,6 +95,11 @@ body {
                         border-radius: 50%;
                     }
                 }
+                .game-menu-btn {
+                    font-size: 40px;
+                    color: #33F6F9;
+                    z-index: 999;
+                }
             }
             footer {
                 background: $transparent;

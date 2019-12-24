@@ -1,23 +1,14 @@
 import { types } from './types';
 
-export const getAcademies = () => ({
-    type: types.GET_ACADEMIES,
+export const initApp = () => ({
+    type: types.APP_INIT,
+});
+
+export const loadApp = () => ({
+    type: types.START_LOADING_APP,
+});
+
+export const endLoadApp = () => ({
+    type: types.LOADING_APP_COMPLETE,
 });
   
-export const clearAcademies = () => ({
-    type: types.CLEAR_ACADEMIES,
-});
-
-export const updateAcademies = (type, id) => ({
-    type: types.UPDATE_ACADEMIES,
-    payload: { type, id }
-});
-
-export const addAcademy = (title, type) => ({
-    type: types.ADD_ACADEMY,
-    payload: { title, type }
-});
-
-export const loading = () => ({
-    type: types.LOADING,
-});

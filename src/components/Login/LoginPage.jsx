@@ -35,6 +35,7 @@ const LoginForm = (props) => {
       setTimeout(() => {
         history.replace('./game');
       }, 1000);
+      return null
     }
   });
 
