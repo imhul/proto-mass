@@ -4,6 +4,7 @@ import authReducer from './auth/reducer';
 import appReducer from './app/reducer';
 import gameReducer from './game/reducer';
 import stageReducer from './stage/reducer';
+import mapReducer from './map/reducer';
 
 
 export default history => combineReducers({
@@ -12,6 +13,7 @@ export default history => combineReducers({
   appReducer,
   gameReducer,
   stageReducer,
+  mapReducer,
 });
 
   

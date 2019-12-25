@@ -13,15 +13,26 @@
 body {
     background: url('../img/bg.jpg') no-repeat 50% 50%;
     background-size: cover;
+    overflow: hidden;
     #root {
+        overflow: hidden;
         .Output {
             background: $transparent;
+            overflow: hidden;
             main {
                 height: calc(100vh - 133px);
                 display: flex;
                 padding: 25px;
                 justify-content: center;
                 align-items: center;
+                &.game-active {
+                    height: calc(100vh + 5px);
+                    position: absolute;
+                    overflow: hidden;
+                    top: 0;
+                    left: 0;
+                    padding: 0;
+                }
                 .Login {
                     background-color: #051C5F;
                     border: 3px solid #33F6F9;
@@ -103,6 +114,7 @@ body {
             }
             footer {
                 background: $transparent;
+                color: #33F6F9;
             }
         }
     }

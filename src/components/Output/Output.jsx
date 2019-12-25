@@ -1,4 +1,5 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import { ConnectedRouter } from 'connected-react-router';
 import { Route, Switch } from 'react-router';
 import { Redirect } from "react-router-dom";
@@ -17,12 +18,14 @@ const { Content } = Layout;
 
 const Output = ({ history }) => {
 
+    const { isInit } = useSelector(state => state.gameReducer);
+
     return (
         <ConnectedRouter history={history}>
             <Layout className="Output">
                 <MainHeader />
                     
-                <Content>
+                <Content className={isInit ? 'game-active' : '' }>
                     <Switch>
                         <Route exact path="/">
                             <HomePage />

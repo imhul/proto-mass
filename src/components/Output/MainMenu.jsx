@@ -2,7 +2,7 @@ import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from "react-router-dom";
 import { useCookies, withCookies } from 'react-cookie';
-import { Menu, Button, Icon } from 'antd';
+import { Menu, Icon } from 'antd';
 
 // Components
 import UserMenu from './UserMenu';
@@ -17,11 +17,17 @@ const MainMenu = () => {
     const [cookie, removeCookie] = useCookies(['userId']);
 
     const signout = () => {
-        if (isAuthenticated && cookie.userId) setTimeout(() => {
+        // if (isAuthenticated && cookie.userId) setTimeout(() => {
+        //     dispatch({ type: 'SET_AUTH_LOGOUT' });
+        //     removeCookie('userId');
+        //     history.push("/");
+        // }, 2000);
+
+        if (isAuthenticated && cookie.userId) {
             dispatch({ type: 'SET_AUTH_LOGOUT' });
             removeCookie('userId');
             history.push("/");
-        }, 2000);
+        }
     }
 
     const signin = () => {

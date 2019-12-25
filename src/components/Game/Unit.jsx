@@ -1,70 +1,104 @@
-import React, { useState } from 'react';
-import { 
-    Application,
-    withPixiApp, 
-    PixiComponent, 
-    ParticleContainer, 
-    Stage, 
-    Container, 
-    Sprite, 
-    Texture, 
-    particles,
-    Rectangle,
-    render,
-} from '@inlet/react-pixi';
+import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { withPixiApp, AnimatedSprite } from '@inlet/react-pixi';
+import { Texture } from 'pixi.js';
+
+// Graphic
+import botPart1 from '../../assets/img/animations/bot/frame_0_delay-0.2s.gif';
+import botPart2 from '../../assets/img/animations/bot/frame_1_delay-0.2s.gif';
+import botPart3 from '../../assets/img/animations/bot/frame_2_delay-0.2s.gif';
+import botPart4 from '../../assets/img/animations/bot/frame_3_delay-0.2s.gif';
 
 const GameUnit = () => {
 
-    const [rotation, rotate] = useState(0);
-    const [XPath, setXPath] = useState(400);
-    const [YPath, setYPath] = useState(300);
+    let botImages = [botPart1, botPart2, botPart3, botPart4];
+    let textures = [];
 
-    document.addEventListener('keyup', event => {
-        console.info("event", event.code);
+    for (let i=0; i < 4; i++)
+    {
+        let texture = new Texture.from(botImages[i]);
+        textures.push(texture);
+    };
+
+
+
+    const dispatch = useDispatch();
+    const { unitPosition } = useSelector(state => state.mapReducer);
+    console.info("Unit position: ", unitPosition);
+
+    const onKeyup = event => {
+        event.preventDefault();
+        event.stopPropagation();
+        // TODO: need to stop re-rendering!
         const amout = 10;
         switch (event.code) {
             case 'KeyW': 
                 console.info("up");
-                setYPath(YPath - amout); break;
+                dispatch({ 
+                    type: 'MAP_CLICK', 
+                    payload: { 
+                        x: unitPosition.x, 
+                        y: unitPosition.y - amout,
+                    } 
+                });
+                break;
             case 'KeyS':
                 console.info("down");
-                setYPath(YPath + amout); break;
+                dispatch({ 
+                    type: 'MAP_CLICK', 
+                    payload: { 
+                        x: unitPosition.x, 
+                        y: unitPosition.y + amout,
+                    } 
+                });
+                break;
             case 'KeyA':
                 console.info("left");
-                setYPath(XPath + amout); break;
+                dispatch({ 
+                    type: 'MAP_CLICK', 
+                    payload: { 
+                        x: unitPosition.x - amout, 
+                        y: unitPosition.y,
+                    } 
+                });
+                break;
             case 'KeyD':
                 console.info("right");
-                setYPath(XPath - amout); break;
+                dispatch({ 
+                    type: 'MAP_CLICK', 
+                    payload: { 
+                        x: unitPosition.x + amout, 
+                        y: unitPosition.y,
+                    } 
+                });
+                break;
             default:
                 break;
         }
-    });
+        document.removeEventListener('keyup', onKeyup);
+    }
 
-    const RotatingBunny = () => {
-        const onSprite = event => {            
-            if (event.data.pointerType === 'mouse') {
-                rotate(rotation + (Math.cos(38/1000) || 0) * 0.1);
-                // requestAnimationFrame()
-            } 
-        }
-        return (
-            <Sprite 
-                image="https://s3-us-west-2.amazonaws.com/s.cdpn.io/693612/IaUrttj.png"
-                x={XPath}
-                y={YPath}
-                scale={[2 + Math.abs(2 * rotation), 2 + Math.abs(2 * rotation)]}
-                rotation={rotation}
-                anchor={[0.5, 0.5]}
-                interactive={true}
-                buttonMode={true}
-                pointerdown={event => onSprite(event)}
-            />
-        )
-    };
+    document.addEventListener('keyup', onKeyup);
 
-    return ( <RotatingBunny /> ) 
-};
+    const onSprite = event => {            
+        console.log("onSprite click event: ", event);
+    }
+    
+    return ( 
+        <AnimatedSprite 
+            x={unitPosition.x} 
+            y={unitPosition.y}
+            textures={textures}
+            isPlaying={true}
+            initialFrame={0}
+            animationSpeed={0.1}
+            interactive={true}
+            buttonMode={true}
+            pointerdown={event => onSprite(event)}
+        />
+    );
+}
 
-const Unit = withPixiApp(GameUnit)
+const Unit = withPixiApp(GameUnit);
 
 export default Unit;

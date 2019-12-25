@@ -32,9 +32,10 @@ const LoginForm = (props) => {
           avatar: unit.avatar,
         } 
       });
-      setTimeout(() => {
-        history.replace('./game');
-      }, 1000);
+      history.replace('./game');
+      // setTimeout(() => {
+      //   history.replace('./game');
+      // }, 1000);
       return null
     }
   });
@@ -70,9 +71,11 @@ const LoginForm = (props) => {
             } 
           });
 
-          if (isAuthenticated) setTimeout(() =>
-            history.replace('./game'),
-          2000);
+          // if (isAuthenticated) setTimeout(() =>
+          //   history.replace('./game'),
+          // 2000);
+
+          if (isAuthenticated) history.replace('./game');
         }
       } else {
         console.warn('Received values error: ', err);
