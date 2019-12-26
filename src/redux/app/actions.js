@@ -11,4 +11,13 @@ export const loadApp = () => ({
 export const endLoadApp = () => ({
     type: types.LOADING_APP_COMPLETE,
 });
+
+export const getNotify = options => ({
+    type: types.SHOW_MESSAGE,
+    payload: options,
+});
   
+export const setArchiveMessage = options => ({
+    type: types.ARCHIVE_MESSAGE,
+    payload: options,
+});

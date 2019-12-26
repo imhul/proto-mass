@@ -3,6 +3,9 @@ import { useSelector } from 'react-redux';
 import { Route } from 'react-router';
 import { Redirect } from "react-router-dom";
 
+// Components
+import Notify from '../Output/Notify';
+
 function AuthContainer({ children, ...rest }) {
 
     const { isAuthenticated } = useSelector(state => state.authReducer);
@@ -10,13 +13,25 @@ function AuthContainer({ children, ...rest }) {
     return (
         <Route {...rest}
             render={({ location }) =>
+            // TODO: Check location for errors on SET_AUTH_LOGOUT
                 isAuthenticated ? (
                     children
-                ) : (
-                    <Redirect to={{
-                        pathname: "/login",
-                        state: { from: location }
-                    }} />
+                ) : ( 
+                    <>
+                        {
+                            Notify({
+                                type: "warn",
+                                message: "You are not logged in",
+                                description: "To play the game, you must first authenticate! Or you can just return to the home page;)",
+                                icon: "warning",
+                                duration: 1
+                            })
+                        }
+                        <Redirect to={{
+                            pathname: "/login",
+                            state: { from: location }
+                        }} />
+                    </>
                 )
             }
         />

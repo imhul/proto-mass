@@ -6,7 +6,6 @@ import uuidv5 from 'uuid/v5';
 import { useCookies, withCookies } from 'react-cookie';
 import users from './users';
 
-
 const LoginForm = (props) => {
 
   const history = useHistory();
@@ -17,29 +16,6 @@ const LoginForm = (props) => {
   const [newCookies, setCookie] = useCookies(['name']);
   const { cookies } = props.cookies;
   const isHasCookies = props.cookies.HAS_DOCUMENT_COOKIE;
-
-  users.map(unit => {
-    // if (!isAuthenticated && isHasCookies && cookies.userId && cookies.userId === unit.id) {
-    if (!isAuthenticated) { // mock
-
-      dispatch({ 
-        type: 'SET_AUTH_LOGIN', 
-        payload: { 
-        login: unit.username, 
-          pass: unit.password, 
-          remember: unit.remember,
-          id: unit.id,
-          avatar: unit.avatar,
-        } 
-      });
-      history.replace('./game');
-      // setTimeout(() => {
-      //   history.replace('./game');
-      // }, 1000);
-      return null
-    }
-  });
-
   const setUserIdCookie = (id) => {
     setCookie('userId', id, { path: '/' });
   }
@@ -49,6 +25,27 @@ const LoginForm = (props) => {
     props.form.validateFields((err, values) => {
       
       if (!err) {
+
+        // mock
+        users.map(user => {
+          // if (!isAuthenticated && isHasCookies && cookies.userId && cookies.userId === unit.id) {
+          if (!isAuthenticated) { // mock
+      
+            dispatch({ 
+              type: 'SET_AUTH_LOGIN', 
+              payload: { 
+              login: user.username, 
+                pass: user.password, 
+                remember: user.remember,
+                id: user.id,
+                avatar: user.avatar,
+              } 
+            });
+            history.replace('./game');
+            return null
+          }
+        });
+        // mock end
         
         if (values.username.length >= 4 && values.password.length >= 8) {
           let newId;
@@ -71,11 +68,9 @@ const LoginForm = (props) => {
             } 
           });
 
-          // if (isAuthenticated) setTimeout(() =>
-          //   history.replace('./game'),
-          // 2000);
-
-          if (isAuthenticated) history.replace('./game');
+          if (isAuthenticated) setTimeout(() =>
+            history.replace('./game'),
+          2000);
         }
       } else {
         console.warn('Received values error: ', err);
@@ -116,8 +111,6 @@ const LoginForm = (props) => {
                 <Button type="primary" htmlType="submit" className="login-form-button">
                     Log in
                 </Button>
-                
-                
           <div>
             <a className="login-form-forgot" href="/reset">
                 Forgot password?

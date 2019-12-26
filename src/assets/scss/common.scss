@@ -19,6 +19,9 @@ body {
         .Output {
             background: $transparent;
             overflow: hidden;
+            a {
+                color: #F804FB;
+            }
             main {
                 height: calc(100vh - 133px);
                 display: flex;
@@ -53,7 +56,10 @@ body {
                             &::-webkit-input-placeholder {
                                 color: #33F6F9;
                             }
-                        } 
+                        }
+                        .ant-form-explain {
+                            color: #F804FB;
+                        }
                     }
                 }
                 section {

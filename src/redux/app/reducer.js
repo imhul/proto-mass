@@ -25,6 +25,38 @@ export default function appReducer(state = initState, action) {
             }
         }
 
+        case types.SHOW_MESSAGE: {
+            return {
+                ...state,
+                notify: {
+                    key: action.payload.key,
+                    type: action.payload.type,
+                    message: action.payload.message,
+                    description: action.payload.description,
+                    icon: action.payload.icon ? action.payload.icon : null,
+                    duration: action.payload.duration ? action.payload.duration : 6,
+                    placement: action.payload.placement ? action.payload.placement : 'bottomLeft',
+                    onClose: action.payload.onClose ? action.payload.onClose : null,
+                },
+            }
+        }
+
+        case types.ARCHIVE_MESSAGE: {
+            return {
+                ...state,
+                notifyArchive: [...state.notifyArchive, {
+                    key: action.payload.key,
+                    type: action.payload.type,
+                    message: action.payload.message,
+                    description: action.payload.description,
+                    icon: action.payload.icon ? action.payload.icon : null,
+                    duration: action.payload.duration ? action.payload.duration : 6,
+                    placement: action.payload.placement ? action.payload.placement : 'bottomLeft',
+                    onClose: action.payload.onClose ? action.payload.onClose : null,
+                }],
+            }
+        }
+
         default:
             return state
     }

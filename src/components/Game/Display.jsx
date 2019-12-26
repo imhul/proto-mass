@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Provider, useStore, useSelector, useDispatch } from 'react-redux';
 import { withPixiApp, Stage, } from '@inlet/react-pixi';
 
@@ -9,6 +9,10 @@ import Fullscreen from 'react-full-screen';
 // Components
 import GameMap from './GameMap';
 import Unit from './Unit';
+import Preloader from './Preloader';
+
+// Sounds
+import intro from '../../assets/ogg/thump.ogg';
 
 const DisplayGame = () => {
 
@@ -19,32 +23,58 @@ const DisplayGame = () => {
     const { unitPosition } = useSelector(state => state.mapReducer);
     const { isFullscreen } = useSelector(state => state.stageReducer);
 
+    const introSound = new Audio(intro);
+
+    const play = introSound.addEventListener('loadeddata', () => {
+        if(introSound.paused && !introSound.playing && !introSound.progress) {
+            introSound.play();
+            introSound.removeEventListener('loadeddata', play);
+        }
+        
+    });
+    introSound.addEventListener('ended', () => {
+        console.info("ended: ", introSound.ended);
+        if (!isInit) {
+            dispatch({ type: 'INIT_GAME' });
+        }
+    });
+
+    const [perent, percentUpdate] = useState(0);
+
+    const interval = introSound.addEventListener('timeupdate', () => {
+        const timerId = setInterval(() => {
+            percentUpdate(introSound.currentTime);
+            introSound.removeEventListener('timeupdate', interval);
+        }, 1000 );
+        clearInterval(timerId)
+    });
+    
     return  (
-         <WindowSizeListener
-            onResize={output => dispatch({ type: 'RESIZE', payload: output })}
-        >
-            {/* TODO: Fullscreen !!!  */}
-            <Fullscreen 
-                enabled={isFullscreen} 
-                onChange={isFull => dispatch({ type: 'FULLSCREEN' })}
-            >
-                <Stage 
-                    className="Game"    
-                    width={size.width} 
-                    height={size.height} 
-                    onMount={() => {
-                        if (!isInit) {
-                            dispatch({ type: 'INIT_GAME' });
-                        }
-                    }}
+        <>
+            { !isInit ? <Preloader percent={perent} /> : 
+                <WindowSizeListener
+                    onResize={output => dispatch({ type: 'RESIZE', payload: output })}
                 >
-                    <Provider store={ store }>
-                        <GameMap />
-                        <Unit />
-                    </Provider>
-                </Stage>
-            </Fullscreen>
-        </WindowSizeListener>
+                    {/* TODO: Fullscreen !!!  */}
+                    <Fullscreen 
+                        enabled={isFullscreen} 
+                        onChange={isFull => dispatch({ type: 'FULLSCREEN' })}
+                    >
+                        <Stage 
+                            className="Game"    
+                            width={size.width} 
+                            height={size.height} 
+                            onMount={() => console.info("GAME IS MOUNTED!")}
+                        >
+                            <Provider store={ store }>
+                                <GameMap />
+                                <Unit />
+                            </Provider>
+                        </Stage>
+                    </Fullscreen>
+                </WindowSizeListener>
+            }
+        </>
     )
 };
 

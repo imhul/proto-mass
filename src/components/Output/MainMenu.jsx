@@ -17,17 +17,17 @@ const MainMenu = () => {
     const [cookie, removeCookie] = useCookies(['userId']);
 
     const signout = () => {
-        // if (isAuthenticated && cookie.userId) setTimeout(() => {
-        //     dispatch({ type: 'SET_AUTH_LOGOUT' });
-        //     removeCookie('userId');
-        //     history.push("/");
-        // }, 2000);
-
-        if (isAuthenticated && cookie.userId) {
+        if (isAuthenticated && cookie.userId) setTimeout(() => {
             dispatch({ type: 'SET_AUTH_LOGOUT' });
             removeCookie('userId');
             history.push("/");
-        }
+        }, 2000);
+
+        // if (isAuthenticated && cookie.userId) {
+        //     dispatch({ type: 'SET_AUTH_LOGOUT' });
+        //     removeCookie('userId');
+        //     history.push("/");
+        // }
     }
 
     const signin = () => {
