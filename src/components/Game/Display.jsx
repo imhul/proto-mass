@@ -1,18 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Provider, useStore, useSelector, useDispatch } from 'react-redux';
 import { withPixiApp, Stage, } from '@inlet/react-pixi';
 
-// screen size utils
+// Utils
 import WindowSizeListener from 'react-window-size-listener';
 import Fullscreen from 'react-full-screen';
+import Animation from './Animation';
 
 // Components
 import GameMap from './GameMap';
 import Unit from './Unit';
 import Preloader from './Preloader';
-
-// Sounds
-import intro from '../../assets/ogg/thump.ogg';
+import SoundPlayer from './SoundPlayer';
 
 const DisplayGame = () => {
 
@@ -23,35 +22,39 @@ const DisplayGame = () => {
     const { unitPosition } = useSelector(state => state.mapReducer);
     const { isFullscreen } = useSelector(state => state.stageReducer);
 
-    const introSound = new Audio(intro);
-
-    const play = introSound.addEventListener('loadeddata', () => {
-        if(introSound.paused && !introSound.playing && !introSound.progress) {
-            introSound.play();
-            introSound.removeEventListener('loadeddata', play);
-        }
+    const Loader = () => {
+        const [percent, percentUpdate] = useState(0);
+        console.info("percent: ", percent);
+        if (percent < 100 && !isInit) {
+            Animation(deltaTime => {
+                // Pass on a function to the setter of the state
+                // to make sure we always have the latest state
+                // 
+                percentUpdate(prevCount => (prevCount + deltaTime * 0.01) % 100);
+            });
+        } else {
+            percentUpdate(101);
+            dispatch({ type: 'INIT_GAME' })
+        } 
+            
         
-    });
-    introSound.addEventListener('ended', () => {
-        console.info("ended: ", introSound.ended);
-        if (!isInit) {
-            dispatch({ type: 'INIT_GAME' });
-        }
-    });
+        
+        return <Preloader percent={Math.round(percent)} />;
+    }
 
-    const [perent, percentUpdate] = useState(0);
+    // const interval = introSound.addEventListener('timeupdate', () => {
+    //     const timerId = setInterval(() => {
+    //         percentUpdate(introSound.currentTime);
+    //         introSound.removeEventListener('timeupdate', interval);
+    //     }, 1000 );
+    //     clearInterval(timerId)
+    // });
 
-    const interval = introSound.addEventListener('timeupdate', () => {
-        const timerId = setInterval(() => {
-            percentUpdate(introSound.currentTime);
-            introSound.removeEventListener('timeupdate', interval);
-        }, 1000 );
-        clearInterval(timerId)
-    });
+    // <SoundPlayer audioType="intro" />
     
     return  (
         <>
-            { !isInit ? <Preloader percent={perent} /> : 
+            { !isInit ? <><Loader /></> : 
                 <WindowSizeListener
                     onResize={output => dispatch({ type: 'RESIZE', payload: output })}
                 >
