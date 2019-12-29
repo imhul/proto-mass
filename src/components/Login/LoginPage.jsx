@@ -6,6 +6,8 @@ import uuidv5 from 'uuid/v5';
 import { useCookies, withCookies } from 'react-cookie';
 import users from './users';
 
+const FormItem = Form.Item;
+
 const LoginForm = (props) => {
 
   const history = useHistory();
@@ -80,9 +82,9 @@ const LoginForm = (props) => {
   
   return (
     <Card className="Login">
-      <p>Hello!</p>
+      <p className="hello">Hello, voyager!</p>
       <Form onSubmit={(form) => onSubmit(form)} className="login-form">
-        <Form.Item>
+        <FormItem>
           {getFieldDecorator('username', {
             rules: [{ required: true, message: 'Please input your username!' }],
           })(
@@ -91,8 +93,8 @@ const LoginForm = (props) => {
               placeholder="Username"
             />,
           )}
-        </Form.Item>
-        <Form.Item>
+        </FormItem>
+        <FormItem>
           {getFieldDecorator('password', {
             rules: [{ required: true, message: 'Please input your Password!' }],
           })(
@@ -102,23 +104,23 @@ const LoginForm = (props) => {
               placeholder="Password"
             />,
           )}
-        </Form.Item>
-        <Form.Item>
+        </FormItem>
+        <FormItem className="flex-item">
            {getFieldDecorator('remember', {
                     valuePropName: 'checked',
                     initialValue: true,
                 })(<Checkbox>Remember me</Checkbox>)}
                 <Button type="primary" htmlType="submit" className="login-form-button">
-                    Log in
+                    Login
                 </Button>
-          <div>
+        </FormItem>
+        <FormItem>
             <a className="login-form-forgot" href="/reset">
                 Forgot password?
             </a>
             <br />
             <a href="/register">Register now!</a>
-          </div>
-        </Form.Item>
+        </FormItem>
       </Form>
     </Card>
   );

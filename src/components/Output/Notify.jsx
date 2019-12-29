@@ -1,5 +1,5 @@
 import React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+// import { useSelector, useDispatch } from 'react-redux';
 import { notification, Icon } from 'antd';
 import uuidv5 from 'uuid/v5';
 
@@ -37,7 +37,7 @@ const Notify = (notify) => {
             // return notify.onClose();
         // },
     });
-    return null;
+    return <></>;
 };
 
 export default Notify;

@@ -1,17 +1,19 @@
 import React from 'react';
 import { Progress } from 'antd';
 
-const Preloader = (props) => {
-    if (props.percent < 100) {
-        return <Progress
-            strokeColor={{
-                from: '#108ee9',
-                to: '#87d068',
-            }}
-            percent={props.percent}
-            status={props.percent < 100 ? 'active' : 'success' }
-        />
-    } else return null;
-}
+const Preloader = (props) => (
+    <Progress
+        className="Preloader"
+        strokeColor={{
+            from: '#1D175F',
+            to: '#8615B4',
+        }}
+        strokeWidth={30}
+        strokeLinecap="square"
+        percent={props.percent}
+        status="active"
+    />
+);
+
 
 export default Preloader;

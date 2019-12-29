@@ -1,0 +1,32 @@
+.ant-drawer {
+    .ant-drawer-content {
+        background-color: #051C5F;
+        box-shadow: -2px 0 0 #F804FB;
+        border: 3px solid #33F6F9;
+        .ant-drawer-header {
+            color: #33F6F9;
+            background: #051C5F;
+            border-bottom: 3px solid #33F6F9;
+            border-radius: 0;
+            text-align: center;
+            font-size: 60px;
+            padding: 0;
+            height: 100px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 10px;
+            .ant-drawer-title {
+                color: #33F6F9;
+                font-family: 'NK221';
+                font-size: 70px;
+            }
+        }
+        .ant-drawer-body {
+            color: #33F6F9;
+            i {
+                font-size: 30px;
+            }
+        }
+    }
+}

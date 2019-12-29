@@ -1,0 +1,33 @@
+main {
+    height: calc(100vh - 133px);
+    display: flex;
+    padding: 25px;
+    justify-content: center;
+    align-items: center;
+    &.game-active {
+        height: calc(100vh + 5px);
+        position: absolute;
+        overflow: hidden;
+        top: 0;
+        left: 0;
+        padding: 0;
+    }
+    section {
+        &.ant-layout {
+            background: $transparent;
+            .hero {
+                font-family: 'NK221';
+                font-size: 10rem;
+                text-align: center;
+                color: #051C5F;
+                text-shadow: 2px 2px 0px #F804FB;
+                margin-bottom: 10px;
+            }
+            .hero-desc {
+                font-family: 'NK221';
+                font-size: 4rem;
+                text-align: center;
+            }
+        }
+    }
+}

@@ -1,0 +1,83 @@
+.Output {
+    header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        .ant-menu {
+            text-transform: uppercase;
+            .ant-menu-item {
+                color: #33F6F9;
+                text-shadow: 1px 1px 0px #F804FB;
+                &.ant-menu-item-selected {
+                    background-color: #33F6F9;
+                }
+                i {
+                    font-size: 36px;
+                    font-family: "PixelIconsCompilation";
+                    vertical-align: middle;
+                }
+                span {
+                    font-size: 22px;
+                    font-family: "PressStart2P-Regular";
+                    vertical-align: middle;
+                }
+            }
+        } 
+        .UserMenu {
+            background-color: #051C5F;
+            box-shadow: 1px 1px 0 #F804FB;
+            border: 1px solid #33F6F9;
+            height: 40px;
+            min-width: 150px;
+            color: #33F6F9;
+            span {
+                display: flex;
+                justify-content: space-around;
+                align-items: center;
+                height: 100%;
+                canvas {
+                    width: 30px !important;
+                    height: 30px !important;
+                    border-radius: 50%;
+                }
+            }
+        }
+        .game-menu-btn {
+            font-size: 50px;
+            font-family: "PixelIconsCompilation";
+            vertical-align: middle;
+            width: 64px;
+            z-index: 999;
+            color: #33F6F9;
+        }
+    }
+}
+
+.ant-popover {
+    .ant-popover-arrow {
+        border-top-color: #33F6F9 !important;
+        border-left-color: #33F6F9 !important;
+    }
+    .ant-popover-inner {
+        border-radius: 0;
+        background-color: #051C5F;
+        box-shadow: 1px 1px 0 #F804FB;
+        border: 3px solid #33F6F9;
+        .ant-popover-title {
+            color: #33F6F9;
+            border-bottom: 3px solid #33F6F9;
+        }
+        .ant-popover-inner-content {
+            button {
+                display: block;
+                width: 100%;
+                border-radius: 0;
+                background-color: #051C5F;
+                box-shadow: 1px 1px 0 #F804FB;
+                border: 1px solid #33F6F9;
+                color: #F804FB;
+                text-transform: uppercase;
+            }
+        }
+    }
+}

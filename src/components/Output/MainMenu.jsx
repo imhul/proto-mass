@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import { useCookies, withCookies } from 'react-cookie';
-import { Menu, Icon } from 'antd';
+import { Menu, Drawer, Icon } from 'antd';
 
 // Components
 import UserMenu from './UserMenu';
@@ -11,10 +11,12 @@ const MainMenu = () => {
 
     const history = useHistory();
     const dispatch = useDispatch();
+    const location = useLocation();
     const { isAuthenticated } = useSelector(state => state.authReducer);
     const { isInit } = useSelector(state => state.gameReducer);
     const { isFullscreen } = useSelector(state => state.stageReducer);
     const [cookie, removeCookie] = useCookies(['userId']);
+    const [isDrawerOpen, onDrawer] = useState(false);
 
     const signout = () => {
         if (isAuthenticated && cookie.userId) setTimeout(() => {
@@ -28,10 +30,6 @@ const MainMenu = () => {
         //     removeCookie('userId');
         //     history.push("/");
         // }
-    }
-
-    const signin = () => {
-        history.push('/login');
     }
 
     const onWebMenuClick = e => {
@@ -52,32 +50,39 @@ const MainMenu = () => {
                 <>
                     <Menu onClick={onWebMenuClick} mode="horizontal" theme="dark">
                         <Menu.Item key="/">
-                            <Icon type="home" />
+                            <i className="anticon">4</i>
                             <span>Home</span>
                         </Menu.Item>
                         <Menu.Item key="game">
-                            <Icon type="play-circle" />
+                            <i className="anticon">7</i>
                             <span>Game</span>
                         </Menu.Item>
-                        <Menu.Item 
-                            key='login'
-                            onClick={ isAuthenticated ? signout : signin }
-                        >
-                            { isAuthenticated ? <Icon type="logout" /> : <Icon type="login" /> }
-                            { isAuthenticated ? <span>logout</span> : <span>login</span> }
-                        </Menu.Item>
                     </Menu>
-                    <UserMenu /> 
+                    { location.pathname !== '/login' && !isAuthenticated ? <UserMenu /> : null} 
                 </> : <>
-                    <Icon 
-                        className="game-menu-btn"
-                        type="plus-square" 
-                        onClick={() => gameMenuToggle()} />
-                    <Icon 
-                        className="game-menu-btn"
-                        type={ isFullscreen ? "fullscreen-exit" : "fullscreen" }
-                        onClick={() => dispatch({ type: 'FULLSCREEN' })} 
-                    />
+                    <i className="anticon game-menu-btn" onClick={() => onDrawer(true)}>j</i>
+                    <Drawer
+                        title="MENU"
+                        placement="right"
+                        closable={false}
+                        onClose={() => onDrawer(false)}
+                        visible={isDrawerOpen}
+                        >
+                        <Icon 
+                            className="game-menu-btn"
+                            type="plus-square" 
+                            onClick={() => gameMenuToggle()}
+                        />
+                        <br />
+                        <Icon 
+                            className="game-menu-btn"
+                            type={ isFullscreen ? "fullscreen-exit" : "fullscreen" }
+                            onClick={() => dispatch({ type: 'FULLSCREEN' })} 
+                        />
+                        <p>Some contents...</p>
+                        <p>Some contents...</p>
+                        <p>Some contents...</p>
+                    </Drawer>
                 </>
             }
         </>

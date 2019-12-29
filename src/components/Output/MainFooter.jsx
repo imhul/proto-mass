@@ -1,12 +1,15 @@
 import React from 'react';
 import { Layout } from 'antd';
+import techLogo from '../../assets/img/react-pixijs-logo.png';
+import * as PIXI from 'pixi.js';
 
 const { Footer } = Layout;
 
 const MainFooter = () => {
     return (
         <Footer>
-            copyright + footer menu
+            <span>Developed by <a href="http://weblogic.com.ua/" title="Tkachuk Zakhar portfolio">Tkachuk Zakhar ©</a></span>
+            <span><img width="100" src={techLogo} alt="react & pixijs logo" /></span>
         </Footer>
     );
 }

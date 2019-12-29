@@ -26,14 +26,14 @@ const SoundPlayer = props => {
         return () => {
             audio.removeEventListener('loadeddata', audioLoaded);
         }
-      }, []);
+      }, [audioLoaded]);
 
     useEffect(() => {
         audio.addEventListener('ended', audioEnd);
         return () => {
             audio.removeEventListener('loadeddata', audioEnd);
         }
-    }, []);
+    }, [audioEnd]);
 
     return null;
 }

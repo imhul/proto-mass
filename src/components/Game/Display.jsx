@@ -24,31 +24,17 @@ const DisplayGame = () => {
 
     const Loader = () => {
         const [percent, percentUpdate] = useState(0);
-        console.info("percent: ", percent);
         if (percent < 100 && !isInit) {
             Animation(deltaTime => {
-                // Pass on a function to the setter of the state
-                // to make sure we always have the latest state
-                // 
-                percentUpdate(prevCount => (prevCount + deltaTime * 0.01) % 100);
+                percentUpdate(prevCount => prevCount + deltaTime * 0.01);
             });
         } else {
-            percentUpdate(101);
+            percentUpdate(0);
             dispatch({ type: 'INIT_GAME' })
-        } 
-            
-        
+        }
         
         return <Preloader percent={Math.round(percent)} />;
     }
-
-    // const interval = introSound.addEventListener('timeupdate', () => {
-    //     const timerId = setInterval(() => {
-    //         percentUpdate(introSound.currentTime);
-    //         introSound.removeEventListener('timeupdate', interval);
-    //     }, 1000 );
-    //     clearInterval(timerId)
-    // });
 
     // <SoundPlayer audioType="intro" />
     
