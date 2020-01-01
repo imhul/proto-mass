@@ -5,7 +5,92 @@ export const initState = {
     isPaused: false,
     isGameover: false,
     isWin: false,
-    save: {},
+    settings: {
+        volume: 50,
+    },
+    isGameMenuOpen: false,
+    colonyName: "",
+    save: {
+        player: {
+            id: "",
+            name: "",
+            status: "",
+            stats: {
+                level: 0,
+                skills: [
+                    {
+                        id: "",
+                        name: "",
+                        status: "",
+                        level: "",
+                        pointsToNewLevel: 0,
+                        bonus: {},
+                    },
+                ],
+                health: 0,
+                damage: 0,
+                healthPoints: 0,
+                pointsToNewLevel: 0,
+            },
+            position: {
+                x: 0,
+                y: 0,
+            },
+            technologies: [
+                {
+                    id: "",
+                    status: "",
+                    progress: "",
+                },
+            ],
+            itemsStorage: [],
+            items: [
+                {
+                    id: "",
+                    name: "",
+                    type: "",
+                    stats: {},
+                },
+            ],
+        },
+        colony: {
+            id: "",
+            name: "",
+            constructions: [],
+        },
+        world: {
+            constructions: [
+                {
+                    id: "",
+                    path: [],
+                },
+            ],
+            enemies: {
+                units: [
+                    {
+                        id: "",
+                        stats: {
+                            health: 0,
+                            damage: 0,
+                            healthPoints: 0,
+                        },
+                        status: "",
+                        type: "",
+                        position: {
+                            x: 0,
+                            y: 0,
+                        },
+                    },
+                ],
+                constructions: [
+                    {
+                        id: "",
+                        path: [],
+                    },
+                ],
+            },
+        },
+    },
     game: {},
     error: {},
 };

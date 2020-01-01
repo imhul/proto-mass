@@ -1,23 +1,41 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from "react-router-dom";
-import Avatar from './Avatar';
+import { useCookies, withCookies } from 'react-cookie';
 import { Popover, Button } from 'antd';
+
+// Components
+import Avatar from './Avatar';
 
 const UserMenu = () => {
 
+    const history = useHistory();
+    const dispatch = useDispatch();
+    const text = () => <span>Hello, voyager!</span>;
+    const [cookie, removeCookie] = useCookies(['userId']);
     const { isAuthenticated, user } = useSelector(state => state.authReducer);
 
     const LoginPopup = () => {
-        const history = useHistory();
         return <Button onClick={() => history.push('/login')}>Login</Button>;
     }
-    
-    const text = () => <span>Hello, voyager!</span>;
+
+    const LogoutPopup = () => {
+        return (
+            <Button onClick={() => {
+                if (isAuthenticated && cookie.userId) {
+                    dispatch({ type: 'SET_AUTH_LOGOUT' });
+                    removeCookie('userId');
+                    history.push("/");
+                }
+            }}>
+                Logout
+            </Button>
+        );
+    }
 
     return (
         <div className="UserMenu">
-            <Popover placement="bottomRight" title={text()} content={LoginPopup()} trigger="click">
+            <Popover placement="bottomRight" title={text()} content={isAuthenticated ? LogoutPopup() : LoginPopup()} trigger="click">
                 <span>
                     { isAuthenticated ? `${ user.login }` : "Wellcome!" }
                 </span>
@@ -27,4 +45,4 @@ const UserMenu = () => {
     );
 }
 
-export default UserMenu;
+export default withCookies(UserMenu);

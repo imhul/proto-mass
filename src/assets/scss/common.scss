@@ -8,30 +8,33 @@ body {
         .Output {
             background: $transparent;
             overflow: hidden;
-            a {
-                color: #F804FB;
-            }
-            button {
-                border-radius: 0;
-            }
-            input {
-                border-radius: 0;
-                &:-internal-autofill-selected {
-                    background-color: #051C5F !important;
-                }
-            }
-            div {
-                border-radius: 0;
-            }
-            .ant-input {
-                background-color: #051C5F;
-            }
-            .space-between {
-                justify-content: space-between;
-            }
-            .flex {
-                display: flex;
-            }
         }
+    }
+    a {
+        color: #F804FB;
+    }
+    button {
+        border-radius: 0;
+    }
+    input {
+        border-radius: 0;
+        &:-internal-autofill-selected {
+            background-color: #051C5F !important;
+        }
+    }
+    div {
+        border-radius: 0;
+    }
+    .ant-input {
+        background-color: #051C5F;
+    }
+    .space-between {
+        justify-content: space-between;
+    }
+    .flex {
+        display: flex;
+    }
+    .touchable {
+        cursor: pointer;
     }
 }

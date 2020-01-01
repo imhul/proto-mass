@@ -18,8 +18,8 @@ const Notify = (notify) => {
     }
 
     notification.open({
-        message: notify.message,
-        description: notify.description,
+        message: notify.message ? notify.message : '',
+        description: notify.description ? notify.description : '',
         key: notifyId,
         icon: <Icon 
             type={notify.icon} 
@@ -34,10 +34,9 @@ const Notify = (notify) => {
             //     type: 'ARCHIVE_MESSAGE',
             //     payload: notify,
             // }),
-            // return notify.onClose();
         // },
     });
-    return <></>;
+    return null;
 };
 
 export default Notify;

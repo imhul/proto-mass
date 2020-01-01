@@ -1,41 +1,37 @@
-import React, { useState, useEffect, useCallback } from 'react';
-
-// Sounds
-import audio from '../../assets/ogg/thump.ogg';
+import React, { createRef, useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import Sound from 'react-sound';
+import { soundManager } from 'soundmanager2';
 
 const SoundPlayer = props => {
 
-    // const audio = () => {
-    //     switch(props.audioType) {
-    //         case "intro": return intro;
-    //         default: return null;
-    //     }
-    // }
+    const { settings } = useSelector(state => state.gameReducer);
+    const url = props.src ? props.src : props;
 
-    const audioLoaded = useCallback(event => {
-        if(audio.paused && !audio.playing && !audio.progress) {
-            audio.play();
+    const onSongLoaded = event => {
+        console.info("onSongLoaded", event.loaded);
+    }
+
+    const onFinishedPlaying = () => {
+        console.info("onFinishedPlaying");
+    }
+
+    useEffect(() => { 
+        console.info("SoundPlayer useEffect...");
+        return () => {
+            soundManager.stop(url);
         }
     }, []);
-    const audioEnd = useCallback(event => {
-        console.info("ended: ", audio.ended);
-    }, []);
 
-    useEffect(() => {
-        audio.addEventListener('loadeddata', audioLoaded);
-        return () => {
-            audio.removeEventListener('loadeddata', audioLoaded);
-        }
-      }, [audioLoaded]);
-
-    useEffect(() => {
-        audio.addEventListener('ended', audioEnd);
-        return () => {
-            audio.removeEventListener('loadeddata', audioEnd);
-        }
-    }, [audioEnd]);
-
-    return null;
+    return (
+        <Sound
+            url={url}
+            playStatus={Sound.status.PLAYING}
+            onLoad={onSongLoaded}
+            onFinishedPlaying={onFinishedPlaying}
+            volume={settings.volume}
+        />
+    );
 }
 
 export default SoundPlayer;

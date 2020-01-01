@@ -15,8 +15,8 @@ const LoginForm = (props) => {
   const dispatch = useDispatch();
   const { getFieldDecorator } = props.form;
   const { isAuthenticated, user } = useSelector(state => state.authReducer);
-  const [newCookies, setCookie] = useCookies(['name']);
-  const { cookies } = props.cookies;
+  const [cookies, setCookie, removeCookie] = useCookies(['userId']);
+  const { cookiesFromProps } = props.cookies;
   const isHasCookies = props.cookies.HAS_DOCUMENT_COOKIE;
   const setUserIdCookie = (id) => {
     setCookie('userId', id, { path: '/' });
@@ -32,6 +32,8 @@ const LoginForm = (props) => {
         users.map(user => {
           // if (!isAuthenticated && isHasCookies && cookies.userId && cookies.userId === unit.id) {
           if (!isAuthenticated) { // mock
+
+            setUserIdCookie(user.id);
       
             dispatch({ 
               type: 'SET_AUTH_LOGIN', 
@@ -49,31 +51,31 @@ const LoginForm = (props) => {
         });
         // mock end
         
-        if (values.username.length >= 4 && values.password.length >= 8) {
-          let newId;
-          if (!user.id && isHasCookies && !cookies.userId) {
-            const arr = new Array(16);
-            newId = uuidv5(values.username, arr); 
-            setUserIdCookie(newId);         
-          } else if (isHasCookies && cookies.userId) {
-            newId = cookies.userId;
-          }
+        // if (values.username.length >= 4 && values.password.length >= 8) {
+        //   let newId;
+        //   if (!user.id && isHasCookies && !cookiesFromProps.userId) {
+        //     const arr = new Array(16);
+        //     newId = uuidv5(values.username, arr); 
+        //     setUserIdCookie(newId);         
+        //   } else if (isHasCookies && cookiesFromProps.userId) {
+        //     newId = cookiesFromProps.userId;
+        //   }
 
-          dispatch({ 
-            type: 'SET_AUTH_LOGIN', 
-            payload: { 
-            login: values.username, 
-              pass: values.password, 
-              remember: values.remember,
-              id: newId,
-              avatar: user.avatar,
-            } 
-          });
+        //   dispatch({ 
+        //     type: 'SET_AUTH_LOGIN', 
+        //     payload: { 
+        //     login: values.username, 
+        //       pass: values.password, 
+        //       remember: values.remember,
+        //       id: newId,
+        //       avatar: user.avatar,
+        //     } 
+        //   });
 
-          if (isAuthenticated) setTimeout(() =>
-            history.replace('./game'),
-          2000);
-        }
+        //   if (isAuthenticated) setTimeout(() =>
+        //     history.replace('./game'),
+        //   2000);
+        // }
       } else {
         console.warn('Received values error: ', err);
       }
@@ -86,9 +88,9 @@ const LoginForm = (props) => {
       <Form onSubmit={(form) => onSubmit(form)} className="login-form">
         <FormItem>
           {getFieldDecorator('username', {
-            rules: [{ required: true, message: 'Please input your username!' }],
+            rules: [{ required: false, message: 'Please input your username!' }], // required: true
           })(
-            <Input
+            <Input autoComplete="off"
               prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
               placeholder="Username"
             />,
@@ -96,7 +98,7 @@ const LoginForm = (props) => {
         </FormItem>
         <FormItem>
           {getFieldDecorator('password', {
-            rules: [{ required: true, message: 'Please input your Password!' }],
+            rules: [{ required: false, message: 'Please input your Password!' }], // required: true
           })(
             <Input
               prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}

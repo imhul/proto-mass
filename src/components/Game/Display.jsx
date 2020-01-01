@@ -13,41 +13,41 @@ import Unit from './Unit';
 import Preloader from './Preloader';
 import SoundPlayer from './SoundPlayer';
 
+// Sounds
+import intro from '../../assets/sound/thump.ogg';
+
 const DisplayGame = () => {
 
     const store = useStore();
     const dispatch = useDispatch();
     const { size } = useSelector(state => state.stageReducer);
     const { isInit } = useSelector(state => state.gameReducer);
-    const { unitPosition } = useSelector(state => state.mapReducer);
     const { isFullscreen } = useSelector(state => state.stageReducer);
 
     const Loader = () => {
         const [percent, percentUpdate] = useState(0);
         if (percent < 100 && !isInit) {
             Animation(deltaTime => {
-                percentUpdate(prevCount => prevCount + deltaTime * 0.01);
+                percentUpdate(prevCount => prevCount + deltaTime * 0.1);
             });
         } else {
-            percentUpdate(0);
+            Animation(null);
             dispatch({ type: 'INIT_GAME' })
         }
         
         return <Preloader percent={Math.round(percent)} />;
     }
-
-    // <SoundPlayer audioType="intro" />
     
     return  (
         <>
-            { !isInit ? <><Loader /></> : 
+            { !isInit ? <><Loader /><SoundPlayer src={intro} /></> : 
                 <WindowSizeListener
                     onResize={output => dispatch({ type: 'RESIZE', payload: output })}
                 >
                     {/* TODO: Fullscreen !!!  */}
                     <Fullscreen 
                         enabled={isFullscreen} 
-                        onChange={isFull => dispatch({ type: 'FULLSCREEN' })}
+                        onChange={() => dispatch({ type: 'FULLSCREEN' })}
                     >
                         <Stage 
                             className="Game"    

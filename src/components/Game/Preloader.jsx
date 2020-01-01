@@ -1,7 +1,7 @@
 import React from 'react';
 import { Progress } from 'antd';
 
-const Preloader = (props) => (
+const Preloader = props => (
     <Progress
         className="Preloader"
         strokeColor={{

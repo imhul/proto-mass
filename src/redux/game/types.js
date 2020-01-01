@@ -10,4 +10,6 @@ export const types = {
     EXIT_GAME:                  'EXIT_GAME',
     ERROR_GAME:                 'ERROR_GAME',
     SAVE_GAME:                  'SAVE_GAME',
+    SET_VOLUME:                 'SET_VOLUME',
+    TOGGLE_DRAWER:              'TOGGLE_DRAWER',
 };

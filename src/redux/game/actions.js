@@ -45,3 +45,13 @@ export const errorGame = (error) => ({
     type: types.ERROR_GAME,
     payload: error,
 });
+
+export const setVolume = (volume) => ({
+    type: types.SET_VOLUME,
+    payload: volume,
+});
+
+export const setVolume = () => ({
+    type: types.TOGGLE_DRAWER,
+    payload: volume,
+});

@@ -76,6 +76,20 @@ export default function gameReducer(state = initState, action) {
                 save: action.payload,
             }
 
+        case types.SET_VOLUME:
+            return {
+                ...state,
+                settings: {
+                    volume: action.payload
+                },
+            }
+
+        case types.TOGGLE_DRAWER:
+            return {
+                ...state,
+                isGameMenuOpen: !state.isGameMenuOpen,
+            }
+
         default:
             return state
     }

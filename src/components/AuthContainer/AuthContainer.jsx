@@ -24,7 +24,7 @@ function AuthContainer({ children, ...rest }) {
                                 message: "You are not logged in",
                                 description: "To play the game, you must first authenticate! Or you can just return to the home page;)",
                                 icon: "warning",
-                                duration: 6
+                                duration: 3
                             })
                         }
                         <Redirect to={{
