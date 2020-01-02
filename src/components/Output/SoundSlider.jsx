@@ -33,13 +33,15 @@ const SoundSlider = () => {
                 />
             </div>
             <div className="input">
-                <InputNumber
+                <span>{settings.volume}</span>
+                {/* <InputNumber
+                    readonly
                     min={0}
                     max={1}
                     step={0.01}
                     value={settings.volume}
                     onChange={value => dispatch({ type: 'SET_VOLUME', payload: value })}
-                />
+                /> */}
             </div>
         </div>
     );

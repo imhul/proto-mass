@@ -43,10 +43,9 @@ const HomePage = () => {
                     <h1 className="hero">proto-mass</h1>
                     <h2 className="hero-desc">sandbox</h2>
                     <div className="home-scene">
-                        
                         { 
                             rondomArr.map((item, i) => {
-                                const getTop = getRandom(1, ((+size.height / 100) * 40));
+                                const getTop = getRandom(1, ((size.height / 100) * 40));
                                 const styles = {
                                     top: getTop,
                                     width: getTop / 3,

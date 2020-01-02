@@ -48,16 +48,14 @@
                     justify-content: space-between;
                     align-items: center;
                     .input {
-                        width: 30px;
-                        .ant-input-number {
+                        width: 60px;
+                        padding-left: 8px;
+                        span {
                             border: 0;
                             width: 100%;
-                            margin-left: 20px !important;
+                            margin-left: 10px !important;
                             color: #33F6F9;
                             background-color: $transparent;
-                            .ant-input-number-input {
-                                padding: 0;
-                            }
                         }
                     }
                     .slider {
