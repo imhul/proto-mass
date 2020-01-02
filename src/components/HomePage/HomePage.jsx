@@ -6,6 +6,8 @@ import { Layout } from 'antd';
 import WindowSizeListener from 'react-window-size-listener';
 
 // Gifs
+// import stars from '../../assets/img/2.gif';
+// import stars3 from '../../assets/img/3.gif';
 import explo1 from '../../assets/img/explo01.gif';
 import explo2 from '../../assets/img/explo02.gif';
 import explo4 from '../../assets/img/explo04.webp';
@@ -19,18 +21,29 @@ const HomePage = () => {
     const getRandom = (min, max) => {
         min = Math.ceil(min);
         max = Math.floor(max);
-        return Math.floor(Math.random() * (max - min + 1)) + min; //Максимум и минимум включаются
+        return Math.floor(Math.random() * (max - min + 1)) + min;
     }
 
     const rondomArr = new Array(getRandom(20, 40)).fill({'type': 1}, 0);
+
+    const starsStyles = {
+        position: 'absolute',
+        width: '100%',
+        top: 64,
+        left: 0,
+        opacity: 0.4,
+    };
 
     return <WindowSizeListener
                 onResize={output => dispatch({ type: 'RESIZE', payload: output })}
             >
                 <Layout>
+                    {/* <img src={stars} className="stars-bg" style={starsStyles} />
+                    <img src={stars3} className="stars-bg" style={starsStyles} /> */}
                     <h1 className="hero">proto-mass</h1>
                     <h2 className="hero-desc">sandbox</h2>
                     <div className="home-scene">
+                        
                         { 
                             rondomArr.map((item, i) => {
                                 const getTop = getRandom(1, ((+size.height / 100) * 40));
