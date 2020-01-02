@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Provider, useStore, useSelector, useDispatch } from 'react-redux';
 import { withPixiApp, Stage, } from '@inlet/react-pixi';
 
@@ -14,7 +14,7 @@ import Unit from './Unit';
 import Preloader from './Preloader';
 
 // Sounds
-import intro from '../../assets/sound/thump.ogg';
+import intro from '../../assets/sound/loading.ogg';
 
 const DisplayGame = () => {
 
@@ -24,13 +24,14 @@ const DisplayGame = () => {
     const { isInit, settings } = useSelector(state => state.gameReducer);
     const { isFullscreen } = useSelector(state => state.stageReducer);
 
+    useEffect(() => utils.playSFX(intro, settings.volume), []);
+
     const Loader = () => {
         const [percent, percentUpdate] = useState(0);
         if (percent < 100 && !isInit) {
             Animation(deltaTime => {
                 percentUpdate(prevCount => prevCount + deltaTime * 0.1);
             });
-            utils.playSFX(intro, settings.volume);
         } else {
             Animation(null);
             dispatch({ type: 'INIT_GAME' })
