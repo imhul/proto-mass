@@ -1,9 +1,7 @@
-import cookies from './cookies';
-import audioLoader from './audioLoader';
+import { playSFX } from './playSFX';
 
 const utils = {
-    cookies,
-    audioLoader,
+    playSFX,
 }
 
 export default utils;

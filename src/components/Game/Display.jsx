@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState } from 'react';
 import { Provider, useStore, useSelector, useDispatch } from 'react-redux';
 import { withPixiApp, Stage, } from '@inlet/react-pixi';
 
@@ -6,12 +6,12 @@ import { withPixiApp, Stage, } from '@inlet/react-pixi';
 import WindowSizeListener from 'react-window-size-listener';
 import Fullscreen from 'react-full-screen';
 import Animation from './Animation';
+import utils from '../../utils';
 
 // Components
 import GameMap from './GameMap';
 import Unit from './Unit';
 import Preloader from './Preloader';
-import SoundPlayer from './SoundPlayer';
 
 // Sounds
 import intro from '../../assets/sound/thump.ogg';
@@ -21,7 +21,7 @@ const DisplayGame = () => {
     const store = useStore();
     const dispatch = useDispatch();
     const { size } = useSelector(state => state.stageReducer);
-    const { isInit } = useSelector(state => state.gameReducer);
+    const { isInit, settings } = useSelector(state => state.gameReducer);
     const { isFullscreen } = useSelector(state => state.stageReducer);
 
     const Loader = () => {
@@ -30,6 +30,7 @@ const DisplayGame = () => {
             Animation(deltaTime => {
                 percentUpdate(prevCount => prevCount + deltaTime * 0.1);
             });
+            utils.playSFX(intro, settings.volume);
         } else {
             Animation(null);
             dispatch({ type: 'INIT_GAME' })
@@ -40,7 +41,7 @@ const DisplayGame = () => {
     
     return  (
         <>
-            { !isInit ? <><Loader /><SoundPlayer src={intro} /></> : 
+            { !isInit ? <Loader /> : 
                 <WindowSizeListener
                     onResize={output => dispatch({ type: 'RESIZE', payload: output })}
                 >

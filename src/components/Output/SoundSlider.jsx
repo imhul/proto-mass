@@ -9,9 +9,8 @@ const SoundSlider = () => {
     const { settings } = useSelector(state => state.gameReducer);
     const { Title } = Typography;
     const [cookies, setCookie, removeCookie] = useCookies(['volume']);
-    console.info("SoundSlider cookies: ", cookies);
+
     const setVolume = value => {
-        console.info("setVolume value: ", value);
         setCookie('volume', value, { path: '/' });
         dispatch({ type: 'SET_VOLUME', payload: value });
     }
@@ -26,16 +25,18 @@ const SoundSlider = () => {
         <div className="SoundSlider">
             <div className="slider">
                 <Slider
-                    min={1}
-                    max={100}
+                    min={0}
+                    max={1}
+                    step={0.01}
                     onChange={value => setVolume(value)}
                     value={settings.volume}
                 />
             </div>
             <div className="input">
                 <InputNumber
-                    min={1}
-                    max={100}
+                    min={0}
+                    max={1}
+                    step={0.01}
                     value={settings.volume}
                     onChange={value => dispatch({ type: 'SET_VOLUME', payload: value })}
                 />

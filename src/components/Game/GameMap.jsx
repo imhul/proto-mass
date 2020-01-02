@@ -1,9 +1,7 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { TilingSprite, } from '@inlet/react-pixi';
-
-// Components
-import SoundPlayer from './SoundPlayer';
+import utils from '../../utils';
 
 // Graphic
 import bg from '../../assets/img/stage_bg.png';
@@ -15,9 +13,11 @@ import MapClick from '../../assets/sound/map_click.ogg';
 const GameMap = () => {
 
     const dispatch = useDispatch();
+    const { settings } = useSelector(state => state.gameReducer);
     const { size } = useSelector(state => state.stageReducer);
 
     const onMap = event => {
+        utils.playSFX(MapClick, settings.volume);
         dispatch({ 
             type: 'MAP_CLICK', 
             payload: { 
@@ -27,9 +27,7 @@ const GameMap = () => {
         })
     }
 
-    return <>
-        <SoundPlayer src={MapClick} />
-        <TilingSprite 
+    return <TilingSprite 
             image={bg}
             width={size.width} 
             height={size.height}
@@ -39,8 +37,7 @@ const GameMap = () => {
             interactive={true}
             buttonMode={true}
             pointerdown={event => onMap(event)}
-        />
-    </>;
+        />;
 }
 
 export default GameMap;

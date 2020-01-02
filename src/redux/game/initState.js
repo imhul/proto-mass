@@ -6,7 +6,7 @@ export const initState = {
     isGameover: false,
     isWin: false,
     settings: {
-        volume: 50,
+        volume: 0.5,
     },
     isGameMenuOpen: false,
     colonyName: "",
