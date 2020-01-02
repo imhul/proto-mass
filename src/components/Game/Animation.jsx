@@ -1,8 +1,7 @@
 import React, { useRef, useEffect, useCallback } from 'react';
 
 const Animation = callback => {
-    // Use useRef for mutable variables that we want to persist
-    // without triggering a re-render on their change
+
     const requestRef = useRef();
     const previousTimeRef = useRef();
     

@@ -35,7 +35,12 @@ const UserMenu = () => {
 
     return (
         <div className="UserMenu">
-            <Popover placement="bottomRight" title={text()} content={isAuthenticated ? LogoutPopup() : LoginPopup()} trigger="click">
+            <Popover 
+                placement="bottomRight" 
+                title={text()} 
+                content={isAuthenticated ? LogoutPopup() : LoginPopup()} 
+                trigger="click"
+            >
                 <span>
                     { isAuthenticated ? `${ user.login }` : "Wellcome!" }
                 </span>

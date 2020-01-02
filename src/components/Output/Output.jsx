@@ -42,7 +42,7 @@ const Output = ({ history }) => {
                         <Redirect from="*" to="/error" />
                     </Switch>
                 </Content>
-                <MainFooter />
+                { !isInit && <MainFooter /> }
             </Layout>
         </ConnectedRouter>
     )

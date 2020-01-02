@@ -49,10 +49,10 @@ const GameMenu = () => {
 
     return (
         <>
-            <i className="anticon game-menu-btn touchable" onClick={() => {
-                onDrawer();
-                // TODO: get from cookies!
-            }}>j</i>
+            <span className="Stats"><i className="anticon game-menu-btn">B</i> 99</span>
+            <i 
+                className="anticon game-menu-btn touchable" 
+                onClick={() => onDrawer() }>j</i>
             <Drawer
                 title="MENU"
                 placement="right"
@@ -66,7 +66,7 @@ const GameMenu = () => {
                 </div>
                 <div className="touchable" onClick={() => dispatch({ type: 'FULLSCREEN' })}>
                     <i className="anticon">G</i>
-                    <Title level={4}>FULLSCREEN</Title>
+                    <Title level={4}>FULLSCREEN</Title> {/* TODO: get FULLSCREEN from cookies! */}
                 </div>
                 <div>
                     <i className="anticon">t</i>

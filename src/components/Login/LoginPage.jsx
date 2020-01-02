@@ -108,13 +108,13 @@ const LoginForm = (props) => {
           )}
         </FormItem>
         <FormItem className="flex-item">
-           {getFieldDecorator('remember', {
-                    valuePropName: 'checked',
-                    initialValue: true,
-                })(<Checkbox>Remember me</Checkbox>)}
-                <Button type="primary" htmlType="submit" className="login-form-button">
-                    Login
-                </Button>
+          {getFieldDecorator('remember', {
+            valuePropName: 'checked',
+            initialValue: true,
+          })(<Checkbox>Remember me</Checkbox>)}
+          <Button type="primary" htmlType="submit" className="login-form-button">
+              Login
+          </Button>
         </FormItem>
         <FormItem>
             <a className="login-form-forgot" href="/reset">
