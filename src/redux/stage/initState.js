@@ -1,4 +1,7 @@
 export const initState = {
-    size: {},
+    size: {
+        width: 0,
+        height: 0,
+    },
     error: {},
 };
