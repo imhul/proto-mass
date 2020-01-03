@@ -16,7 +16,7 @@ export default function stageReducer(state = initState, action) {
         case types.FULLSCREEN: 
             return {
                 ...state,
-                isFullscreen: !state.isFullscreen,
+                isFullscreen: action.payload,
             }
 
         default:

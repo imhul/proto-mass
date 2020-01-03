@@ -53,6 +53,7 @@ const GameMenu = () => {
             <i 
                 className="anticon game-menu-btn touchable" 
                 onClick={() => onDrawer() }>j</i>
+                {/* TODO: resolve fullscreen Drawer visibility */}
             <Drawer
                 title="MENU"
                 placement="right"
@@ -64,9 +65,12 @@ const GameMenu = () => {
                     <i className="anticon">7</i>
                     <Title level={4}>CONTINUE</Title>
                 </div>
-                <div className="touchable" onClick={() => dispatch({ type: 'FULLSCREEN' })}>
+                <div 
+                    className="touchable" 
+                    onClick={() => dispatch({ type: 'FULLSCREEN', payload: true })}
+                >
                     <i className="anticon">G</i>
-                    <Title level={4}>FULLSCREEN</Title> {/* TODO: get FULLSCREEN from cookies! */}
+                    <Title level={4}>FULLSCREEN</Title>
                 </div>
                 <div>
                     <i className="anticon">t</i>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Provider, useStore, useSelector, useDispatch } from 'react-redux';
 import { withPixiApp, Stage, } from '@inlet/react-pixi';
 
@@ -26,6 +26,21 @@ const DisplayGame = () => {
 
     useEffect(() => utils.playSFX(intro, settings.volume), []);
 
+    const onPressM = event => {
+        if (isFullscreen && event.code === 'KeyM') {
+            dispatch({ type: 'TOGGLE_DRAWER' });
+            dispatch({ type: 'TOGGLE_PAUSE_GAME' });
+        }
+    }
+
+    useEffect(() => {
+        window.addEventListener('keyup', onPressM);
+    
+        return () => {
+          window.removeEventListener('keyup', onPressM);
+        };
+    }, [onPressM]);
+
     const Loader = () => {
         const [percent, percentUpdate] = useState(0);
         if (percent < 100 && !isInit) {
@@ -46,10 +61,9 @@ const DisplayGame = () => {
                 <WindowSizeListener
                     onResize={output => dispatch({ type: 'RESIZE', payload: output })}
                 >
-                    {/* TODO: Fullscreen !!!  */}
                     <Fullscreen 
                         enabled={isFullscreen} 
-                        onChange={() => dispatch({ type: 'FULLSCREEN' })}
+                        onChange={isFull  => dispatch({ type: 'FULLSCREEN', payload: isFull })}
                     >
                         <Stage 
                             className="Game"    
