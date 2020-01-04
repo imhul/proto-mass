@@ -23,8 +23,9 @@ const GameUnit = () => {
 
 
     const dispatch = useDispatch();
-    const { unitPosition } = useSelector(state => state.mapReducer);
-    console.info("Unit position: ", unitPosition);
+    const { clickPosition } = useSelector(state => state.mapReducer);
+    const { size } = useSelector(state => state.stageReducer);
+    console.info("Unit position: ", clickPosition);
 
     const onKeyup = event => {
         event.preventDefault();
@@ -37,8 +38,8 @@ const GameUnit = () => {
                 dispatch({ 
                     type: 'MAP_CLICK', 
                     payload: { 
-                        x: unitPosition.x, 
-                        y: unitPosition.y - amout,
+                        x: clickPosition.x, 
+                        y: clickPosition.y - amout,
                     } 
                 });
                 break;
@@ -47,8 +48,8 @@ const GameUnit = () => {
                 dispatch({ 
                     type: 'MAP_CLICK', 
                     payload: { 
-                        x: unitPosition.x, 
-                        y: unitPosition.y + amout,
+                        x: clickPosition.x, 
+                        y: clickPosition.y + amout,
                     } 
                 });
                 break;
@@ -57,8 +58,8 @@ const GameUnit = () => {
                 dispatch({ 
                     type: 'MAP_CLICK', 
                     payload: { 
-                        x: unitPosition.x - amout, 
-                        y: unitPosition.y,
+                        x: clickPosition.x - amout, 
+                        y: clickPosition.y,
                     } 
                 });
                 break;
@@ -67,8 +68,8 @@ const GameUnit = () => {
                 dispatch({ 
                     type: 'MAP_CLICK', 
                     payload: { 
-                        x: unitPosition.x + amout, 
-                        y: unitPosition.y,
+                        x: clickPosition.x + amout, 
+                        y: clickPosition.y,
                     } 
                 });
                 break;
@@ -86,8 +87,10 @@ const GameUnit = () => {
     
     return ( 
         <AnimatedSprite 
-            x={unitPosition.x} 
-            y={unitPosition.y}
+            x={size.width * 0.5} 
+            y={size.height * 0.5}
+            // x={clickPosition.x} 
+            // y={clickPosition.y}
             textures={textures}
             isPlaying={true}
             initialFrame={0}

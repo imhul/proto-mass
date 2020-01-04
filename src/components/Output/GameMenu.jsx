@@ -15,7 +15,7 @@ const GameMenu = () => {
     const dispatch = useDispatch();
     const { isFullscreen } = useSelector(state => state.stageReducer);
     const { isGameMenuOpen, settings } = useSelector(state => state.gameReducer);
-    const { unitPosition } = useSelector(state => state.mapReducer);
+    const { clickPosition } = useSelector(state => state.mapReducer);
 
     const onExit = () => {
         dispatch({ type: 'EXIT_GAME' })
@@ -33,8 +33,8 @@ const GameMenu = () => {
             payload: { 
                 player: {
                     position: {
-                        x: unitPosition.x,
-                        y: unitPosition.y,
+                        x: clickPosition.x,
+                        y: clickPosition.y,
                     },
                 },
             },

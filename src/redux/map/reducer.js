@@ -7,7 +7,7 @@ export default function mapReducer(state = initState, action) {
         case types.MAP_CLICK: {
             return {
                 ...state,
-                unitPosition: {
+                clickPosition: {
                     x: action.payload.x,
                     y: action.payload.y,
                 },

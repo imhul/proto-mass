@@ -1,7 +1,6 @@
 import React from 'react';
 import { Layout } from 'antd';
 import techLogo from '../../assets/img/react-pixijs-logo.png';
-import * as PIXI from 'pixi.js';
 
 const { Footer } = Layout;
 

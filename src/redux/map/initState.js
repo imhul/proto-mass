@@ -1,5 +1,5 @@
 export const initState = {
-    unitPosition: {
+    clickPosition: {
         x: 400,
         y: 400,
     },
