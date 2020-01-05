@@ -1,14 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Stage, AppConsumer, TilingSprite, } from '@inlet/react-pixi';
+import { TilingSprite } from '@inlet/react-pixi';
 
 // Utils
 import utils from '../../utils';
-import Animation from './Animation';
 
 // Graphic
-import bg from '../../assets/img/stage_bg.png';
-// import cursor from '../../assets/img/cur.gif';
+import ground from '../../assets/img/stage_bg.png';
 
 // Sounds
 import MapClick from '../../assets/sound/map_click.ogg';
@@ -90,13 +88,12 @@ class GameMap extends Component {
     render() {
         const { stage } = this.props;
         return <TilingSprite 
-            image={bg}
+            image={ground}
             width={stage.size.width} 
             height={stage.size.height}
             tilePosition={this.state.mapPosition}
             anchor={0}
             interactive={true}
-            // buttonMode={true}
             pointerdown={event => this.onMap(event)}
         />;
     }

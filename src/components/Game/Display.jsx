@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Provider, useStore, useSelector, useDispatch } from 'react-redux';
-import { withPixiApp, Stage, } from '@inlet/react-pixi';
+import { withPixiApp, Stage, TilingSprite } from '@inlet/react-pixi';
 
 // Utils
 import WindowSizeListener from 'react-window-size-listener';
@@ -12,6 +12,7 @@ import utils from '../../utils';
 import GameMap from './GameMap';
 import Unit from './Unit';
 import Preloader from './Preloader';
+import TransparentLayer from './TransparentLayer';
 
 // Sounds
 import intro from '../../assets/sound/loading.ogg';
@@ -66,7 +67,7 @@ const DisplayGame = () => {
                         onChange={isFull  => dispatch({ type: 'FULLSCREEN', payload: isFull })}
                     >
                         <Stage 
-                            className="Game"    
+                            className="Game"
                             width={size.width} 
                             height={size.height} 
                             onMount={() => console.info("GAME IS MOUNTED!")}
@@ -74,6 +75,7 @@ const DisplayGame = () => {
                             <Provider store={ store }>
                                 <GameMap />
                                 <Unit />
+                                <TransparentLayer />
                             </Provider>
                         </Stage>
                     </Fullscreen>
