@@ -5,11 +5,12 @@ export default function mapReducer(state = initState, action) {
     switch (action.type) {
 
         case types.MAP_CLICK: {
+            console.info("action.payload: ", action.payload);
             return {
                 ...state,
                 clickPosition: {
-                    x: action.payload.x,
-                    y: action.payload.y,
+                    x: action.payload.data.global.x,
+                    y: action.payload.data.global.y,
                 },
             }
         }

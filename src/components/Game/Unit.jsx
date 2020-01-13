@@ -43,7 +43,9 @@ class GameUnit extends Component {
 
         if (units.current.status !== "absent" &&
             prev.map.clickPosition.x !== map.clickPosition.x &&
-            prev.map.clickPosition.y !== map.clickPosition.y) {
+            prev.map.clickPosition.y !== map.clickPosition.y &&
+            prev.map.clickPosition.x !== 0 &&
+            prev.map.clickPosition.y !== 0) {
             this.tick();   
         }
     }
@@ -55,7 +57,7 @@ class GameUnit extends Component {
     tick = () => {
         console.info("::::tick run::::");
 
-        const { stage, game, map, units, startWalking, stopWalking } = this.props;
+        const { stage, map, units, startWalking, stopWalking } = this.props;
 
         const speed = units.current.stats.speed;
 
@@ -80,26 +82,26 @@ class GameUnit extends Component {
             if (map.clickPosition.x > centerX && map.clickPosition.y > centerY) {
                 console.log("↘ SE");
                 startWalking({
-                    x: units.current.position.x - speedX,
-                    y: units.current.position.y - speedY
+                    x: units.current.position.x + speedX,
+                    y: units.current.position.y + speedY
                 });
             } else if (this.props.map.clickPosition.x < centerX && this.props.map.clickPosition.y < centerY) {
                 console.log("↖ NW ");
                 startWalking({
-                    x: units.current.position.x + speedX,
-                    y: units.current.position.y + speedY
+                    x: units.current.position.x - speedX,
+                    y: units.current.position.y - speedY
                 });
             } else if (this.props.map.clickPosition.x > centerX && this.props.map.clickPosition.y < centerY) {
                 console.log("↗ NE ");
                 startWalking({
-                    x: units.current.position.x - speedX,
-                    y: units.current.position.y - speedY
+                    x: units.current.position.x + speedX,
+                    y: units.current.position.y + speedY
                 });
             } else if (this.props.map.clickPosition.x < centerX && this.props.map.clickPosition.y > centerY) {
                 console.info("↙ SW");
                 startWalking({
-                    x: units.current.position.x + speedX,
-                    y: units.current.position.y + speedY
+                    x: units.current.position.x - speedX,
+                    y: units.current.position.y - speedY
                 });
             } else {
                 cancelAnimationFrame(this.tick);
