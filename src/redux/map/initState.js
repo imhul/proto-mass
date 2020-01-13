@@ -1,7 +1,11 @@
 export const initState = {
     clickPosition: {
-        x: 400,
-        y: 400,
+        x: 0,
+        y: 0,
+    },
+    mapPosition: {
+        x: 0,
+        y: 0,
     },
     error: {},
 };

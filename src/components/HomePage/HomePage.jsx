@@ -16,7 +16,7 @@ import explo5 from '../../assets/img/explo05.webp';
 const HomePage = () => {
 
     const dispatch = useDispatch();
-    const { size } = useSelector(state => state.stageReducer);
+    const { size } = useSelector(state => state.stage);
 
     const getRandom = (min, max) => {
         min = Math.ceil(min);

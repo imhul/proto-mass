@@ -21,9 +21,9 @@ const DisplayGame = () => {
 
     const store = useStore();
     const dispatch = useDispatch();
-    const { size } = useSelector(state => state.stageReducer);
-    const { isInit, settings } = useSelector(state => state.gameReducer);
-    const { isFullscreen } = useSelector(state => state.stageReducer);
+    const { size } = useSelector(state => state.stage);
+    const { isInit, settings } = useSelector(state => state.game);
+    const { isFullscreen } = useSelector(state => state.stage);
 
     useEffect(() => utils.playSFX(intro, settings.volume), []);
 

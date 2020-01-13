@@ -8,7 +8,7 @@ import Notify from '../Output/Notify';
 
 function AuthContainer({ children, ...rest }) {
 
-    const { isAuthenticated } = useSelector(state => state.authReducer);
+    const { isAuthenticated } = useSelector(state => state.auth);
 
     return (
         <Route {...rest}

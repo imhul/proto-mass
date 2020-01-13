@@ -5,7 +5,7 @@ import _ from 'lodash';
 
 const Avatar = () => {
     const dispatch = useDispatch();
-    const { user } = useSelector(state => state.authReducer);
+    const { user } = useSelector(state => state.auth);
     const [isAvatarDone, setAvatarDone] = useState(false);
 
     const setAvatar = (avatar) => {

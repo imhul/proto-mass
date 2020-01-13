@@ -13,7 +13,7 @@ const UserMenu = () => {
     const dispatch = useDispatch();
     const text = () => <span>Hello, voyager!</span>;
     const [cookie, removeCookie] = useCookies(['userId']);
-    const { isAuthenticated, user } = useSelector(state => state.authReducer);
+    const { isAuthenticated, user } = useSelector(state => state.auth);
 
     const LoginPopup = () => {
         return <Button onClick={() => history.push('/login')}>Login</Button>;

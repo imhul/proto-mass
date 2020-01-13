@@ -48,7 +48,7 @@ class TransparentLayer extends Component {
 
 function mapStateToProps(state) {
     return {
-        stage: state.stageReducer,
+        stage: state.stage,
     }
 };
 

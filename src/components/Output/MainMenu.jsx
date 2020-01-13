@@ -11,7 +11,7 @@ const MainMenu = () => {
 
     const history = useHistory();
     const location = useLocation();
-    const { isInit } = useSelector(state => state.gameReducer);
+    const { isInit } = useSelector(state => state.game);
 
     const onWebMenuClick = e => {
         console.log('click ', e);

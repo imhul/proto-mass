@@ -13,9 +13,9 @@ const GameMenu = () => {
 
     const history = useHistory();
     const dispatch = useDispatch();
-    const { isFullscreen } = useSelector(state => state.stageReducer);
-    const { isGameMenuOpen, settings } = useSelector(state => state.gameReducer);
-    const { clickPosition } = useSelector(state => state.mapReducer);
+    const { isFullscreen } = useSelector(state => state.stage);
+    const { isGameMenuOpen, settings } = useSelector(state => state.game);
+    const { clickPosition } = useSelector(state => state.map);
 
     const onExit = () => {
         dispatch({ type: 'EXIT_GAME' })
@@ -31,12 +31,15 @@ const GameMenu = () => {
         dispatch({ 
             type: 'SAVE_GAME', 
             payload: { 
-                player: {
-                    position: {
-                        x: clickPosition.x,
-                        y: clickPosition.y,
-                    },
-                },
+                units: [
+                    {
+                        id: '1001',
+                        position: {
+                            x: clickPosition.x,
+                            y: clickPosition.y,
+                        },
+                    }
+                ],
             },
         });
         Notify({

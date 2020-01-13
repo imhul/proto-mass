@@ -18,7 +18,7 @@ const { Content } = Layout;
 
 const Output = ({ history }) => {
 
-    const { isInit } = useSelector(state => state.gameReducer);
+    const { isInit } = useSelector(state => state.game);
 
     return (
         <ConnectedRouter history={history}>

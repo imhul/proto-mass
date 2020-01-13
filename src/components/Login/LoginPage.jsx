@@ -14,7 +14,7 @@ const LoginForm = (props) => {
   const location = useLocation();
   const dispatch = useDispatch();
   const { getFieldDecorator } = props.form;
-  const { isAuthenticated, user } = useSelector(state => state.authReducer);
+  const { isAuthenticated, user } = useSelector(state => state.auth);
   const [cookies, setCookie, removeCookie] = useCookies(['userId']);
   const { cookiesFromProps } = props.cookies;
   const isHasCookies = props.cookies.HAS_DOCUMENT_COOKIE;

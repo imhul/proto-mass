@@ -6,7 +6,7 @@ import { Slider, Typography, InputNumber } from 'antd';
 const SoundSlider = () => {
 
     const dispatch = useDispatch();
-    const { settings } = useSelector(state => state.gameReducer);
+    const { settings } = useSelector(state => state.game);
     const { Title } = Typography;
     const [cookies, setCookie, removeCookie] = useCookies(['volume']);
 
