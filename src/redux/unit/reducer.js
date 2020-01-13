@@ -14,6 +14,7 @@ export default function unitReducer(state = initState, action) {
                 ...state,
                 current: {
                     ...state.current,
+                    status: 'search',
                     position: {
                         x: action.payload.x,
                         y: action.payload.y,

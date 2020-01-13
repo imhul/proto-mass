@@ -47,7 +47,7 @@ export const initState = {
     current: {
         id: "",
         name: "",
-        status: "",
+        status: "absent",
         stats: {
             level: 0,
             skills: [

@@ -21,34 +21,41 @@ class GameUnit extends Component {
         };
     }
 
-    componentWillUpdate(prev) {
+    componentDidUpdate(prev) {
         console.info("update! prev: ", prev);
+        const { map, units, stage, initPosition } = this.props;
 
-        const centerX = prev.stage.size.width / 2;
-        const centerY = prev.stage.size.height / 2;
+        const centerX = stage.size.width / 2;
+        const centerY = stage.size.height / 2;
 
-        if (centerX > 0 && centerY > 0 && 
-            prev.stage.size.width !== this.props.stage.size.width &&
-            prev.stage.size.height !== this.props.stage.size.height) {
-            this.props.initPosition({
+        if (units.current.status === "absent" &&
+            centerX > 0 && centerY > 0 && 
+            prev.stage.size.width !== stage.size.width &&
+            prev.stage.size.height !== stage.size.height) {
+            // &&
+            // prev.units.current.position.y !== this.props.units.current.position.y &&
+            // prev.units.current.position.x !== this.props.unitscurrent.position.x) {
+            initPosition({
                 x: centerX,
                 y: centerY,
-            })
+            });
         }
 
-        if (prev.map.clickPosition.x !== this.props.map.clickPosition.x &&
-            prev.map.clickPosition.y !== this.props.map.clickPosition.y) {
+        if (units.current.status !== "absent" &&
+            prev.map.clickPosition.x !== map.clickPosition.x &&
+            prev.map.clickPosition.y !== map.clickPosition.y) {
             this.tick();   
         }
     }
 
-    componentWillUnmount() {
-        cancelAnimationFrame(this.tick);
-    }
+    // componentWillUnmount() {
+    //     cancelAnimationFrame(this.tick);
+    // }
 
     tick = () => {
+        console.info("::::tick run::::");
 
-        const { stage, game, map, units, startWalking } = this.props;
+        const { stage, game, map, units, startWalking, stopWalking } = this.props;
 
         const speed = units.current.stats.speed;
 
@@ -68,7 +75,8 @@ class GameUnit extends Component {
             (centerY - clickPositionY)/(centerX - clickPositionX)));
 
         // Check click sectors
-        if (Math.abs(units.current.position.x) < distance && Math.abs(units.current.position.y) < distance) {
+        if (Math.abs(units.current.position.x - centerX) < distance && 
+            Math.abs(units.current.position.y - centerY) < distance) {
             if (map.clickPosition.x > centerX && map.clickPosition.y > centerY) {
                 console.log("↘ SE");
                 startWalking({
@@ -95,10 +103,12 @@ class GameUnit extends Component {
                 });
             } else {
                 cancelAnimationFrame(this.tick);
+                stopWalking();
             }
             requestAnimationFrame(this.tick);
         } else {
             cancelAnimationFrame(this.tick);
+            stopWalking();
         }
     }
 
@@ -161,9 +171,8 @@ class GameUnit extends Component {
     }
     
     render() {
-        console.log("render this.props: ", this.props);
         
-        const { map, units, stage, initPosition } = this.props;
+        const { units } = this.props;
         
         return ( 
             <AnimatedSprite 
