@@ -50,9 +50,9 @@ class GameUnit extends Component {
         }
     }
 
-    // componentWillUnmount() {
-    //     cancelAnimationFrame(this.tick);
-    // }
+    componentWillUnmount() {
+        cancelAnimationFrame(this.tick);
+    }
 
     tick = () => {
         console.info("::::tick run::::");
