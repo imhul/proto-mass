@@ -8,6 +8,7 @@ import botPart1 from '../../assets/img/animations/bot/frame_0_delay-0.2s.gif';
 import botPart2 from '../../assets/img/animations/bot/frame_1_delay-0.2s.gif';
 import botPart3 from '../../assets/img/animations/bot/frame_2_delay-0.2s.gif';
 import botPart4 from '../../assets/img/animations/bot/frame_3_delay-0.2s.gif';
+import cursor from '../../assets/img/cur.gif';
 
 class GameUnit extends Component {
 
@@ -19,12 +20,15 @@ class GameUnit extends Component {
             const texture = new Texture.from(botImages[i]);
             this.textures.push(texture);
         };
+        const defaultIcon = `url(${cursor}),auto`;
+        const hoverIcon = `url(${cursor}),auto`;
+        props.app.renderer.plugins.interaction.cursorStyles.default = defaultIcon;
+        props.app.renderer.plugins.interaction.cursorStyles.hover = hoverIcon;
     }
 
     componentDidUpdate(prev) {
         console.info("update! prev: ", prev);
         const { map, units, stage, initPosition } = this.props;
-
         const centerX = stage.size.width / 2;
         const centerY = stage.size.height / 2;
 
@@ -32,9 +36,6 @@ class GameUnit extends Component {
             centerX > 0 && centerY > 0 && 
             prev.stage.size.width !== stage.size.width &&
             prev.stage.size.height !== stage.size.height) {
-            // &&
-            // prev.units.current.position.y !== this.props.units.current.position.y &&
-            // prev.units.current.position.x !== this.props.unitscurrent.position.x) {
             initPosition({
                 x: centerX,
                 y: centerY,

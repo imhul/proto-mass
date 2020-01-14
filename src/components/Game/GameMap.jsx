@@ -20,19 +20,48 @@ const GameMap = () => {
     const { size } = useSelector(state => state.stage);
     const { mapPosition } = useSelector(state => state.map);
     const { settings } = useSelector(state => state.game);
-    const onMap = useCallback(event => {
+    const onMapDown = useCallback(event => {
         utils.playSFX(MapClick, settings.volume);
         dispatch(mapClick(event));
     }, [dispatch]);
 
+    const onDragStart = useCallback(event => {
+        console.info("onDragStart event", event);
+        // this.data = event.data;
+        // this.alpha = 0.5;
+        // this.dragging = true;
+    }, []);
+
+    const onDragEnd = useCallback(event => {
+        console.info("onDragEnd event", event);
+        // this.alpha = 1;
+        // this.dragging = false;
+        // set the interaction data to null
+        // this.data = null;
+    }, []);
+
+    const onDragMove = useCallback(event => {
+        console.info("onDragMove event", event);
+        dispatch(mapClick(event)); // TODO;))))))))))))))))))))))))))))
+        // if (this.dragging) {
+        //     const newPosition = this.data.getLocalPosition(this.parent);
+        //     this.x = newPosition.x;
+        //     this.y = newPosition.y;
+        // }
+    }, [dispatch]);
+
     return <TilingSprite 
         image={ground}
-        width={size.width} 
-        height={size.height}
+        width={3000} 
+        height={3000}
         tilePosition={mapPosition}
         anchor={0}
         interactive={true}
-        pointerdown={event => onMap(event)}
+        pointerdown={event => onMapDown(event)}
+        pointerdown={event => onDragStart(event)}
+        pointerup={event => onDragEnd(event)}
+        pointerupoutside={event => onDragEnd(event)}
+        pointermove={event => onDragMove(event)}
     />;
 }
 

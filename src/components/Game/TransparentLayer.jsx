@@ -4,7 +4,6 @@ import { TilingSprite } from '@inlet/react-pixi';
 
 // Graphic
 import layer from '../../assets/img/clouds.png';
-import cursor from '../../assets/img/cur.gif';
 
 class TransparentLayer extends Component {
   
@@ -38,7 +37,6 @@ class TransparentLayer extends Component {
             height={stage.size.height}
             tilePosition={this.state.mapPosition}
             anchor={0}
-            cursor={cursor} 
             className="TransparentLayer"
             interactive={false}
             buttonMode={false}
