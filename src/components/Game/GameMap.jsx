@@ -1,9 +1,15 @@
-import React, { useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { TilingSprite } from '@inlet/react-pixi';
+import moment from 'moment';
 
 // Actions
-import { mapClick } from '../../redux/map/actions';
+import { 
+    mapClick,
+    dragMapStart, 
+    dragMapMove, 
+    dragMapStop 
+} from '../../redux/map/actions';
 
 // Utils
 import utils from '../../utils';
@@ -16,39 +22,48 @@ import MapClick from '../../assets/sound/map_click.ogg';
 
 const GameMap = () => { 
 
+    const now = moment();
+    const msec = moment.unix(now)._i;
+    const [clickMoment, setClickMoment] = useState(msec);
+    const [dragMoment, setDragMoment] = useState(msec);
     const dispatch = useDispatch();
-    const { size } = useSelector(state => state.stage);
-    const { mapPosition } = useSelector(state => state.map);
+    // const { size } = useSelector(state => state.stage);
+    const { mapPosition, isClicked, isMoved } = useSelector(state => state.map);
     const { settings } = useSelector(state => state.game);
-    const onMapDown = useCallback(event => {
-        utils.playSFX(MapClick, settings.volume);
-        dispatch(mapClick(event));
-    }, [dispatch]);
 
     const onDragStart = useCallback(event => {
         console.info("onDragStart event", event);
-        // this.data = event.data;
-        // this.alpha = 0.5;
-        // this.dragging = true;
-    }, []);
+        const nowStart = moment();
+        const msStart = moment.unix(nowStart)._i;
+        setClickMoment(msStart);
+        console.info("clickMoment: ", clickMoment);
+        console.info("dragMoment: ", dragMoment);
+        if ((clickMoment - dragMoment) > 500) {
+            console.info("> 500");
+            
+            dispatch(dragMapStart(event));
+        } else {
+            utils.playSFX(MapClick, settings.volume);
+            dispatch(mapClick(event));
+        }
+        
+        
+    }, [dispatch, settings.volume]);
 
     const onDragEnd = useCallback(event => {
         console.info("onDragEnd event", event);
-        // this.alpha = 1;
-        // this.dragging = false;
-        // set the interaction data to null
-        // this.data = null;
-    }, []);
+        dispatch(dragMapStop(event));
+    }, [dispatch]);
 
     const onDragMove = useCallback(event => {
-        console.info("onDragMove event", event);
-        dispatch(mapClick(event)); // TODO;))))))))))))))))))))))))))))
-        // if (this.dragging) {
-        //     const newPosition = this.data.getLocalPosition(this.parent);
-        //     this.x = newPosition.x;
-        //     this.y = newPosition.y;
-        // }
-    }, [dispatch]);
+        if (isClicked)  {
+            const nowMove = moment();
+            const msMove = moment.unix(nowMove)._i;
+            setDragMoment(msMove);
+            console.info("onDragMove event", event);
+            dispatch(dragMapMove(event));
+        }
+    }, [dispatch, isClicked]);
 
     return <TilingSprite 
         image={ground}
@@ -57,10 +72,8 @@ const GameMap = () => {
         tilePosition={mapPosition}
         anchor={0}
         interactive={true}
-        pointerdown={event => onMapDown(event)}
         pointerdown={event => onDragStart(event)}
         pointerup={event => onDragEnd(event)}
-        pointerupoutside={event => onDragEnd(event)}
         pointermove={event => onDragMove(event)}
     />;
 }
