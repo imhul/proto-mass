@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { withPixiApp, AnimatedSprite } from '@inlet/react-pixi';
-import { Texture } from 'pixi.js';
 
 // Graphic
 import botPart1 from '../../assets/img/animations/bot/frame_0_delay-0.2s.gif';
@@ -10,16 +8,16 @@ import botPart3 from '../../assets/img/animations/bot/frame_2_delay-0.2s.gif';
 import botPart4 from '../../assets/img/animations/bot/frame_3_delay-0.2s.gif';
 import cursor from '../../assets/img/cur.gif';
 
-class GameUnit extends Component {
+class Unit extends Component {
 
     constructor(props) {
         super(props);
         const botImages = [botPart1, botPart2, botPart3, botPart4];
-        this.textures = [];
-        for (let i=0; i < botImages.length; i++) {
-            const texture = new Texture.from(botImages[i]);
-            this.textures.push(texture);
-        };
+        // this.textures = [];
+        // for (let i=0; i < botImages.length; i++) {
+        //     const texture = new Texture.from(botImages[i]);
+        //     this.textures.push(texture);
+        // };
         const defaultIcon = `url(${cursor}),auto`;
         const hoverIcon = `url(${cursor}),auto`;
         props.app.renderer.plugins.interaction.cursorStyles.default = defaultIcon;
@@ -124,23 +122,23 @@ class GameUnit extends Component {
         
         const { units } = this.props;
         
-        return ( 
-            <AnimatedSprite 
-                x={units.current.position.x} 
-                y={units.current.position.y}
-                textures={this.textures}
-                isPlaying={true}
-                initialFrame={0}
-                animationSpeed={0.1}
-                interactive={true}
-                buttonMode={true}
-                pointerdown={event => this.onSprite(event)}
-            />
-        );
+        return <div></div>
+            // <AnimatedSprite 
+            //     x={units.current.position.x} 
+            //     y={units.current.position.y}
+            //     textures={this.textures}
+            //     isPlaying={true}
+            //     initialFrame={0}
+            //     animationSpeed={0.1}
+            //     interactive={true}
+            //     buttonMode={true}
+            //     pointerdown={event => this.onSprite(event)}
+            // />
+        
     }
 }
 
-const Unit = withPixiApp(GameUnit);
+// const Unit = withPixiApp(GameUnit);
 
 function mapDispatchToProps(dispatch) {
     return {

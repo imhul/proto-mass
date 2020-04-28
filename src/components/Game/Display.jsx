@@ -15,7 +15,7 @@ import Preloader from './Preloader';
 // Sounds
 import intro from '../../assets/sound/loading.ogg';
 
-const DisplayGame = () => {
+const Display = () => {
 
     const store = useStore();
     const dispatch = useDispatch();
@@ -68,7 +68,7 @@ const DisplayGame = () => {
                         > */}
                             <Provider store={ store }>
                                 <GameMap />
-                                <Unit />
+                                {/* <Unit /> */}
                             </Provider>
                         {/* </Stage> */}
                     </Fullscreen>
@@ -77,7 +77,5 @@ const DisplayGame = () => {
         </>
     )
 };
-
-const Display = withPixiApp(DisplayGame);
 
 export default Display;
