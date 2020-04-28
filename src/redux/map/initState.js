@@ -7,7 +7,6 @@ export const initState = {
         x: 0,
         y: 0,
     },
-    isClicked: false,
-    isMoved: false,
+    isDragg: false,
     error: {},
 };

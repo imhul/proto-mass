@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Provider, useStore, useSelector, useDispatch } from 'react-redux';
-import { withPixiApp, Stage, TilingSprite } from '@inlet/react-pixi';
 
 // Utils
 import WindowSizeListener from 'react-window-size-listener';
@@ -12,7 +11,6 @@ import utils from '../../utils';
 import GameMap from './GameMap';
 import Unit from './Unit';
 import Preloader from './Preloader';
-import TransparentLayer from './TransparentLayer';
 
 // Sounds
 import intro from '../../assets/sound/loading.ogg';
@@ -25,22 +23,19 @@ const DisplayGame = () => {
     const { isInit, settings } = useSelector(state => state.game);
     const { isFullscreen } = useSelector(state => state.stage);
 
-    useEffect(() => utils.playSFX(intro, settings.volume), []);
+    useEffect(() => utils.playSFX(intro, settings.volume), [settings.volume]);
 
-    const onPressM = event => {
-        if (isFullscreen && event.code === 'KeyM') {
-            dispatch({ type: 'TOGGLE_DRAWER' });
-            dispatch({ type: 'TOGGLE_PAUSE_GAME' });
-        }
-    }
+    const prevent = useCallback(e => {
+        e.preventDefault();
+    }, []);
 
     useEffect(() => {
-        window.addEventListener('keyup', onPressM);
+        window.addEventListener('contextmenu', prevent);
     
         return () => {
-          window.removeEventListener('keyup', onPressM);
+          window.removeEventListener('contextmenu', prevent);
         };
-    }, [onPressM]);
+    }, [prevent]);
 
     const Loader = () => {
         const [percent, percentUpdate] = useState(0);
@@ -66,18 +61,16 @@ const DisplayGame = () => {
                         enabled={isFullscreen} 
                         onChange={isFull  => dispatch({ type: 'FULLSCREEN', payload: isFull })}
                     >
-                        <Stage 
+                        {/* <Stage 
                             className="Game"
                             width={size.width} 
                             height={size.height} 
-                            onMount={() => console.info("GAME IS MOUNTED!")}
-                        >
+                        > */}
                             <Provider store={ store }>
                                 <GameMap />
                                 <Unit />
-                                <TransparentLayer />
                             </Provider>
-                        </Stage>
+                        {/* </Stage> */}
                     </Fullscreen>
                 </WindowSizeListener>
             }

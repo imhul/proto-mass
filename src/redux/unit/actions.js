@@ -12,9 +12,15 @@ export const initPosition = position => {
     })
 };
 
-export const startWalking = position => {
+export const startWalking = () => {
     return ({
         type: types.UNIT_START_WALKING,
+    })
+};
+
+export const unitWalking = position => {
+    return ({
+        type: types.UNIT_WALKING,
         payload: position
     })
 };

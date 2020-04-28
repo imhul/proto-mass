@@ -5,7 +5,6 @@ export default function mapReducer(state = initState, action) {
     switch (action.type) {
 
         case types.MAP_CLICK: {
-            console.info("action.payload: ", action.payload);
             return {
                 ...state,
                 clickPosition: {
@@ -15,36 +14,24 @@ export default function mapReducer(state = initState, action) {
             }
         }
 
-        case types.MAP_DRAG_START: {
-            console.info("action.payload: ", action.payload);
-            return {
-                ...state,
-                isMoved: false,
-                isClicked: true,
-            }
-        }
-
         case types.MAP_DRAG_MOVE: {
-            console.info("action.payload: ", action.payload);
             return {
                 ...state,
-                isMoved: true,
+                isDragg: true,
                 mapPosition: {
-                    x: action.payload.data.global.x,
-                    y: action.payload.data.global.y,
+                    x: action.payload.x,
+                    y: action.payload.y,
                 },
             }
         }
 
         case types.MAP_DRAG_STOP: {
-            console.info("action.payload: ", action.payload);
             return {
                 ...state,
-                isClicked: false,
-                isMoved: false,
+                isDragg: false,
                 mapPosition: {
-                    x: action.payload.data.global.x,
-                    y: action.payload.data.global.y,
+                    x: action.payload.x,
+                    y: action.payload.y,
                 },
             }
         }

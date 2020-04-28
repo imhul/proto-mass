@@ -58,7 +58,7 @@ class GameUnit extends Component {
     tick = () => {
         console.info("::::tick run::::");
 
-        const { stage, map, units, startWalking, stopWalking } = this.props;
+        const { stage, map, units, startWalking, unitWalking, stopWalking } = this.props;
 
         const speed = units.current.stats.speed;
 
@@ -80,27 +80,28 @@ class GameUnit extends Component {
         // Check click sectors
         if (Math.abs(units.current.position.x - centerX) < distance && 
             Math.abs(units.current.position.y - centerY) < distance) {
+            if (units.current.status !== 'walk') startWalking(); 
             if (map.clickPosition.x > centerX && map.clickPosition.y > centerY) {
                 console.log("↘ SE");
-                startWalking({
+                unitWalking({
                     x: units.current.position.x + speedX,
                     y: units.current.position.y + speedY
                 });
             } else if (this.props.map.clickPosition.x < centerX && this.props.map.clickPosition.y < centerY) {
                 console.log("↖ NW ");
-                startWalking({
+                unitWalking({
                     x: units.current.position.x - speedX,
                     y: units.current.position.y - speedY
                 });
             } else if (this.props.map.clickPosition.x > centerX && this.props.map.clickPosition.y < centerY) {
                 console.log("↗ NE ");
-                startWalking({
+                unitWalking({
                     x: units.current.position.x + speedX,
                     y: units.current.position.y + speedY
                 });
             } else if (this.props.map.clickPosition.x < centerX && this.props.map.clickPosition.y > centerY) {
                 console.info("↙ SW");
-                startWalking({
+                unitWalking({
                     x: units.current.position.x - speedX,
                     y: units.current.position.y - speedY
                 });
@@ -114,60 +115,6 @@ class GameUnit extends Component {
             stopWalking();
         }
     }
-
-    // const onKeyup = event => {
-    //     event.preventDefault();
-    //     event.stopPropagation();
-    //     // TODO: need to stop re-rendering!
-    //     const amout = 10;
-    //     switch (event.code) {
-    //         case 'KeyW': 
-    //             console.info("up");
-    //             dispatch({ 
-    //                 type: 'MAP_CLICK', 
-    //                 payload: { 
-    //                     x: clickPosition.x, 
-    //                     y: clickPosition.y - amout,
-    //                 } 
-    //             });
-    //             break;
-    //         case 'KeyS':
-    //             console.info("down");
-    //             dispatch({ 
-    //                 type: 'MAP_CLICK', 
-    //                 payload: { 
-    //                     x: clickPosition.x, 
-    //                     y: clickPosition.y + amout,
-    //                 } 
-    //             });
-    //             break;
-    //         case 'KeyA':
-    //             console.info("left");
-    //             dispatch({ 
-    //                 type: 'MAP_CLICK', 
-    //                 payload: { 
-    //                     x: clickPosition.x - amout, 
-    //                     y: clickPosition.y,
-    //                 } 
-    //             });
-    //             break;
-    //         case 'KeyD':
-    //             console.info("right");
-    //             dispatch({ 
-    //                 type: 'MAP_CLICK', 
-    //                 payload: { 
-    //                     x: clickPosition.x + amout, 
-    //                     y: clickPosition.y,
-    //                 } 
-    //             });
-    //             break;
-    //         default:
-    //             break;
-    //     }
-    //     document.removeEventListener('keyup', onKeyup);
-    // }
-
-    // document.addEventListener('keyup', onKeyup);
 
     onSprite = event => {            
         console.log("onSprite click event: ", event);
@@ -204,8 +151,11 @@ function mapDispatchToProps(dispatch) {
                 y: position.y
             }
         }),
-        startWalking: position => dispatch({ 
+        startWalking: () => dispatch({ 
             type: 'UNIT_START_WALKING', 
+        }),
+        unitWalking: position => dispatch({ 
+            type: 'UNIT_WALKING', 
             payload: { 
                 x: position.x, 
                 y: position.y

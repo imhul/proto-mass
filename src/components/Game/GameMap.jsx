@@ -1,12 +1,9 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { TilingSprite } from '@inlet/react-pixi';
-import moment from 'moment';
 
 // Actions
 import { 
     mapClick,
-    dragMapStart, 
     dragMapMove, 
     dragMapStop 
 } from '../../redux/map/actions';
@@ -22,60 +19,85 @@ import MapClick from '../../assets/sound/map_click.ogg';
 
 const GameMap = () => { 
 
-    const now = moment();
-    const msec = moment.unix(now)._i;
-    const [clickMoment, setClickMoment] = useState(msec);
-    const [dragMoment, setDragMoment] = useState(msec);
     const dispatch = useDispatch();
     // const { size } = useSelector(state => state.stage);
-    const { mapPosition, isClicked, isMoved } = useSelector(state => state.map);
+    const { mapPosition, isDragg } = useSelector(state => state.map);
+    const { current } = useSelector(state => state.unit);
     const { settings } = useSelector(state => state.game);
+    const { isFullscreen } = useSelector(state => state.stage);
+    const [ keysPressed, setKeysPressed] = useState({});
 
-    const onDragStart = useCallback(event => {
-        console.info("onDragStart event", event);
-        const nowStart = moment();
-        const msStart = moment.unix(nowStart)._i;
-        setClickMoment(msStart);
-        console.info("clickMoment: ", clickMoment);
-        console.info("dragMoment: ", dragMoment);
-        if ((clickMoment - dragMoment) > 500) {
-            console.info("> 500");
-            
-            dispatch(dragMapStart(event));
-        } else {
-            utils.playSFX(MapClick, settings.volume);
-            dispatch(mapClick(event));
-        }
-        
-        
+    const onMapClick = useCallback(event => {
+        // console.info("onMapClick event", event);
+        utils.playSFX(MapClick, settings.volume);
+        dispatch(mapClick(event));
     }, [dispatch, settings.volume]);
 
-    const onDragEnd = useCallback(event => {
-        console.info("onDragEnd event", event);
-        dispatch(dragMapStop(event));
-    }, [dispatch]);
-
-    const onDragMove = useCallback(event => {
-        if (isClicked)  {
-            const nowMove = moment();
-            const msMove = moment.unix(nowMove)._i;
-            setDragMoment(msMove);
-            console.info("onDragMove event", event);
-            dispatch(dragMapMove(event));
+    const onKeyUp = event => {
+        if (isFullscreen && event.code === 'KeyM') {
+            dispatch({ type: 'TOGGLE_DRAWER' });
+            dispatch({ type: 'TOGGLE_PAUSE_GAME' });
         }
-    }, [dispatch, isClicked]);
+    }
 
-    return <TilingSprite 
-        image={ground}
-        width={3000} 
-        height={3000}
-        tilePosition={mapPosition}
-        anchor={0}
-        interactive={true}
-        pointerdown={event => onDragStart(event)}
-        pointerup={event => onDragEnd(event)}
-        pointermove={event => onDragMove(event)}
-    />;
+    const onKeyDown = useCallback(event => {
+        console.info("event.code: ", event.code);
+        const step = 10;
+        let keysPressed = {};ы
+        //     event.preventDefault();
+        //     event.stopPropagation();
+        if (current.status !== ('walk' || 'absent')) {
+            switch (event.code) {
+                case 'ArrowUp': 
+                case 'KeyW': 
+                    console.info("up");
+                    dispatch(dragMapMove({ 
+                        x: mapPosition.x, 
+                        y: mapPosition.y + step,
+                    }));
+                    break;
+                case 'ArrowDown': 
+                case 'KeyS':
+                    console.info("down");
+                    dispatch(dragMapMove({ 
+                        x: mapPosition.x, 
+                        y: mapPosition.y - step,
+                    }));
+                    break;
+                case 'ArrowLeft': 
+                case 'KeyA':
+                    console.info("left");
+                    dispatch(dragMapMove({ 
+                        x: mapPosition.x + step, 
+                        y: mapPosition.y,
+                    }));
+                    break;
+                case 'ArrowRight': 
+                case 'KeyD':
+                    console.info("right");
+                    dispatch(dragMapMove({ 
+                        x: mapPosition.x - step, 
+                        y: mapPosition.y,
+                    }));
+                    break;
+                default:
+                    if (isDragg) dispatch(dragMapStop(event));
+                    break;
+            }
+        }
+    }, [dispatch, isDragg, mapPosition.x, mapPosition.y, current.status]);
+    
+    useEffect(() => {
+        document.addEventListener('keyup', onKeyUp);
+        document.addEventListener('keydown', onKeyDown);
+    
+        return () => {
+            document.removeEventListener('keyup', onKeyUp);
+            document.removeEventListener('keydown', onKeyDown);
+        };
+    }, [onKeyUp, onKeyDown]);
+
+    return <div mousedown={event => onMapClick(event)} />;
 }
 
 export default GameMap;

@@ -5,11 +5,6 @@ export const mapClick = position => ({
     payload: position,
 });
 
-export const dragMapStart = position => ({
-    type: types.MAP_DRAG_START,
-    payload: position,
-});
-
 export const dragMapMove = position => ({
     type: types.MAP_DRAG_MOVE,
     payload: position,
