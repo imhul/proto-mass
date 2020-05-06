@@ -7401,6 +7401,11 @@ mini-css-extract-plugin@0.8.0:
     schema-utils "^1.0.0"
     webpack-sources "^1.1.0"
 
+mini-signals@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/mini-signals/-/mini-signals-1.2.0.tgz#45b08013c5fae51a24aa1a935cd317c9ed721d74"
+  integrity sha1-RbCAE8X65RokqhqTXNMXye1yHXQ=
+
 mini-store@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/mini-store/-/mini-store-2.0.0.tgz#0843c048d6942ce55e3e78b1b67fc063022b5488"
@@ -9831,6 +9836,14 @@ react-is@^16.12.0, react-is@^16.6.0, react-is@^16.7.0, react-is@^16.8.1, react-i
   version "16.13.1"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.13.1.tgz#789729a4dc36de2999dc156dd6c1d9c18cea56a4"
   integrity sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==
+
+react-isometric-tilemap@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/react-isometric-tilemap/-/react-isometric-tilemap-1.0.0.tgz#2d311f064278999ee75505666ff2916bbf3644a3"
+  integrity sha512-S2Tf3HzqtRv9IziyhbUd/XcwecOdzEDrbzPRpkpJf1hCI5riHFKZhazvEgrL54W5SR62Ekb3q/Xp1LxB50C4SQ==
+  dependencies:
+    mini-signals "^1.2.0"
+    prop-types "^15.6.0"
 
 react-lazy-load@^3.0.13:
   version "3.0.13"

@@ -1,7 +1,9 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { MapProvider, Map } from "react-tiled";
+// import { MapProvider, Map } from "./Map";
+import IsometricMap, { IsometricTile, IsometricObject } from "react-isometric-tilemap";
 import styled from "styled-components";
+import "react-isometric-tilemap/build/css/index.css";
 
 // Actions
 import { 
@@ -14,30 +16,87 @@ import {
 import utils from '../../utils';
 
 // Graphic
-import ground from '../../assets/img/stage_bg.png';
+// import floor63 from '../../assets/sprites/isometric_pixel_0063.png';
+// import leftTop from '../../assets/sprites/left-top.png';
+// import leftBottom from '../../assets/sprites/left-bottom.png';
+// import leftMiddle from '../../assets/sprites/left-middle.png';
+// import rightTop from '../../assets/sprites/right-top.png';
+// import rightBottom from '../../assets/sprites/right-bottom.png';
+// import rightMiddle from '../../assets/sprites/right-middle.png';
 
 // Sounds
 import MapClick from '../../assets/sound/map_click.ogg';
 
-// maps
-import mapData from '../../assets/maps/map-intro.json';
-
 const GameMap = () => { 
 
-    const MapWrapper = styled.div`
-        height: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        background-color: #1c1117;
-    `;
+    const mapWidth = 10;
+    const mapHeight = 10;
+    const tileSize = 42;
+    const area = mapWidth * mapHeight;
+    const tiles = Array.from(
+        { length: area }, 
+        (val, k) => (
+            k <= mapWidth || 
+            k.toString().indexOf('0') > -1 || 
+            k.toString().indexOf('9', 1) > -1 || 
+            k > area - mapWidth 
+        ) ? val = 1 : val = 0
+    );
+
+    console.info("tiles: ", tiles);
+
+    const frames = [{
+        floor: require("../../assets/sprites/isometric_pixel_0063.png"), // floor63
+        leftWall: {
+          top: require("../../assets/sprites/left-top.png"),
+          bottom: require("../../assets/sprites/left-bottom.png"),
+          middle: require("../../assets/sprites/left-middle.png")
+        },
+        rightWall: {
+          top: require("../../assets/sprites/right-top.png"),
+          bottom: require("../../assets/sprites/right-bottom.png"),
+          middle: require("../../assets/sprites/right-middle.png")
+        }
+    }];
 
     return (
-        <MapProvider mapUrl={mapData}>
-            <MapWrapper>
-                <Map style={{ transform: "scale(2)" }} />
-            </MapWrapper>
-        </MapProvider>
+        <IsometricMap 
+            mapWidth={mapWidth} 
+            mapHeight={mapHeight} 
+            tileSize={tileSize} 
+            slabSize={12}
+            offsetY={-100}>
+            {
+               tiles.map((z, index) => {
+                const x = index % mapWidth;
+                const y = Math.floor(index / mapWidth);
+                const result = [
+                    <IsometricTile
+                        key={`tile${index}`}
+                        x={x}
+                        y={y}
+                        z={z}
+                        frames={frames}
+                    />
+                ];
+                if (Math.random() < 0.1) {
+                    result.push(
+                        <IsometricObject
+                            key={`object${index}`}
+                            x={x}
+                            y={y}
+                            z={z + 100}
+                            width={85}
+                            height={186}
+                            frames={[require("../../assets/sprites/tree.png")]}
+                            active
+                        />
+                    );
+                }
+                return result;
+               }) 
+            }
+        </IsometricMap>
     );
       
 }
