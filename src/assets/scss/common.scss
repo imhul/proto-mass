@@ -9,6 +9,9 @@ body {
             background: $transparent;
             overflow: hidden;
         }
+        .react-isometric-object {
+            bottom: 0 !important;
+        }
     }
     a {
         color: #F804FB;

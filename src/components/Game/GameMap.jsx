@@ -40,7 +40,7 @@ const GameMap = () => {
             k.toString().indexOf('0') > -1 || 
             k.toString().indexOf('9', 1) > -1 || 
             k > area - mapWidth 
-        ) ? val = 1 : val = 0
+        ) ? val = 1 : val = 1
     );
 
     console.info("tiles: ", tiles);
@@ -65,35 +65,35 @@ const GameMap = () => {
             mapHeight={mapHeight} 
             tileSize={tileSize} 
             slabSize={12}
-            offsetY={-100}>
+        >
             {
                tiles.map((z, index) => {
-                const x = index % mapWidth;
-                const y = Math.floor(index / mapWidth);
-                const result = [
-                    <IsometricTile
-                        key={`tile${index}`}
-                        x={x}
-                        y={y}
-                        z={z}
-                        frames={frames}
-                    />
-                ];
-                if (Math.random() < 0.1) {
-                    result.push(
-                        <IsometricObject
-                            key={`object${index}`}
+                    const x = index % mapWidth;
+                    const y = Math.floor(index / mapWidth);
+                    const result = [
+                        <IsometricTile
+                            key={`tile${index}`}
                             x={x}
                             y={y}
-                            z={z + 100}
-                            width={85}
-                            height={186}
-                            frames={[require("../../assets/sprites/tree.png")]}
-                            active
+                            z={z}
+                            frames={frames}
                         />
-                    );
-                }
-                return result;
+                    ];
+                    if (Math.random() < 0.1) {
+                        result.push(
+                            <IsometricObject
+                                key={`object${index}`}
+                                x={x}
+                                y={y}
+                                z={z}
+                                width={85}
+                                height={186}
+                                frames={[require("../../assets/sprites/tree.png")]}
+                                active
+                            />
+                        );
+                    }
+                    return result;
                }) 
             }
         </IsometricMap>
