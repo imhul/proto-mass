@@ -8,8 +8,8 @@ export default function mapReducer(state = initState, action) {
             return {
                 ...state,
                 clickPosition: {
-                    x: action.payload.data.global.x,
-                    y: action.payload.data.global.y,
+                    x: action.payload.x,
+                    y: action.payload.y,
                 },
             }
         }
