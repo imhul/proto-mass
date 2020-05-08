@@ -9,8 +9,14 @@ body {
             background: $transparent;
             overflow: hidden;
         }
+        // isometric fixes
+        .react-isometric-map {
+            transform-origin: right center;
+            position: absolute;
+        }
         .react-isometric-object {
-            bottom: 0 !important;
+            bottom: 20px;
+            left: 6px;
         }
     }
     a {

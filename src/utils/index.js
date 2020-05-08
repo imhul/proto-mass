@@ -1,7 +1,3 @@
-import { playSFX } from './playSFX';
-
-const utils = {
-    playSFX,
-}
-
-export default utils;
+export { playSFX } from './playSFX';
+export { getFrames } from './getFrames';
+export { getRandomInt } from './getRandomInt';

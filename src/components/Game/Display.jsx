@@ -5,7 +5,7 @@ import { Provider, useStore, useSelector, useDispatch } from 'react-redux';
 import WindowSizeListener from 'react-window-size-listener';
 import Fullscreen from 'react-full-screen';
 import Animation from './Animation';
-import utils from '../../utils';
+import { playSFX } from '../../utils';
 
 // Components
 import GameMap from './GameMap';
@@ -23,7 +23,7 @@ const Display = () => {
     const { isInit, settings } = useSelector(state => state.game);
     const { isFullscreen } = useSelector(state => state.stage);
 
-    useEffect(() => utils.playSFX(intro, settings.volume), [settings.volume]);
+    useEffect(() => playSFX(intro, settings.volume), [settings.volume]);
 
     const prevent = useCallback(e => {
         e.preventDefault();
