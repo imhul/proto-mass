@@ -1,11 +1,8 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 // import { MapProvider, Map } from "./Map";
-import IsometricMap, { IsometricTile, IsometricObject } from "react-isometric-tilemap";
+import { IsometricMap, IsometricTile } from './Map';
 import { Zoom } from 'react-scaling';
-
-import styled from "styled-components";
-import "react-isometric-tilemap/build/css/index.css";
 
 // Actions
 import { 
@@ -28,7 +25,6 @@ import MapClick from '../../assets/sound/map_click.ogg';
 const GameMap = () => { 
 
     // map constants
-    const dispatch = useDispatch();
     const mapWidth = 30;
     const mapHeight = 30;
     const tileSize = 42;
@@ -47,6 +43,7 @@ const GameMap = () => {
     // effects
     const { zoom, isDraggable } = useSelector(state => state.map);
     const { settings } = useSelector(state => state.game);
+    const dispatch = useDispatch();
 
     const onWheel = useCallback(e => {
         if (e.deltaY < 0) {
@@ -87,8 +84,34 @@ const GameMap = () => {
         dispatch({ type: 'MAP_CLICK', payload: {x: x, y: y} })
     }, [dispatch, settings.volume]);
 
+    // render
+    const MapLoader = () => {
+        const loadMap = mockedMap.map((tileId, index) => { // tileList[]
+            const x = index % mapWidth;
+            const y = Math.floor(index / mapWidth);
+            const result = [
+                <IsometricTile
+                    key={`tile${index}`}
+                    x={x}
+                    y={y}
+                    z={1}
+                    frames={getFrames(true, tileId)}
+                    onClick={() => onMapClick(x, y)}
+                />
+            ];
+            return result;
+        });
+        loadMap.push( 
+            <Objects width={tileSize} height={92} key={`objects`} />
+        );
+        return loadMap
+    };
+
     return (
-        <Zoom zoom={zoom} style={{ 'cursor': isDraggable ? 'grab' : 'default' }}>
+        <Zoom 
+            zoom={zoom} 
+            style={{ 'cursor': isDraggable ? 'grab' : 'default' }}
+        >
             <IsometricMap 
                 mapWidth={mapWidth} 
                 mapHeight={mapHeight} 
@@ -96,32 +119,10 @@ const GameMap = () => {
                 slabSize={1}
                 offsetY={offset}
             >
-                {
-                    mockedMap.map((tileId, index) => { // tileList[]
-                        const x = index % mapWidth;
-                        const y = Math.floor(index / mapWidth);
-                        const result = [
-                            <IsometricTile
-                                key={`tile${index}`}
-                                x={x}
-                                y={y}
-                                z={1}
-                                frames={getFrames(true, tileId)}
-                                onClick={() => onMapClick(x, y)}
-                            />
-                        ];
-
-                        result.push( 
-                            <Objects width={tileSize} height={92} key={`object${index + 1000}`} />
-                        );
-
-                        return result;
-                    }) 
-                }
+                <MapLoader />
             </IsometricMap>
         </Zoom>
-    );
-      
+    );   
 }
 
 //     const dispatch = useDispatch();
