@@ -18,6 +18,13 @@ export default function appReducer(state = initState, action) {
             }
         }
 
+        case types.LOADING_APP: {
+            return {
+                ...state,
+                loadingPercent: action.payload,
+            }
+        }
+
         case types.LOADING_APP_COMPLETE: {
             return {
                 ...state,

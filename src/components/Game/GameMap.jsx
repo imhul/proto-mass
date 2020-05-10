@@ -1,81 +1,202 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { TilingSprite } from '@inlet/react-pixi';
-import moment from 'moment';
+// import { MapProvider, Map } from "./Map";
+import IsometricMap, { IsometricTile, IsometricObject } from "react-isometric-tilemap";
+import { Zoom } from 'react-scaling';
+
+import styled from "styled-components";
+import "react-isometric-tilemap/build/css/index.css";
 
 // Actions
 import { 
     mapClick,
-    dragMapStart, 
     dragMapMove, 
-    dragMapStop 
+    dragMapStop,
+    // mapScaleUp,
+    // mapScaleDown,
 } from '../../redux/map/actions';
 
 // Utils
-import utils from '../../utils';
+import { getFrames, getRandomInt, mockedMap, playSFX } from '../../utils';
 
-// Graphic
-import ground from '../../assets/img/stage_bg.png';
+// Components
+import Objects from './Objects';
 
 // Sounds
 import MapClick from '../../assets/sound/map_click.ogg';
 
 const GameMap = () => { 
 
-    const now = moment();
-    const msec = moment.unix(now)._i;
-    const [clickMoment, setClickMoment] = useState(msec);
-    const [dragMoment, setDragMoment] = useState(msec);
+    // map constants
     const dispatch = useDispatch();
-    // const { size } = useSelector(state => state.stage);
-    const { mapPosition, isClicked, isMoved } = useSelector(state => state.map);
+    const mapWidth = 30;
+    const mapHeight = 30;
+    const tileSize = 42;
+    const offset = -(mapWidth * 5);
+    const area = mapWidth * mapHeight;
+    const tileList = Array.from(
+        { length: area }, 
+        (val, k) => (
+            k <= mapWidth || 
+            k.toString().indexOf('0') > -1 || 
+            k.toString().indexOf('9', 1) > -1 || 
+            k > area - mapWidth 
+        ) ? val = 1 : val = getRandomInt(2, 9)
+    );
+
+    // effects
+    const { zoom, isDraggable } = useSelector(state => state.map);
     const { settings } = useSelector(state => state.game);
 
-    const onDragStart = useCallback(event => {
-        console.info("onDragStart event", event);
-        const nowStart = moment();
-        const msStart = moment.unix(nowStart)._i;
-        setClickMoment(msStart);
-        console.info("clickMoment: ", clickMoment);
-        console.info("dragMoment: ", dragMoment);
-        if ((clickMoment - dragMoment) > 500) {
-            console.info("> 500");
-            
-            dispatch(dragMapStart(event));
-        } else {
-            utils.playSFX(MapClick, settings.volume);
-            dispatch(mapClick(event));
+    const onWheel = useCallback(e => {
+        if (e.deltaY < 0) {
+            dispatch({ type: 'MAP_DECREASE'})
+        } else if (e.deltaY > 0) {
+            dispatch({ type: 'MAP_INCREASE'})
         }
-        
-        
-    }, [dispatch, settings.volume]);
-
-    const onDragEnd = useCallback(event => {
-        console.info("onDragEnd event", event);
-        dispatch(dragMapStop(event));
     }, [dispatch]);
 
-    const onDragMove = useCallback(event => {
-        if (isClicked)  {
-            const nowMove = moment();
-            const msMove = moment.unix(nowMove)._i;
-            setDragMoment(msMove);
-            console.info("onDragMove event", event);
-            dispatch(dragMapMove(event));
+    const onKeydown = useCallback(e => {
+        // console.info("e.code: ", e.code);
+        // console.info("e.keyCode: ", e.keyCode);
+        if (e.code === 'ControlLeft' && e.keyCode === 17 && !isDraggable) {
+            dispatch({ type: 'MAP_IS_DRAGGABLE'})
         }
-    }, [dispatch, isClicked]);
+    }, [dispatch, isDraggable]);
 
-    return <TilingSprite 
-        image={ground}
-        width={3000} 
-        height={3000}
-        tilePosition={mapPosition}
-        anchor={0}
-        interactive={true}
-        pointerdown={event => onDragStart(event)}
-        pointerup={event => onDragEnd(event)}
-        pointermove={event => onDragMove(event)}
-    />;
+    const onKeyup = useCallback(e => {
+        if (e.code === 'ControlLeft' && e.keyCode === 17 && isDraggable) {
+            dispatch({ type: 'MAP_NO_DRAGGABLE'})
+        }
+    }, [dispatch, isDraggable]);
+
+    useEffect(() => {
+        window.addEventListener('wheel', onWheel);
+        window.addEventListener('keydown', onKeydown);
+        window.addEventListener('keyup', onKeyup);
+    
+        return () => {
+            window.removeEventListener('wheel', onWheel);
+            window.removeEventListener('keydown', onKeydown);
+            window.removeEventListener('keyup', onKeyup);
+        };
+    }, [onWheel, onKeydown, onKeyup]);
+
+    const onMapClick = useCallback((x, y) => {
+        playSFX(MapClick, settings.volume);
+        dispatch({ type: 'MAP_CLICK', payload: {x: x, y: y} })
+    }, [dispatch, settings.volume]);
+
+    return (
+        <Zoom zoom={zoom} style={{ 'cursor': isDraggable ? 'grab' : 'default' }}>
+            <IsometricMap 
+                mapWidth={mapWidth} 
+                mapHeight={mapHeight} 
+                tileSize={tileSize} 
+                slabSize={1}
+                offsetY={offset}
+            >
+                {
+                    mockedMap.map((tileId, index) => { // tileList[]
+                        const x = index % mapWidth;
+                        const y = Math.floor(index / mapWidth);
+                        const result = [
+                            <IsometricTile
+                                key={`tile${index}`}
+                                x={x}
+                                y={y}
+                                z={1}
+                                frames={getFrames(true, tileId)}
+                                onClick={() => onMapClick(x, y)}
+                            />
+                        ];
+
+                        result.push( 
+                            <Objects width={tileSize} height={92} key={`object${index + 1000}`} />
+                        );
+
+                        return result;
+                    }) 
+                }
+            </IsometricMap>
+        </Zoom>
+    );
+      
 }
+
+//     const dispatch = useDispatch();
+//     // const { size } = useSelector(state => state.stage);
+//     const { mapPosition, isDragg } = useSelector(state => state.map);
+//     const { current } = useSelector(state => state.unit);
+//     const { settings } = useSelector(state => state.game);
+//     const { isFullscreen } = useSelector(state => state.stage);
+//     const [ keysPressed, setKeysPressed] = useState({});
+
+//     const onKeyUp = event => {
+//         if (isFullscreen && event.code === 'KeyM') {
+//             dispatch({ type: 'TOGGLE_DRAWER' });
+//             dispatch({ type: 'TOGGLE_PAUSE_GAME' });
+//         }
+//     }
+
+//     const onKeyDown = useCallback(event => {
+//         console.info("event.code: ", event.code);
+//         const step = 10;
+//         let keysPressed = {};
+//         //     event.preventDefault();
+//         //     event.stopPropagation();
+//         if (current.status !== ('walk' || 'absent')) {
+//             switch (event.code) {
+//                 case 'ArrowUp': 
+//                 case 'KeyW': 
+//                     console.info("up");
+//                     dispatch(dragMapMove({ 
+//                         x: mapPosition.x, 
+//                         y: mapPosition.y + step,
+//                     }));
+//                     break;
+//                 case 'ArrowDown': 
+//                 case 'KeyS':
+//                     console.info("down");
+//                     dispatch(dragMapMove({ 
+//                         x: mapPosition.x, 
+//                         y: mapPosition.y - step,
+//                     }));
+//                     break;
+//                 case 'ArrowLeft': 
+//                 case 'KeyA':
+//                     console.info("left");
+//                     dispatch(dragMapMove({ 
+//                         x: mapPosition.x + step, 
+//                         y: mapPosition.y,
+//                     }));
+//                     break;
+//                 case 'ArrowRight': 
+//                 case 'KeyD':
+//                     console.info("right");
+//                     dispatch(dragMapMove({ 
+//                         x: mapPosition.x - step, 
+//                         y: mapPosition.y,
+//                     }));
+//                     break;
+//                 default:
+//                     if (isDragg) dispatch(dragMapStop(event));
+//                     break;
+//             }
+//         }
+//     }, [dispatch, isDragg, mapPosition.x, mapPosition.y, current.status]);
+    
+//     useEffect(() => {
+//         document.addEventListener('keyup', onKeyUp);
+//         document.addEventListener('keydown', onKeyDown);
+    
+//         return () => {
+//             document.removeEventListener('keyup', onKeyUp);
+//             document.removeEventListener('keydown', onKeyDown);
+//         };
+//     }, [onKeyUp, onKeyDown]);
+
+//     return <div mousedown={event => onMapClick(event)} />;
+// }
 
 export default GameMap;

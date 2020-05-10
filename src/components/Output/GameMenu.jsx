@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from "react-router-dom";
-import { Drawer, Progress, Typography, Icon } from 'antd';
+import { Drawer, Typography } from 'antd';
 
 // Components
 import SoundSlider from './SoundSlider';
@@ -13,9 +13,9 @@ const GameMenu = () => {
 
     const history = useHistory();
     const dispatch = useDispatch();
-    const { isFullscreen } = useSelector(state => state.stage);
-    const { isGameMenuOpen, settings } = useSelector(state => state.game);
-    const { clickPosition } = useSelector(state => state.map);
+    // const { isFullscreen } = useSelector(state => state.stage);
+    const { isGameMenuOpen } = useSelector(state => state.game);
+    const { clickPosition, isDraggable } = useSelector(state => state.map);
 
     const onExit = () => {
         dispatch({ type: 'EXIT_GAME' })
@@ -52,10 +52,24 @@ const GameMenu = () => {
 
     return (
         <>
-            <span className="Stats"><i className="anticon game-menu-btn">B</i> 99</span>
-            <i 
+            <span className="Stats">
+                <i className="anticon game-menu-btn touchable">L</i> 3
+            </span>
+            <span>
+                {   isDraggable && 
+                    <i className="anticon game-menu-text-btn">&#x1F591;</i>
+                }
+                <i 
+                    className="anticon game-menu-text-btn touchable" 
+                    onClick={() => dispatch({ type: 'MAP_DECREASE'}) }>-</i>
+                <i 
+                    className="anticon game-menu-text-btn touchable" 
+                    onClick={() => dispatch({ type: 'MAP_INCREASE'}) }>+</i>
+                
+                <i 
                 className="anticon game-menu-btn touchable" 
                 onClick={() => onDrawer() }>j</i>
+            </span>
                 {/* TODO: resolve fullscreen Drawer visibility */}
             <Drawer
                 title="MENU"

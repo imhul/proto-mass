@@ -1,5 +1,5 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
+import React, { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { ConnectedRouter } from 'connected-react-router';
 import { Route, Switch } from 'react-router';
 import { Redirect } from "react-router-dom";
@@ -18,7 +18,10 @@ const { Content } = Layout;
 
 const Output = ({ history }) => {
 
+    const dispatch = useDispatch();
     const { isInit } = useSelector(state => state.game);
+
+    useEffect(() => { dispatch({ type: 'APP_INIT' }) }, [dispatch]);
 
     return (
         <ConnectedRouter history={history}>

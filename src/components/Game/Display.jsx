@@ -1,90 +1,61 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { Provider, useStore, useSelector, useDispatch } from 'react-redux';
-import { withPixiApp, Stage, TilingSprite } from '@inlet/react-pixi';
+import React, { useEffect, useCallback } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 
 // Utils
-import WindowSizeListener from 'react-window-size-listener';
 import Fullscreen from 'react-full-screen';
-import Animation from './Animation';
-import utils from '../../utils';
+import { playSFX } from '../../utils';
 
 // Components
 import GameMap from './GameMap';
-import Unit from './Unit';
 import Preloader from './Preloader';
-import TransparentLayer from './TransparentLayer';
 
 // Sounds
-import intro from '../../assets/sound/loading.ogg';
+import introSFX from '../../assets/sound/loading.ogg';
 
-const DisplayGame = () => {
+const Display = () => {
 
-    const store = useStore();
+    // const store = useStore();
     const dispatch = useDispatch();
-    const { size } = useSelector(state => state.stage);
+    const { loadingPercent } = useSelector(state => state.app);
     const { isInit, settings } = useSelector(state => state.game);
     const { isFullscreen } = useSelector(state => state.stage);
 
-    useEffect(() => utils.playSFX(intro, settings.volume), []);
-
-    const onPressM = event => {
-        if (isFullscreen && event.code === 'KeyM') {
-            dispatch({ type: 'TOGGLE_DRAWER' });
-            dispatch({ type: 'TOGGLE_PAUSE_GAME' });
+    useEffect(() => {
+        dispatch({ type: 'START_LOADING_APP' })
+        if (loadingPercent === 100) {
+            dispatch({ type: 'LOADING_APP_COMPLETE' });
+            dispatch({ type: 'INIT_GAME' });
         }
-    }
+    }, [loadingPercent, dispatch]);
+
+    useEffect(() => playSFX(introSFX, settings.volume), [settings.volume]);
+
+    const prevent = useCallback(e => {
+        e.preventDefault();
+    }, []);
 
     useEffect(() => {
-        window.addEventListener('keyup', onPressM);
+        window.addEventListener('contextmenu', prevent);
     
         return () => {
-          window.removeEventListener('keyup', onPressM);
+          window.removeEventListener('contextmenu', prevent);
         };
-    }, [onPressM]);
-
-    const Loader = () => {
-        const [percent, percentUpdate] = useState(0);
-        if (percent < 100 && !isInit) {
-            Animation(deltaTime => {
-                percentUpdate(prevCount => prevCount + deltaTime * 0.1);
-            });
-        } else {
-            Animation(null);
-            dispatch({ type: 'INIT_GAME' })
-        }
-        
-        return <Preloader percent={Math.round(percent)} />;
-    }
+    }, [prevent]);
     
-    return  (
-        <>
-            { !isInit ? <Loader /> : 
-                <WindowSizeListener
-                    onResize={output => dispatch({ type: 'RESIZE', payload: output })}
-                >
-                    <Fullscreen 
-                        enabled={isFullscreen} 
-                        onChange={isFull  => dispatch({ type: 'FULLSCREEN', payload: isFull })}
-                    >
-                        <Stage 
-                            className="Game"
-                            width={size.width} 
-                            height={size.height} 
-                            onMount={() => console.info("GAME IS MOUNTED!")}
-                        >
-                            <Provider store={ store }>
-                                <GameMap />
-                                <Unit />
-                                <TransparentLayer />
-                            </Provider>
-                        </Stage>
-                    </Fullscreen>
-                </WindowSizeListener>
-            }
-        </>
-    )
+    return <>
+        { 
+            !isInit ? <Preloader 
+                percent={loadingPercent} 
+                style={{ 'zIndex': isInit ? 0 : 998 }} 
+            /> : null 
+        }
+        <Fullscreen 
+            enabled={isFullscreen} 
+            onChange={isFull  => dispatch({ type: 'FULLSCREEN', payload: isFull })}
+        >
+            <GameMap />
+        </Fullscreen>
+    </>
 };
-
-const Display = withPixiApp(DisplayGame);
 
 export default Display;

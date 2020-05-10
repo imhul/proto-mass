@@ -38,7 +38,7 @@ const LoginForm = (props) => {
             dispatch({ 
               type: 'SET_AUTH_LOGIN', 
               payload: { 
-              login: user.username, 
+                login: user.username, 
                 pass: user.password, 
                 remember: user.remember,
                 id: user.id,

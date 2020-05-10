@@ -9,6 +9,29 @@ body {
             background: $transparent;
             overflow: hidden;
         }
+        // isometric fixes
+        .react-isometric-map {
+            transform-origin: right center;
+            position: absolute;
+            user-select: none;
+            & * {
+                user-select: none;
+            }
+            .wall {
+                display: none;
+            }
+            .react-isometric-tile {
+                & > .floor {
+                    background: rgba(0,0,0,0);
+                    border: 0;
+                }
+            }
+        }
+        .react-isometric-object {
+            user-select: none;
+            bottom: 20px;
+            left: 6px;
+        }
     }
     a {
         color: #F804FB;

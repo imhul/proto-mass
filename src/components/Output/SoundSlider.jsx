@@ -1,14 +1,13 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useCookies, withCookies } from 'react-cookie';
-import { Slider, Typography, InputNumber } from 'antd';
+import { Slider } from 'antd';
 
 const SoundSlider = () => {
 
     const dispatch = useDispatch();
     const { settings } = useSelector(state => state.game);
-    const { Title } = Typography;
-    const [cookies, setCookie, removeCookie] = useCookies(['volume']);
+    const [cookies, setCookie] = useCookies(['volume']);
 
     const setVolume = value => {
         setCookie('volume', value, { path: '/' });
@@ -19,7 +18,7 @@ const SoundSlider = () => {
         if (cookies.volume) {
             dispatch({ type: 'SET_VOLUME', payload: +cookies.volume });
         }
-    }, []);
+    }, [dispatch, cookies.volume]);
 
     return (
         <div className="SoundSlider">

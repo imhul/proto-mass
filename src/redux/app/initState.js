@@ -1,6 +1,7 @@
 export const initState = {
     isAppInit: true,
     isAppLoad: false,
+    loadingPercent: 0,
     notify: {
         key: '',
         type: '',

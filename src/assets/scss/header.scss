@@ -3,6 +3,7 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
+        z-index: 998;
         .ant-menu {
             text-transform: uppercase;
             .ant-menu-item {
@@ -53,6 +54,13 @@
             font-family: "PixelIconsCompilation";
             vertical-align: middle;
             width: 64px;
+            z-index: 999;
+            color: #33F6F9;
+        }
+        .game-menu-text-btn {
+            font-size: 50px;
+            font-family: "PressStart2P-Regular";
+            vertical-align: middle;
             z-index: 999;
             color: #33F6F9;
         }

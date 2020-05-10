@@ -5,46 +5,61 @@ export default function mapReducer(state = initState, action) {
     switch (action.type) {
 
         case types.MAP_CLICK: {
-            console.info("action.payload: ", action.payload);
             return {
                 ...state,
                 clickPosition: {
-                    x: action.payload.data.global.x,
-                    y: action.payload.data.global.y,
+                    x: action.payload.x,
+                    y: action.payload.y,
                 },
             }
         }
 
-        case types.MAP_DRAG_START: {
-            console.info("action.payload: ", action.payload);
+        case types.MAP_INCREASE: {
             return {
                 ...state,
-                isMoved: false,
-                isClicked: true,
+                zoom: state.zoom < 250 ? state.zoom + 10 : state.zoom,
+            }
+        }
+
+        case types.MAP_DECREASE: {
+            return {
+                ...state,
+                zoom: state.zoom > 100 ? state.zoom - 10 : state.zoom,
+            }
+        }
+
+        case types.MAP_IS_DRAGGABLE: {
+            return {
+                ...state,
+                isDraggable: true,
+            }
+        }
+
+        case types.MAP_NO_DRAGGABLE: {
+            return {
+                ...state,
+                isDraggable: false,
             }
         }
 
         case types.MAP_DRAG_MOVE: {
-            console.info("action.payload: ", action.payload);
             return {
                 ...state,
-                isMoved: true,
+                isDragg: true,
                 mapPosition: {
-                    x: action.payload.data.global.x,
-                    y: action.payload.data.global.y,
+                    x: action.payload.x,
+                    y: action.payload.y,
                 },
             }
         }
 
         case types.MAP_DRAG_STOP: {
-            console.info("action.payload: ", action.payload);
             return {
                 ...state,
-                isClicked: false,
-                isMoved: false,
+                isDragg: false,
                 mapPosition: {
-                    x: action.payload.data.global.x,
-                    y: action.payload.data.global.y,
+                    x: action.payload.x,
+                    y: action.payload.y,
                 },
             }
         }

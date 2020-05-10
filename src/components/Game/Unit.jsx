@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { withPixiApp, AnimatedSprite } from '@inlet/react-pixi';
-import { Texture } from 'pixi.js';
 
 // Graphic
 import botPart1 from '../../assets/img/animations/bot/frame_0_delay-0.2s.gif';
@@ -10,16 +8,16 @@ import botPart3 from '../../assets/img/animations/bot/frame_2_delay-0.2s.gif';
 import botPart4 from '../../assets/img/animations/bot/frame_3_delay-0.2s.gif';
 import cursor from '../../assets/img/cur.gif';
 
-class GameUnit extends Component {
+class Unit extends Component {
 
     constructor(props) {
         super(props);
         const botImages = [botPart1, botPart2, botPart3, botPart4];
-        this.textures = [];
-        for (let i=0; i < botImages.length; i++) {
-            const texture = new Texture.from(botImages[i]);
-            this.textures.push(texture);
-        };
+        // this.textures = [];
+        // for (let i=0; i < botImages.length; i++) {
+        //     const texture = new Texture.from(botImages[i]);
+        //     this.textures.push(texture);
+        // };
         const defaultIcon = `url(${cursor}),auto`;
         const hoverIcon = `url(${cursor}),auto`;
         props.app.renderer.plugins.interaction.cursorStyles.default = defaultIcon;
@@ -58,7 +56,7 @@ class GameUnit extends Component {
     tick = () => {
         console.info("::::tick run::::");
 
-        const { stage, map, units, startWalking, stopWalking } = this.props;
+        const { stage, map, units, startWalking, unitWalking, stopWalking } = this.props;
 
         const speed = units.current.stats.speed;
 
@@ -80,27 +78,28 @@ class GameUnit extends Component {
         // Check click sectors
         if (Math.abs(units.current.position.x - centerX) < distance && 
             Math.abs(units.current.position.y - centerY) < distance) {
+            if (units.current.status !== 'walk') startWalking(); 
             if (map.clickPosition.x > centerX && map.clickPosition.y > centerY) {
                 console.log("↘ SE");
-                startWalking({
+                unitWalking({
                     x: units.current.position.x + speedX,
                     y: units.current.position.y + speedY
                 });
             } else if (this.props.map.clickPosition.x < centerX && this.props.map.clickPosition.y < centerY) {
                 console.log("↖ NW ");
-                startWalking({
+                unitWalking({
                     x: units.current.position.x - speedX,
                     y: units.current.position.y - speedY
                 });
             } else if (this.props.map.clickPosition.x > centerX && this.props.map.clickPosition.y < centerY) {
                 console.log("↗ NE ");
-                startWalking({
+                unitWalking({
                     x: units.current.position.x + speedX,
                     y: units.current.position.y + speedY
                 });
             } else if (this.props.map.clickPosition.x < centerX && this.props.map.clickPosition.y > centerY) {
                 console.info("↙ SW");
-                startWalking({
+                unitWalking({
                     x: units.current.position.x - speedX,
                     y: units.current.position.y - speedY
                 });
@@ -115,60 +114,6 @@ class GameUnit extends Component {
         }
     }
 
-    // const onKeyup = event => {
-    //     event.preventDefault();
-    //     event.stopPropagation();
-    //     // TODO: need to stop re-rendering!
-    //     const amout = 10;
-    //     switch (event.code) {
-    //         case 'KeyW': 
-    //             console.info("up");
-    //             dispatch({ 
-    //                 type: 'MAP_CLICK', 
-    //                 payload: { 
-    //                     x: clickPosition.x, 
-    //                     y: clickPosition.y - amout,
-    //                 } 
-    //             });
-    //             break;
-    //         case 'KeyS':
-    //             console.info("down");
-    //             dispatch({ 
-    //                 type: 'MAP_CLICK', 
-    //                 payload: { 
-    //                     x: clickPosition.x, 
-    //                     y: clickPosition.y + amout,
-    //                 } 
-    //             });
-    //             break;
-    //         case 'KeyA':
-    //             console.info("left");
-    //             dispatch({ 
-    //                 type: 'MAP_CLICK', 
-    //                 payload: { 
-    //                     x: clickPosition.x - amout, 
-    //                     y: clickPosition.y,
-    //                 } 
-    //             });
-    //             break;
-    //         case 'KeyD':
-    //             console.info("right");
-    //             dispatch({ 
-    //                 type: 'MAP_CLICK', 
-    //                 payload: { 
-    //                     x: clickPosition.x + amout, 
-    //                     y: clickPosition.y,
-    //                 } 
-    //             });
-    //             break;
-    //         default:
-    //             break;
-    //     }
-    //     document.removeEventListener('keyup', onKeyup);
-    // }
-
-    // document.addEventListener('keyup', onKeyup);
-
     onSprite = event => {            
         console.log("onSprite click event: ", event);
     }
@@ -177,23 +122,23 @@ class GameUnit extends Component {
         
         const { units } = this.props;
         
-        return ( 
-            <AnimatedSprite 
-                x={units.current.position.x} 
-                y={units.current.position.y}
-                textures={this.textures}
-                isPlaying={true}
-                initialFrame={0}
-                animationSpeed={0.1}
-                interactive={true}
-                buttonMode={true}
-                pointerdown={event => this.onSprite(event)}
-            />
-        );
+        return <div></div>
+            // <AnimatedSprite 
+            //     x={units.current.position.x} 
+            //     y={units.current.position.y}
+            //     textures={this.textures}
+            //     isPlaying={true}
+            //     initialFrame={0}
+            //     animationSpeed={0.1}
+            //     interactive={true}
+            //     buttonMode={true}
+            //     pointerdown={event => this.onSprite(event)}
+            // />
+        
     }
 }
 
-const Unit = withPixiApp(GameUnit);
+// const Unit = withPixiApp(GameUnit);
 
 function mapDispatchToProps(dispatch) {
     return {
@@ -204,8 +149,11 @@ function mapDispatchToProps(dispatch) {
                 y: position.y
             }
         }),
-        startWalking: position => dispatch({ 
+        startWalking: () => dispatch({ 
             type: 'UNIT_START_WALKING', 
+        }),
+        unitWalking: position => dispatch({ 
+            type: 'UNIT_WALKING', 
             payload: { 
                 x: position.x, 
                 y: position.y
