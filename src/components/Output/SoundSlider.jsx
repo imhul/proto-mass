@@ -7,7 +7,7 @@ const SoundSlider = () => {
 
     const dispatch = useDispatch();
     const { settings } = useSelector(state => state.game);
-    const [cookies, setCookie, removeCookie] = useCookies(['volume']);
+    const [cookies, setCookie] = useCookies(['volume']);
 
     const setVolume = value => {
         setCookie('volume', value, { path: '/' });

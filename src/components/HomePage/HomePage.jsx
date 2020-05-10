@@ -26,13 +26,13 @@ const HomePage = () => {
 
     const rondomArr = new Array(getRandom(20, 40)).fill({'type': 1}, 0);
 
-    const starsStyles = {
-        position: 'absolute',
-        width: '100%',
-        top: 64,
-        left: 0,
-        opacity: 0.4,
-    };
+    // const starsStyles = {
+    //     position: 'absolute',
+    //     width: '100%',
+    //     top: 64,
+    //     left: 0,
+    //     opacity: 0.4,
+    // };
 
     return <WindowSizeListener
                 onResize={output => dispatch({ type: 'RESIZE', payload: output })}
@@ -53,7 +53,7 @@ const HomePage = () => {
                                     animationDuration: `${getRandom(1, 10)}s`,
                                     left: getRandom(40, (size.width - 40)),
                                 };
-                                return <img className="show" key={i + 1} src={explo1} style={styles} />
+                                return <img className="show" key={i + 1} src={explo1} style={styles} alt="exp 1" />
                             })
                         }
                         { 
@@ -66,7 +66,7 @@ const HomePage = () => {
                                     animationDuration: `${getRandom(1, 10)}s`,
                                     left: getRandom(40, (size.width - 40)),
                                 };
-                                return <img className="show" key={i + 2} src={explo2} style={styles} />
+                                return <img className="show" key={i + 2} src={explo2} style={styles} alt="exp 2" />
                             })
                         }
                         { 
@@ -79,7 +79,7 @@ const HomePage = () => {
                                     animationDuration: `${getRandom(1, 10)}s`,
                                     left: getRandom(40, (size.width - 40)),
                                 };
-                                return <img className="show" key={i + 4} src={explo4} style={styles} />
+                                return <img className="show" key={i + 4} src={explo4} style={styles} alt="exp 3" />
                             })
                         }
                         { 
@@ -92,7 +92,7 @@ const HomePage = () => {
                                     animationDuration: `${getRandom(1, 10)}s`,
                                     left: getRandom(40, (size.width - 40)),
                                 };
-                                return <img className="show" key={i + 5} src={explo5} style={styles} />
+                                return <img className="show" key={i + 5} src={explo5} style={styles} alt="exp 4" />
                             })
                         }
                     </div>

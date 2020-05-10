@@ -8,5 +8,7 @@ export const initState = {
         y: 0,
     },
     isDragg: false,
+    isDraggable: false,
     error: {},
+    zoom: 100,
 };

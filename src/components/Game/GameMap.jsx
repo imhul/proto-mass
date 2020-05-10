@@ -17,9 +17,10 @@ import {
 } from '../../redux/map/actions';
 
 // Utils
-import { getFrames, getRandomInt, mockedMap } from '../../utils';
+import { getFrames, getRandomInt, mockedMap, playSFX } from '../../utils';
 
-// Graphic
+// Components
+import Objects from './Objects';
 
 // Sounds
 import MapClick from '../../assets/sound/map_click.ogg';
@@ -27,7 +28,6 @@ import MapClick from '../../assets/sound/map_click.ogg';
 const GameMap = () => { 
 
     // map constants
-
     const dispatch = useDispatch();
     const mapWidth = 30;
     const mapHeight = 30;
@@ -45,35 +45,50 @@ const GameMap = () => {
     );
 
     // effects
+    const { zoom, isDraggable } = useSelector(state => state.map);
+    const { settings } = useSelector(state => state.game);
 
-    const [zoom, setZoom] = useState(100);
-
-    // TODO: solution: "+" & "-" buttons?
     const onWheel = useCallback(e => {
-        const delta = e.deltaY || e.detail || e.wheelDelta;
-
         if (e.deltaY < 0) {
-            console.log('scrolling up delta: ', delta);
-            setZoom(zoom => zoom > 100 ? zoom - 10 : zoom);
+            dispatch({ type: 'MAP_DECREASE'})
+        } else if (e.deltaY > 0) {
+            dispatch({ type: 'MAP_INCREASE'})
         }
-        else if (e.deltaY > 0) {
-            console.log('scrolling down delta: ', delta);
-            setZoom(zoom => zoom < 250 ? zoom + 10 : zoom);
-        }
-        
+    }, [dispatch]);
 
-    }, []);
+    const onKeydown = useCallback(e => {
+        // console.info("e.code: ", e.code);
+        // console.info("e.keyCode: ", e.keyCode);
+        if (e.code === 'ControlLeft' && e.keyCode === 17 && !isDraggable) {
+            dispatch({ type: 'MAP_IS_DRAGGABLE'})
+        }
+    }, [dispatch, isDraggable]);
+
+    const onKeyup = useCallback(e => {
+        if (e.code === 'ControlLeft' && e.keyCode === 17 && isDraggable) {
+            dispatch({ type: 'MAP_NO_DRAGGABLE'})
+        }
+    }, [dispatch, isDraggable]);
 
     useEffect(() => {
         window.addEventListener('wheel', onWheel);
+        window.addEventListener('keydown', onKeydown);
+        window.addEventListener('keyup', onKeyup);
     
         return () => {
-          window.removeEventListener('wheel', onWheel);
+            window.removeEventListener('wheel', onWheel);
+            window.removeEventListener('keydown', onKeydown);
+            window.removeEventListener('keyup', onKeyup);
         };
-    }, [onWheel]);
+    }, [onWheel, onKeydown, onKeyup]);
+
+    const onMapClick = useCallback((x, y) => {
+        playSFX(MapClick, settings.volume);
+        dispatch({ type: 'MAP_CLICK', payload: {x: x, y: y} })
+    }, [dispatch, settings.volume]);
 
     return (
-        <Zoom zoom={zoom}>
+        <Zoom zoom={zoom} style={{ 'cursor': isDraggable ? 'grab' : 'default' }}>
             <IsometricMap 
                 mapWidth={mapWidth} 
                 mapHeight={mapHeight} 
@@ -92,23 +107,14 @@ const GameMap = () => {
                                 y={y}
                                 z={1}
                                 frames={getFrames(true, tileId)}
-                                onClick={() => dispatch({ type: 'MAP_CLICK', payload: {x: x, y: y} })}
+                                onClick={() => onMapClick(x, y)}
                             />
                         ];
-                        if (Math.random() < 0.1) {
-                            result.push(
-                                <IsometricObject
-                                    key={`object${index}`}
-                                    x={x}
-                                    y={y}
-                                    z={1}
-                                    width={tileSize}
-                                    height={92}
-                                    frames={[require("../../assets/sprites/tree.png")]}
-                                    active
-                                />
-                            );
-                        }
+
+                        result.push( 
+                            <Objects width={tileSize} height={92} key={`object${index + 1000}`} />
+                        );
+
                         return result;
                     }) 
                 }
@@ -126,12 +132,6 @@ const GameMap = () => {
 //     const { isFullscreen } = useSelector(state => state.stage);
 //     const [ keysPressed, setKeysPressed] = useState({});
 
-//     const onMapClick = useCallback(event => {
-//         // console.info("onMapClick event", event);
-//         utils.playSFX(MapClick, settings.volume);
-//         dispatch(mapClick(event));
-//     }, [dispatch, settings.volume]);
-
 //     const onKeyUp = event => {
 //         if (isFullscreen && event.code === 'KeyM') {
 //             dispatch({ type: 'TOGGLE_DRAWER' });
@@ -142,7 +142,7 @@ const GameMap = () => {
 //     const onKeyDown = useCallback(event => {
 //         console.info("event.code: ", event.code);
 //         const step = 10;
-//         let keysPressed = {};ы
+//         let keysPressed = {};
 //         //     event.preventDefault();
 //         //     event.stopPropagation();
 //         if (current.status !== ('walk' || 'absent')) {
