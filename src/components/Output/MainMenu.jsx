@@ -11,7 +11,7 @@ const MainMenu = () => {
 
     const history = useHistory();
     const location = useLocation();
-    const { isInit } = useSelector(state => state.game);
+    const { isGameInit } = useSelector(state => state.game);
 
     const onWebMenuClick = e => {
         console.log('click ', e);
@@ -20,7 +20,7 @@ const MainMenu = () => {
 
     return (
         <>
-            { !isInit ? 
+            { !isGameInit ? 
                 <>
                     <Menu onClick={onWebMenuClick} mode="horizontal" theme="dark">
                         <Menu.Item key="/">

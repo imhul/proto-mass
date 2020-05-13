@@ -1,8 +1,10 @@
 export const initState = {
-    isLoad: false,
-    isInit: false,
-    isStarted: false,
-    isPaused: false,
+    loadingPercent: 0,
+    isMapLoaded: false,
+    isGameLoaded: false,
+    isGameInit: false,
+    isGameStarted: false,
+    isGamePaused: false,
     isGameover: false,
     isWin: false,
     settings: {

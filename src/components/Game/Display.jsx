@@ -9,26 +9,37 @@ import { playSFX } from '../../utils';
 import GameMap from './GameMap';
 import Preloader from './Preloader';
 
+// Hooks
+import useDOMState from '../../hooks/dom';
+
 // Sounds
 import introSFX from '../../assets/sound/loading.ogg';
 
 const Display = () => {
 
-    // const store = useStore();
     const dispatch = useDispatch();
-    const { loadingPercent } = useSelector(state => state.app);
-    const { isInit, settings } = useSelector(state => state.game);
+    const dom = useDOMState();
+    const { loadingPercent, isGameInit, isMapLoaded, isGameLoaded, settings } = useSelector(state => state.game);
     const { isFullscreen } = useSelector(state => state.stage);
 
     useEffect(() => {
-        dispatch({ type: 'START_LOADING_APP' })
-        if (loadingPercent === 100) {
-            dispatch({ type: 'LOADING_APP_COMPLETE' });
-            dispatch({ type: 'INIT_GAME' });
+        let step1, step2;
+        if (dom.readyState === "complete" && isMapLoaded && !isGameInit) {
+            step1 = setTimeout(() => dispatch({ type: 'LOADING_GAME', payload: 99 }), 1000);
         }
-    }, [loadingPercent, dispatch]);
+        if (isGameLoaded && !isGameInit) {
+            step2 = setTimeout(() => dispatch({ type: 'INIT_GAME' }), 500);
+        }
 
-    useEffect(() => playSFX(introSFX, settings.volume), [settings.volume]);
+        return () => {
+            clearTimeout(step1);
+            clearTimeout(step2);
+        }
+        
+    }, [dispatch, isMapLoaded, isGameLoaded, isGameInit, dom.readyState]);
+
+    // TODO: UNCOMMENT !!! INTRO SOUND !!!
+    // useEffect(() => playSFX(introSFX, settings.volume), [settings.volume]);
 
     const prevent = useCallback(e => {
         e.preventDefault();
@@ -44,14 +55,14 @@ const Display = () => {
     
     return <>
         { 
-            !isInit ? <Preloader 
+            !isGameInit ? <Preloader 
                 percent={loadingPercent} 
-                style={{ 'zIndex': isInit ? 0 : 998 }} 
             /> : null 
         }
         <Fullscreen 
             enabled={isFullscreen} 
-            onChange={isFull  => dispatch({ type: 'FULLSCREEN', payload: isFull })}
+            onChange={isFull => 
+                dispatch({ type: 'FULLSCREEN', payload: isFull })}
         >
             <GameMap />
         </Fullscreen>

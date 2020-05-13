@@ -3,15 +3,9 @@ import { useSelector, useDispatch } from 'react-redux';
 // import { MapProvider, Map } from "./Map";
 import { IsometricMap, IsometricTile } from './Map';
 import { Zoom } from 'react-scaling';
-
-// Actions
-import { 
-    mapClick,
-    dragMapMove, 
-    dragMapStop,
-    // mapScaleUp,
-    // mapScaleDown,
-} from '../../redux/map/actions';
+import VisibilitySensor from 'react-visibility-sensor';
+import { DndProvider } from 'react-dnd';
+import Backend from 'react-dnd-html5-backend';
 
 // Utils
 import { getFrames, getRandomInt, mockedMap, playSFX } from '../../utils';
@@ -42,7 +36,7 @@ const GameMap = () => {
 
     // effects
     const { zoom, isDraggable } = useSelector(state => state.map);
-    const { settings } = useSelector(state => state.game);
+    const { settings, isGameInit } = useSelector(state => state.game);
     const dispatch = useDispatch();
 
     const onWheel = useCallback(e => {
@@ -54,8 +48,6 @@ const GameMap = () => {
     }, [dispatch]);
 
     const onKeydown = useCallback(e => {
-        // console.info("e.code: ", e.code);
-        // console.info("e.keyCode: ", e.keyCode);
         if (e.code === 'ControlLeft' && e.keyCode === 17 && !isDraggable) {
             dispatch({ type: 'MAP_IS_DRAGGABLE'})
         }
@@ -66,6 +58,13 @@ const GameMap = () => {
             dispatch({ type: 'MAP_NO_DRAGGABLE'})
         }
     }, [dispatch, isDraggable]);
+
+    const onMapLoaded = useCallback(isVisible => {
+        if (isVisible) {
+            dispatch({ type: 'MAP_LOADED' });
+            dispatch({ type: 'LOADING_GAME', payload: getRandomInt(40, 60) });
+        }
+    }, [dispatch]);
 
     useEffect(() => {
         window.addEventListener('wheel', onWheel);
@@ -86,7 +85,7 @@ const GameMap = () => {
 
     // render
     const MapLoader = () => {
-        const loadMap = mockedMap.map((tileId, index) => { // tileList[]
+        const loadMap = mockedMap.map((tileId, index) => { // mocked tileList[]
             const x = index % mapWidth;
             const y = Math.floor(index / mapWidth);
             const result = [
@@ -118,14 +117,18 @@ const GameMap = () => {
                 tileSize={tileSize} 
                 slabSize={1}
                 offsetY={offset}
+                visibility={isGameInit ? 'visible' : 'hidden'}
             >
-                <MapLoader />
+                <VisibilitySensor onChange={onMapLoaded}>
+                    <MapLoader />
+                </VisibilitySensor>
             </IsometricMap>
         </Zoom>
-    );   
+    );
 }
 
-//     const dispatch = useDispatch();
+export default GameMap;
+
 //     // const { size } = useSelector(state => state.stage);
 //     const { mapPosition, isDragg } = useSelector(state => state.map);
 //     const { current } = useSelector(state => state.unit);
@@ -186,18 +189,3 @@ const GameMap = () => {
 //             }
 //         }
 //     }, [dispatch, isDragg, mapPosition.x, mapPosition.y, current.status]);
-    
-//     useEffect(() => {
-//         document.addEventListener('keyup', onKeyUp);
-//         document.addEventListener('keydown', onKeyDown);
-    
-//         return () => {
-//             document.removeEventListener('keyup', onKeyUp);
-//             document.removeEventListener('keydown', onKeyDown);
-//         };
-//     }, [onKeyUp, onKeyDown]);
-
-//     return <div mousedown={event => onMapClick(event)} />;
-// }
-
-export default GameMap;

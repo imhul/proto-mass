@@ -4,40 +4,41 @@ import { initState } from './initState';
 export default function gameReducer(state = initState, action) {
     switch (action.type) {
 
-        case types.START_LOADING_GAME:
+        case types.MAP_LOADED: 
             return {
                 ...state,
-                isLoad: true,
+                isMapLoaded: true,
             }
 
-        case types.LOADING_GAME_COMPLETE:
+        case types.LOADING_GAME: 
             return {
                 ...state,
-                isLoad: false,
+                loadingPercent: action.payload,
+                isGameLoaded: action.payload > 60 ? true : false,
             }
 
         case types.INIT_GAME:
             return {
                 ...state,
-                isInit: true,
+                isGameInit: true,
             }
 
         case types.START_GAME:
             return {
                 ...state,
-                isStarted: true,
+                isGameStarted: true,
             }
 
         case types.STOP_GAME:
             return {
                 ...state,
-                isStarted: false,
+                isGameStarted: false,
             }
 
         case types.TOGGLE_PAUSE_GAME:
             return {
                 ...state,
-                isPaused: !state.isPaused,
+                isGamePaused: !state.isGamePaused,
             }
 
         case types.GAMEOVER:
@@ -57,8 +58,8 @@ export default function gameReducer(state = initState, action) {
         case types.EXIT_GAME:
             return {
                 ...state,
-                isStarted: false,
-                isInit: false,
+                isGameStarted: false,
+                isGameInit: false,
             }
 
         case types.ERROR_GAME:

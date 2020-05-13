@@ -1,6 +1,8 @@
 export const types = {
     START_LOADING_GAME:         'LOADING_GAME',
+    LOADING_GAME:               'LOADING_GAME',
     LOADING_GAME_COMPLETE:      'LOADING_GAME',
+    MAP_LOADED:                 'MAP_LOADED',
     INIT_GAME:                  'INIT_GAME',
     START_GAME:                 'START_GAME',
     STOP_GAME:                  'STOP_GAME',

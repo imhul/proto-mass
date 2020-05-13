@@ -155,6 +155,7 @@ class IsometricMap extends Component {
 
   render() {
     const {
+      visibility,
       children,
       mapWidth,
       mapHeight,
@@ -175,7 +176,8 @@ class IsometricMap extends Component {
       "--margin-left": margin.left,
       "--margin-right": margin.right,
       "--map-max-dimension": Math.max(mapWidth, mapHeight),
-      "--map-offset-y": offsetY
+      "--map-offset-y": offsetY,
+      visibility: visibility
     };
     return (
       <div

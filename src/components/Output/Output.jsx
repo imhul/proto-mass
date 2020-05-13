@@ -19,7 +19,7 @@ const { Content } = Layout;
 const Output = ({ history }) => {
 
     const dispatch = useDispatch();
-    const { isInit } = useSelector(state => state.game);
+    const { isGameInit } = useSelector(state => state.game);
 
     useEffect(() => { dispatch({ type: 'APP_INIT' }) }, [dispatch]);
 
@@ -28,7 +28,7 @@ const Output = ({ history }) => {
             <Layout className="Output">
                 <MainHeader />
                     
-                <Content className={isInit ? 'game-active' : '' }>
+                <Content className={isGameInit ? 'game-active' : '' }>
                     <Switch>
                         <Route exact path="/">
                             <HomePage />
@@ -45,7 +45,7 @@ const Output = ({ history }) => {
                         <Redirect from="*" to="/error" />
                     </Switch>
                 </Content>
-                { !isInit && <MainFooter /> }
+                { !isGameInit && <MainFooter /> }
             </Layout>
         </ConnectedRouter>
     )

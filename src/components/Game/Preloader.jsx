@@ -12,6 +12,7 @@ const Preloader = props => (
         strokeLinecap="square"
         percent={props.percent}
         status="active"
+        style={props.style}
     />
 );
 
