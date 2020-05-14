@@ -1,6 +1,7 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { IsometricObject } from "react-isometric-tilemap";
+import React from 'react';
+// import React, { useState, useEffect, useCallback } from 'react';
+// import { useSelector, useDispatch } from 'react-redux';
+import IsometricObject from '../Map/IsometricObject';
 
 // Utils
 import { mockedObjects } from '../../../utils';

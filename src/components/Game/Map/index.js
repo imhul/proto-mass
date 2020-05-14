@@ -1,10 +1,10 @@
-import IsometricMap from "./components/IsometricMap";
-import IsometricTile from "./components/IsometricTile";
-import IsometricObject from "./components/IsometricObject";
+import IsometricMap from "./IsometricMap";
+import IsometricTile from "./IsometricTile";
+import IsometricObject from "./IsometricObject";
 
-import IsometricMapEvent from "./events/IsometricMapEvent";
+import IsometricMapEvent from "./IsometricMapEvent";
 
-import AnimatedTexture from "./components/AnimatedTexture";
+import AnimatedTexture from "./AnimatedTexture";
 
 export {
   AnimatedTexture,

@@ -1,25 +1,31 @@
 import React, { useEffect, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import WindowSizeListener from 'react-window-size-listener';
+import Fullscreen from 'react-full-screen';
+import { Zoom } from 'react-scaling';
+import { DndProvider } from 'react-dnd';
+import Backend from 'react-dnd-html5-backend';
 
 // Utils
-import Fullscreen from 'react-full-screen';
-import { playSFX } from '../../utils';
+import { getRandomInt, playSFX } from '../../utils';
 
 // Components
-import GameMap from './GameMap';
+import DnD from './DnD';
 import Preloader from './Preloader';
 
 // Hooks
 import useDOMState from '../../hooks/dom';
 
 // Sounds
-import introSFX from '../../assets/sound/loading.ogg';
+// TODO: UNCOMMENT !!! INTRO SOUND !!!
+// import introSFX from '../../assets/sound/loading.ogg';
 
 const Display = () => {
 
     const dispatch = useDispatch();
     const dom = useDOMState();
-    const { loadingPercent, isGameInit, isMapLoaded, isGameLoaded, settings } = useSelector(state => state.game);
+    const { zoom, isDraggable } = useSelector(state => state.map);
+    const { loadingPercent, isGameInit, isMapLoaded, isGameLoaded, isMapVisible, settings } = useSelector(state => state.game);
     const { isFullscreen } = useSelector(state => state.stage);
 
     useEffect(() => {
@@ -45,13 +51,47 @@ const Display = () => {
         e.preventDefault();
     }, []);
 
+    const onWheel = useCallback(e => {
+        if (e.deltaY < 0) {
+            dispatch({ type: 'MAP_DECREASE'})
+        } else if (e.deltaY > 0) {
+            dispatch({ type: 'MAP_INCREASE'})
+        }
+    }, [dispatch]);
+
+    const onKeydown = useCallback(e => {
+        if (e.code === 'ControlLeft' && e.keyCode === 17 && !isDraggable) {
+            dispatch({ type: 'MAP_IS_DRAGGABLE'})
+        }
+    }, [dispatch, isDraggable]);
+
+    const onKeyup = useCallback(e => {
+        if (e.code === 'ControlLeft' && e.keyCode === 17 && isDraggable) {
+            dispatch({ type: 'MAP_NO_DRAGGABLE'})
+        }
+    }, [dispatch, isDraggable]);
+
+    const onResize = useCallback(output => {
+        dispatch({ type: 'RESIZE', payload: output });
+        if (!isGameInit && !isMapLoaded && loadingPercent < 40 && !isMapVisible) {
+            dispatch({ type: 'MAP_LOADED' });
+            dispatch({ type: 'LOADING_GAME', payload: getRandomInt(40, 60) });
+        }
+    }, [dispatch, isGameInit, isMapLoaded, loadingPercent, isMapVisible]);
+
     useEffect(() => {
         window.addEventListener('contextmenu', prevent);
+        window.addEventListener('wheel', onWheel);
+        window.addEventListener('keydown', onKeydown);
+        window.addEventListener('keyup', onKeyup);
     
         return () => {
-          window.removeEventListener('contextmenu', prevent);
+            window.removeEventListener('contextmenu', prevent);
+            window.removeEventListener('wheel', onWheel);
+            window.removeEventListener('keydown', onKeydown);
+            window.removeEventListener('keyup', onKeyup);
         };
-    }, [prevent]);
+    }, [onWheel, onKeydown, onKeyup, prevent]);
     
     return <>
         { 
@@ -59,13 +99,24 @@ const Display = () => {
                 percent={loadingPercent} 
             /> : null 
         }
-        <Fullscreen 
-            enabled={isFullscreen} 
-            onChange={isFull => 
-                dispatch({ type: 'FULLSCREEN', payload: isFull })}
+        <WindowSizeListener
+            onResize={output => onResize(output)}
         >
-            <GameMap />
-        </Fullscreen>
+            <Fullscreen 
+                enabled={isFullscreen} 
+                onChange={isFull => 
+                    dispatch({ type: 'FULLSCREEN', payload: isFull })}
+            >
+                <Zoom 
+                    zoom={zoom} 
+                    style={{ 'cursor': isDraggable ? 'grab' : 'default' }}
+                >
+                    <DndProvider backend={Backend}>
+                        <DnD />
+                    </DndProvider>
+                </Zoom>
+            </Fullscreen>
+        </WindowSizeListener>
     </>
 };
 

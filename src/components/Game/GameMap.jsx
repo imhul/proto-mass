@@ -2,10 +2,7 @@ import React, { useEffect, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 // import { MapProvider, Map } from "./Map";
 import { IsometricMap, IsometricTile } from './Map';
-import { Zoom } from 'react-scaling';
 import VisibilitySensor from 'react-visibility-sensor';
-import { DndProvider } from 'react-dnd';
-import Backend from 'react-dnd-html5-backend';
 
 // Utils
 import { getFrames, getRandomInt, mockedMap, playSFX } from '../../utils';
@@ -35,48 +32,18 @@ const GameMap = () => {
     );
 
     // effects
-    const { zoom, isDraggable } = useSelector(state => state.map);
     const { settings, isGameInit } = useSelector(state => state.game);
     const dispatch = useDispatch();
 
-    const onWheel = useCallback(e => {
-        if (e.deltaY < 0) {
-            dispatch({ type: 'MAP_DECREASE'})
-        } else if (e.deltaY > 0) {
-            dispatch({ type: 'MAP_INCREASE'})
-        }
-    }, [dispatch]);
-
-    const onKeydown = useCallback(e => {
-        if (e.code === 'ControlLeft' && e.keyCode === 17 && !isDraggable) {
-            dispatch({ type: 'MAP_IS_DRAGGABLE'})
-        }
-    }, [dispatch, isDraggable]);
-
-    const onKeyup = useCallback(e => {
-        if (e.code === 'ControlLeft' && e.keyCode === 17 && isDraggable) {
-            dispatch({ type: 'MAP_NO_DRAGGABLE'})
-        }
-    }, [dispatch, isDraggable]);
-
     const onMapLoaded = useCallback(isVisible => {
+        console.info('isVisible: ', isVisible);
         if (isVisible) {
             dispatch({ type: 'MAP_LOADED' });
-            dispatch({ type: 'LOADING_GAME', payload: getRandomInt(40, 60) });
+            dispatch({ type: 'LOADING_GAME', payload: getRandomInt(40, 60) })
+        } else {
+            dispatch({ type: 'MAP_VISIBLE_ERROR' });
         }
     }, [dispatch]);
-
-    useEffect(() => {
-        window.addEventListener('wheel', onWheel);
-        window.addEventListener('keydown', onKeydown);
-        window.addEventListener('keyup', onKeyup);
-    
-        return () => {
-            window.removeEventListener('wheel', onWheel);
-            window.removeEventListener('keydown', onKeydown);
-            window.removeEventListener('keyup', onKeyup);
-        };
-    }, [onWheel, onKeydown, onKeyup]);
 
     const onMapClick = useCallback((x, y) => {
         playSFX(MapClick, settings.volume);
@@ -107,25 +74,20 @@ const GameMap = () => {
     };
 
     return (
-        <Zoom 
-            zoom={zoom} 
-            style={{ 'cursor': isDraggable ? 'grab' : 'default' }}
+        <IsometricMap 
+            mapWidth={mapWidth} 
+            mapHeight={mapHeight} 
+            tileSize={tileSize} 
+            slabSize={1}
+            offsetY={0}
+            visibility={isGameInit ? 'visible' : 'hidden'}
         >
-            <IsometricMap 
-                mapWidth={mapWidth} 
-                mapHeight={mapHeight} 
-                tileSize={tileSize} 
-                slabSize={1}
-                offsetY={offset}
-                visibility={isGameInit ? 'visible' : 'hidden'}
-            >
-                <VisibilitySensor onChange={onMapLoaded}>
-                    <MapLoader />
-                </VisibilitySensor>
-            </IsometricMap>
-        </Zoom>
+            <VisibilitySensor onChange={onMapLoaded}>
+                <MapLoader />
+            </VisibilitySensor>
+        </IsometricMap>
     );
-}
+};
 
 export default GameMap;
 

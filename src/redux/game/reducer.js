@@ -8,6 +8,13 @@ export default function gameReducer(state = initState, action) {
             return {
                 ...state,
                 isMapLoaded: true,
+                isMapVisible: true,
+            }
+
+        case types.MAP_VISIBLE_ERROR: 
+            return {
+                ...state,
+                isMapVisible: false,
             }
 
         case types.LOADING_GAME: 
@@ -21,6 +28,7 @@ export default function gameReducer(state = initState, action) {
             return {
                 ...state,
                 isGameInit: true,
+                isMapVisible: true,
             }
 
         case types.START_GAME:

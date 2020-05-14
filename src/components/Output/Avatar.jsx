@@ -6,10 +6,11 @@ import _ from 'lodash';
 const Avatar = () => {
     const dispatch = useDispatch();
     const { user } = useSelector(state => state.auth);
+    const { isAppInit } = useSelector(state => state.app);
     const [isAvatarDone, setAvatarDone] = useState(false);
 
     const setAvatar = (avatar) => {
-        if (_.isEmpty(user) && !isAvatarDone) {
+        if (_.isEmpty(user) && !isAvatarDone && isAppInit) {
             setAvatarDone(true);
             dispatch({ type: 'SET_AVATAR', payload: avatar })
         }

@@ -5,7 +5,7 @@ import MiniSignal from "mini-signals";
 import raf from "raf";
 
 import "./IsometricMap.scss";
-import IsometricMapEvent from "../events/IsometricMapEvent";
+import IsometricMapEvent from "./IsometricMapEvent";
 
 /**
  * An isometric map is a container for isometric objects and isometric tiles.

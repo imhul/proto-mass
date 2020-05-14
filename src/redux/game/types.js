@@ -3,6 +3,7 @@ export const types = {
     LOADING_GAME:               'LOADING_GAME',
     LOADING_GAME_COMPLETE:      'LOADING_GAME',
     MAP_LOADED:                 'MAP_LOADED',
+    MAP_VISIBLE_ERROR:          'MAP_VISIBLE_ERROR',
     INIT_GAME:                  'INIT_GAME',
     START_GAME:                 'START_GAME',
     STOP_GAME:                  'STOP_GAME',
