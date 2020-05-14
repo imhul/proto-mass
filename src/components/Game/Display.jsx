@@ -73,10 +73,12 @@ const Display = () => {
 
     const onResize = useCallback(output => {
         dispatch({ type: 'RESIZE', payload: output });
-        if (!isGameInit && !isMapLoaded && loadingPercent < 40 && !isMapVisible) {
-            dispatch({ type: 'MAP_LOADED' });
-            dispatch({ type: 'LOADING_GAME', payload: getRandomInt(40, 60) });
-        }
+        
+        // TODO: need to resolve safity loading
+        // if (!isGameInit && !isMapLoaded && loadingPercent < 40 && !isMapVisible) {
+        //     dispatch({ type: 'MAP_LOADED' });
+        //     dispatch({ type: 'LOADING_GAME', payload: getRandomInt(40, 60) });
+        // }
     }, [dispatch, isGameInit, isMapLoaded, loadingPercent, isMapVisible]);
 
     useEffect(() => {
