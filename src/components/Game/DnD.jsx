@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, } from 'react';
 import { useSelector } from 'react-redux';
 import { useDrop, useDrag } from 'react-dnd';
 import update from 'immutability-helper';
@@ -17,10 +17,15 @@ const ItemTypes = {
     MAP: 'map',
 };
 
-export const GameMapDrag = ({ id, left, top }) => {
+export const GameMapDrag = ({ left, top }) => {
     
-    const [drag] = useDrag({
-        item: { id, left, top, type: ItemTypes.MAP },
+    const [, drag] = useDrag({
+        item: { 
+            id: 'map-drag', 
+            left, 
+            top, 
+            type: ItemTypes.MAP 
+        },
         collect: (monitor) => ({
             isDragging: monitor.isDragging(),
         }),
@@ -28,7 +33,7 @@ export const GameMapDrag = ({ id, left, top }) => {
 
     return (
         <div ref={drag} style={{ ...boxStyle, left, top }}>
-            <GameMap />
+           <GameMap />
         </div>
     )
 };
@@ -68,7 +73,7 @@ const DnD = () => {
         <div ref={drop} style={containerStyle}>
             { console.info('box.left: ', box.left) }
             { console.info('box.top: ', box.top) }
-            <GameMapDrag id='map-drag' left={box.left} top={box.top} />
+            <GameMapDrag left={box.left} top={box.top} />
         </div>
     )
 };

@@ -72,14 +72,8 @@ const Display = () => {
     }, [dispatch, isDraggable]);
 
     const onResize = useCallback(output => {
-        dispatch({ type: 'RESIZE', payload: output });
-        
-        // TODO: need to resolve safity loading
-        // if (!isGameInit && !isMapLoaded && loadingPercent < 40 && !isMapVisible) {
-        //     dispatch({ type: 'MAP_LOADED' });
-        //     dispatch({ type: 'LOADING_GAME', payload: getRandomInt(40, 60) });
-        // }
-    }, [dispatch, isGameInit, isMapLoaded, loadingPercent, isMapVisible]);
+        if (!isGameInit) dispatch({ type: 'RESIZE', payload: output });
+    }, [dispatch, isGameInit]);
 
     useEffect(() => {
         window.addEventListener('contextmenu', prevent);
@@ -93,7 +87,7 @@ const Display = () => {
             window.removeEventListener('keydown', onKeydown);
             window.removeEventListener('keyup', onKeyup);
         };
-    }, [onWheel, onKeydown, onKeyup, prevent]);
+    }, [prevent, onWheel, onKeydown, onKeyup]);
     
     return <>
         { 
