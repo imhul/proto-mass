@@ -1,3 +1,103 @@
-.Game {
+@keyframes starMove {
+	from {
+		background-position: 5% 5%;
+	}
+	to { 
+		background-position: 1300% 5%;
+	}
+}
+
+.game-active {
     cursor: url('../img/cur.gif') !important;
+	background: #111719;
+
+	// background
+	#bg-game {
+		background: url(../img/parallax_3.png) repeat 50% 50%;
+		background-size: cover;
+		position: absolute;
+		top: 0; 
+		left: 0; 
+		right: 0; 
+		bottom: 0;
+		z-index: 1;
+	}
+	
+	#bg-parallax {
+		background: url(../img/parallax_1.png) repeat 5% 5%;
+		position: absolute;
+		top: 0; 
+		left: 0; 
+		right: 0; 
+		bottom: 0;
+		z-index: 2;
+		animation-name: starMove;
+		animation-duration: 700s;
+		animation-timing-function: linear;
+		animation-iteration-count: infinite;
+	}
+	
+	#mg-parallax {
+		background: url(../img/parallax_2.png) repeat 20% 20%;
+		position: absolute;
+		top: 0; 
+		left: 0; 
+		right: 0; 
+		bottom: 0;
+		z-index: 3;
+		animation-name: starMove;
+		animation-duration: 500s;
+		animation-timing-function: linear;
+		animation-iteration-count: infinite;
+	}
+	
+	#fg-parallax {
+		background: url(../img/parallax_2.png) repeat 35% 35%;
+		position: absolute;
+		top: 0; 
+		left: 0; 
+		right: 0; 
+		bottom: 0;
+		z-index: 4;
+		animation-name: starMove;
+		animation-duration: 300s;
+		animation-timing-function: linear;
+		animation-iteration-count: infinite;
+	}
+
+	// isometric fixes
+	.react-isometric-map-wrapper {
+		z-index: 5;
+		.react-isometric-map {
+			transform-origin: right center;
+			position: absolute;
+			user-select: none;
+			z-index: 6;
+			& * {
+				user-select: none;
+			}
+			& > .unit-wrapper {
+				z-index: 8;
+				& > img {
+					transform: rotateY(60deg);
+				}
+			}
+			.wall {
+				display: none;
+			}
+			.react-isometric-object {
+				user-select: none;
+				bottom: 20px;
+				left: -3px;
+			}
+			.react-isometric-tile {
+				z-index: 7;
+				& > .floor {
+					background: rgba(0,0,0,0);
+					border: 0;
+					z-index: 8;
+				}
+			}
+		}
+	}
 }

@@ -7,7 +7,7 @@ import { DndProvider } from 'react-dnd';
 import Backend from 'react-dnd-html5-backend';
 
 // Utils
-import { getRandomInt, playSFX } from '../../utils';
+import { playSFX } from '../../utils';
 
 // Components
 import DnD from './DnD';
@@ -103,14 +103,19 @@ const Display = () => {
                 onChange={isFull => 
                     dispatch({ type: 'FULLSCREEN', payload: isFull })}
             >
-                <Zoom 
-                    zoom={zoom} 
-                    style={{ 'cursor': isDraggable ? 'grab' : 'default' }}
-                >
-                    <DndProvider backend={Backend}>
-                        <DnD />
-                    </DndProvider>
-                </Zoom>
+                <div id="bg-game"></div>
+                <div id="bg-parallax"></div>
+                <div id="mg-parallax"></div>
+                <div id="fg-parallax"></div>
+                    <Zoom 
+                        zoom={zoom} 
+                        style={{ 'cursor': isDraggable ? 'grab' : 'default' }}
+                    >
+                        <DndProvider backend={Backend}>
+                            <DnD />
+                        </DndProvider>
+                    </Zoom>
+
             </Fullscreen>
         </WindowSizeListener>
     </>

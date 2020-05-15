@@ -1,5 +1,6 @@
 import { types } from './types';
 import { initState } from './initState';
+import update from 'immutability-helper';
 
 export default function unitReducer(state = initState, action) {
     switch (action.type) {
@@ -7,6 +8,10 @@ export default function unitReducer(state = initState, action) {
         case types.UNIT_CREATED: 
             return {
                 ...state,
+                unitList: update(state.unitList, 
+                    { $push: [action.payload] }
+                ),
+                totalUnits: state.totalUnits + 1,
             }
 
         case types.UNIT_INIT_POSITION: 

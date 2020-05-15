@@ -4,28 +4,25 @@ import { initState } from './initState';
 export default function appReducer(state = initState, action) {
     switch (action.type) {
 
-        case types.APP_INIT: {
+        case types.APP_INIT:
             return {
                 ...state,
                 isAppInit: true,
             }
-        }
 
-        case types.START_LOADING_APP: {
+        case types.START_LOADING_APP:
             return {
                 ...state,
                 isAppLoad: true,
             }
-        }
 
-        case types.LOADING_APP_COMPLETE: {
+        case types.LOADING_APP_COMPLETE:
             return {
                 ...state,
                 isAppLoad: false,
             }
-        }
 
-        case types.SHOW_MESSAGE: {
+        case types.SHOW_MESSAGE:
             return {
                 ...state,
                 notify: {
@@ -39,9 +36,8 @@ export default function appReducer(state = initState, action) {
                     onClose: action.payload.onClose ? action.payload.onClose : null,
                 },
             }
-        }
 
-        case types.ARCHIVE_MESSAGE: {
+        case types.ARCHIVE_MESSAGE:
             return {
                 ...state,
                 notifyArchive: [...state.notifyArchive, {
@@ -55,7 +51,6 @@ export default function appReducer(state = initState, action) {
                     onClose: action.payload.onClose ? action.payload.onClose : null,
                 }],
             }
-        }
 
         default:
             return state

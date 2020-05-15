@@ -1,4 +1,4 @@
-import React, { useState, useRef, } from 'react';
+import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useDrop, useDrag } from 'react-dnd';
 import update from 'immutability-helper';
@@ -45,7 +45,7 @@ const DnD = () => {
     const containerStyle = {
         width: size.width,
         height: size.height,
-        border: '1px solid black',
+        border: 0,
         position: 'relative',
     };
 

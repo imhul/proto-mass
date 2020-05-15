@@ -16,8 +16,9 @@ const Objects = ({ width, height }) => {
             z={1}
             width={width}
             height={height}
-            frames={[require("../../../assets/sprites/tree.png")]}
-            active
+            frames={[require("../../../assets/sprites/deadtree3_00.png")]}
+            active={true}
+            style={{ zIndex: x + 10 }}
         />
     )
 };

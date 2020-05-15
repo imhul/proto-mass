@@ -9,6 +9,7 @@ import { getFrames, getRandomInt, mockedMap, playSFX } from '../../utils';
 
 // Components
 import Objects from './Objects';
+import Units from './Units';
 
 // Sounds
 import MapClick from '../../assets/sound/map_click.ogg';
@@ -41,7 +42,7 @@ const GameMap = () => {
             dispatch({ type: 'MAP_LOADED' });
             dispatch({ type: 'LOADING_GAME', payload: getRandomInt(40, 60) })
         } else {
-            dispatch({ type: 'MAP_VISIBLE_ERROR' });
+            dispatch({ type: 'MAP_LOADING' });
         }
     }, [dispatch]);
 
@@ -68,7 +69,10 @@ const GameMap = () => {
             return result;
         });
         loadMap.push( 
-            <Objects width={tileSize} height={92} key={`objects`} />
+            <Objects width={72} height={92} key={`objects`} />
+        );
+        loadMap.push(
+            <Units width={40} height={79} key={`units`} />
         );
         return loadMap
     };

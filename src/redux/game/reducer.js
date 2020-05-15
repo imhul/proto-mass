@@ -11,7 +11,7 @@ export default function gameReducer(state = initState, action) {
                 isMapVisible: true,
             }
 
-        case types.MAP_VISIBLE_ERROR: 
+        case types.MAP_LOADING: 
             return {
                 ...state,
                 isMapVisible: false,
