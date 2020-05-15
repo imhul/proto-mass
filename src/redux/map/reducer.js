@@ -4,6 +4,21 @@ import { initState } from './initState';
 export default function mapReducer(state = initState, action) {
     switch (action.type) {
 
+        case types.OBJECTS_CREATION_START: {
+            return {
+                ...state,
+                isObjectsCreation: true,
+            }
+        }
+
+        case types.OBJECTS_CREATED: {
+            return {
+                ...state,
+                objectList: action.payload,
+                isObjectsCreation: false,
+            }
+        }
+
         case types.MAP_CLICK: {
             return {
                 ...state,

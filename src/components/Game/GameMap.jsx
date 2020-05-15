@@ -69,7 +69,7 @@ const GameMap = () => {
             return result;
         });
         loadMap.push( 
-            <Objects width={72} height={65} key={`objects`} />
+            <Objects width={72} height={65} type="tree" key={`objects`} />
         );
         loadMap.push(
             <Units width={40} height={79} key={`units`} />

@@ -6,10 +6,10 @@ import { Layout } from 'antd';
 import WindowSizeListener from 'react-window-size-listener';
 
 // Gifs
-import explo1 from '../../assets/sprites/explo01.gif';
-import explo2 from '../../assets/sprites/explo02.gif';
-import explo4 from '../../assets/sprites/explo04.webp';
-import explo5 from '../../assets/sprites/explo05.webp';
+import explo1 from '../../assets/sprites/animations/explo01.gif';
+import explo2 from '../../assets/sprites/animations/explo02.gif';
+import explo4 from '../../assets/sprites/animations/explo04.webp';
+import explo5 from '../../assets/sprites/animations/explo05.webp';
 
 const HomePage = () => {
 

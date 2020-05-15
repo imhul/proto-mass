@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import AnimatedTexture from '../Map/AnimatedTexture';
 import uuidv5 from 'uuid/v5';
@@ -18,7 +18,7 @@ const CreateUnits = props => {
     const onUnitCreate = useCallback(unit => {
         if (totalUnits < 2 && createdUnits === 0 && unitList < 2)
         dispatch({ type: 'UNIT_CREATED', payload: unit });
-    }, [totalUnits, createdUnits, unitList]);
+    }, [dispatch, totalUnits, createdUnits, unitList]);
 
     useEffect(() => {
         const unitZero = Array.from(
@@ -77,7 +77,7 @@ const CreateUnits = props => {
                 return val = unit
             }
         );
-    }, []);
+    }, [idLength, onUnitCreate]);
     
     const staticList = unitList.map(unit => (
         <div 
