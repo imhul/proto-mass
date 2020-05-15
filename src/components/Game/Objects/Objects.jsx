@@ -51,7 +51,7 @@ const Objects = ({ width, height, type }) => {
         {
             dispatch({ type: 'OBJECTS_CREATED', payload: objects });
         }
-    }, [objectsLimit, dispatch, idLength]);
+    }, [objectsLimit, dispatch, idLength, isObjectsCreation, objectList.length, type]);
     
     return objectList.map((obj, index) => 
         <IsometricObject
