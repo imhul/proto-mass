@@ -16,6 +16,7 @@ const GameMenu = () => {
     // const { isFullscreen } = useSelector(state => state.stage);
     const { isGameMenuOpen } = useSelector(state => state.game);
     const { clickPosition, isDraggable } = useSelector(state => state.map);
+    const { unitList } = useSelector(state => state.unit);
 
     const onExit = () => {
         dispatch({ type: 'EXIT_GAME' })
@@ -53,7 +54,7 @@ const GameMenu = () => {
     return (
         <>
             <span className="Stats">
-                <i className="anticon game-menu-btn touchable">L</i> 3
+                <i className="anticon game-menu-btn touchable">L</i> {unitList.length}
             </span>
             <span>
                 {   isDraggable && 

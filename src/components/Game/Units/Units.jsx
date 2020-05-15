@@ -9,26 +9,22 @@ import { withFirebase } from '../../../utils/api';
 
 const CreateUnits = props => {
 
+    const idLength = new Array(16);
+    
     // Effects
     const dispatch = useDispatch();
     const { totalUnits, createdUnits, unitList } = useSelector(state => state.unit);
 
     const onUnitCreate = useCallback(unit => {
-        if (totalUnits < 4 && createdUnits === 0 && unitList < 4)
+        if (totalUnits < 2 && createdUnits === 0 && unitList < 2)
         dispatch({ type: 'UNIT_CREATED', payload: unit });
     }, [totalUnits, createdUnits, unitList]);
 
     useEffect(() => {
-        // firebase.initializeApp();
-        // const users = firebase.firestore().collection('users');
-        // console.info('firebase: ', firebase);
-
-        const unitsZero = Array.from(
-            { length: 3 }, 
+        const unitZero = Array.from(
+            { length: 1 }, 
             (val, k) => {
-                const nameLength = new Array(getRandomInt(3, 7));
-                const idLength = new Array(16);
-                const name = uuidv5(`bot#${k}`, idLength, null, nameLength);
+                const name = uuidv5(`bot#${k}`, idLength);
                 const userId = uuidv5(name, idLength);
                 
                 const unit = {

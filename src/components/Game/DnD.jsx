@@ -41,7 +41,7 @@ export const GameMapDrag = ({ left, top }) => {
 const DnD = () => {
 
     const { size } = useSelector(state => state.stage);
-    const [box, setBox] = useState({ top: -300, left: 0 });
+    const [box, setBox] = useState({ top: -310, left: 0 });
     const containerStyle = {
         width: size.width,
         height: size.height,
@@ -71,8 +71,6 @@ const DnD = () => {
 
     return (
         <div ref={drop} style={containerStyle}>
-            { console.info('box.left: ', box.left) }
-            { console.info('box.top: ', box.top) }
             <GameMapDrag left={box.left} top={box.top} />
         </div>
     )
