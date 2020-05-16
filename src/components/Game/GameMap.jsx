@@ -5,7 +5,14 @@ import { IsometricMap, IsometricTile } from './Map';
 import VisibilitySensor from 'react-visibility-sensor';
 
 // Utils
-import { getFrames, getRandomInt, mockedMap, playSFX } from '../../utils';
+import { 
+    getFrames, 
+    getRandomInt, 
+    mockedMap, 
+    playSFX, 
+    getTileById,
+    getGround,
+} from '../../utils';
 
 // Components
 import Objects from './Objects';
@@ -20,17 +27,6 @@ const GameMap = () => {
     const mapWidth = 30;
     const mapHeight = 30;
     const tileSize = 42;
-    const offset = -(mapWidth * 5);
-    const area = mapWidth * mapHeight;
-    const tileList = Array.from(
-        { length: area }, 
-        (val, k) => (
-            k <= mapWidth || 
-            k.toString().indexOf('0') > -1 || 
-            k.toString().indexOf('9', 1) > -1 || 
-            k > area - mapWidth 
-        ) ? val = 1 : val = getRandomInt(2, 9)
-    );
 
     // effects
     const { settings, isGameInit } = useSelector(state => state.game);
@@ -46,9 +42,13 @@ const GameMap = () => {
         }
     }, [dispatch]);
 
-    const onMapClick = useCallback((x, y) => {
+    const onMapClick = useCallback((x, y, id) => {
         playSFX(MapClick, settings.volume);
-        dispatch({ type: 'MAP_CLICK', payload: {x: x, y: y} })
+        dispatch({ type: 'MAP_CLICK', payload: {
+            x: x, 
+            y: y,
+            data: getTileById(id),
+        }})
     }, [dispatch, settings.volume]);
 
     // render
@@ -63,7 +63,7 @@ const GameMap = () => {
                     y={y}
                     z={1}
                     frames={getFrames(true, tileId)}
-                    onClick={() => onMapClick(x, y)}
+                    onClick={() => onMapClick(x, y, tileId)}
                 />
             ];
             return result;

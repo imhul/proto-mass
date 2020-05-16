@@ -10,8 +10,9 @@ import 'firebase/firestore';
 import { createFirestoreInstance } from 'redux-firestore';
 
 const rrfConfig = {
-  userProfile: null,
-  useFirestoreForProfile: true
+  userProfile: 'users',
+  useFirestoreForProfile: true,
+  logErrors: false,
 };
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_API_KEY,
@@ -20,6 +21,11 @@ const firebaseConfig = {
   projectId: process.env.REACT_APP_PROJECT_ID,
   storageBucket: process.env.REACT_APP_STORAGE_BUCKET,
   messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID,
+};
+
+const permissions = {
+  email: process.env.REACT_APP_USER_EMAIL,
+  password: process.env.REACT_APP_USER_PASS
 };
 
 firebase.initializeApp(firebaseConfig);
