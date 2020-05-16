@@ -1,19 +1,26 @@
 import React, { useEffect, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { useFirestoreConnect } from 'react-redux-firebase';
 import AnimatedTexture from '../Map/AnimatedTexture';
 import uuidv5 from 'uuid/v5';
 
 // Utils
 import { getRandomInt } from '../../../utils';
-import { withFirebase } from '../../../utils/api';
 
-const CreateUnits = props => {
+const Units = props => {
 
     const idLength = new Array(16);
     
     // Effects
     const dispatch = useDispatch();
+    const { isGameInit } = useSelector(state => state.game);
     const { totalUnits, createdUnits, unitList } = useSelector(state => state.unit);
+
+    useFirestoreConnect([
+        { collection: 'users' }
+    ]);
+
+    const users = useSelector(state => state.firestore.ordered.users);
 
     const onUnitCreate = useCallback(unit => {
         if (totalUnits < 2 && createdUnits === 0 && unitList < 2)
@@ -21,6 +28,9 @@ const CreateUnits = props => {
     }, [dispatch, totalUnits, createdUnits, unitList]);
 
     useEffect(() => {
+        if (users) {
+            console.info('users: ', users);
+        }
         const unitZero = Array.from(
             { length: 1 }, 
             (val, k) => {
@@ -106,14 +116,8 @@ const CreateUnits = props => {
         </div>
     ));
 
-    return (
-        <>
-            { staticList }
-        </>
-    )
+    return staticList
     
 };
-
-const Units = withFirebase(CreateUnits);
 
 export default Units;

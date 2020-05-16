@@ -15,10 +15,13 @@ class API {
     constructor() {
         app.initializeApp(config);
         this.auth = app.auth();
+        this.firestore = app.firestore();
 
         // const users = firebase.firestore().collection('users');
         // console.info('firebase users: ', users);
     }
+
+    users = () => this.firestore.ref('users');
 };
 
 export default API;

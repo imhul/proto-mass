@@ -1,5 +1,7 @@
 import { combineReducers } from 'redux';
 import { connectRouter } from 'connected-react-router';
+import { firebaseReducer } from 'react-redux-firebase'
+import { firestoreReducer } from 'redux-firestore'
 import authReducer from './auth/reducer';
 import appReducer from './app/reducer';
 import gameReducer from './game/reducer';
@@ -16,6 +18,8 @@ export default history => combineReducers({
   stage: stageReducer,
   map: mapReducer,
   unit: unitReducer,
+  firebase: firebaseReducer,
+  firestore: firestoreReducer,
 });
 
   
