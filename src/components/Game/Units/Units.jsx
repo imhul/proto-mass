@@ -10,7 +10,7 @@ const Units = props => {
     
     // Effects
     const dispatch = useDispatch();
-    const { taskList } = useSelector(state => state.task);
+    const { taskList, pendingList } = useSelector(state => state.task);
     const { 
         unitsLimit, 
         unitList,
@@ -103,9 +103,47 @@ const Units = props => {
         }
     }, [ dispatch, unitsLimit, unitList ]);
 
+    const getTask = useCallback(() => {
+        const idLength = new Array(16);
+        const taskId = uuidv5(`task#${getRandomInt(100, 1001)}`, idLength);
+        const task = {
+            id: taskId,
+            status: "await", // awayt, progress, paused, done
+            level: 0,
+            profession: "collector",
+            professionLevel: "trainee",
+        }; 
+
+        const limit = taskList.filter(item => item.id === task.id);
+
+        if (task && limit.length < 1 ) {
+            dispatch({ type: 'TASK_ADD', payload: task });
+        }
+    }, [ dispatch, taskList ]);
+
     useEffect(() => getUnit(), [getUnit]);
+
+    useEffect(() => getTask(), [getTask]);
+
+    const getUnitProfessionName = useCallback((unit, profession) => {
+        const professions = unit.professions;
+        const profUnit = professions.filter(prof => prof.name === profession);
+        return profUnit.length > 0
+    }, []);
+
+    const taskSearch = useCallback(unit => {
+        if (unitList.length > 0) {
+            if (pendingList.length > 0) {
+                const currentTask = pendingList.filter(task => task.workerId === unit.id);
+                dispatch({ type: 'UNIT_GET_TASK', payload: currentTask });
+            } else if (pendingList.length === 0 && taskList.length > 0) {
+                 const relevantTask = taskList.filter(task => getUnitProfessionName(unit, task.profession)); 
+                 dispatch({ type: 'UNIT_GET_TASK', payload: relevantTask });
+            }
+        }
+    }, [ unitList, taskList, pendingList, dispatch ]);
     
-    const staticList = unitList.map(unit => (
+    const units = unitList.map(unit => (
         <div 
             key={`animated-unit-wrapper-${unit.name}`}
             className="react-isometric-object-wrapper active unit-wrapper"
@@ -119,7 +157,12 @@ const Units = props => {
             }}
         >
             {
-                isUnitStatsShown && <div className="unit-stats">{JSON.stringify(unit.position)}</div>
+                isUnitStatsShown && <div className="unit-stats">
+                    {JSON.stringify(unit.position)}
+                </div>
+            }
+            {
+                unit.status === "search" && taskSearch(unit)
             }
             <AnimatedTexture
                 id={unit.id}
@@ -138,7 +181,7 @@ const Units = props => {
         </div>
     ));
 
-    return staticList
+    return units
 };
 
 export default Units;

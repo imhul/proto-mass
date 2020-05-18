@@ -63,6 +63,15 @@ export default function unitReducer(state = initState, action) {
                 },
             }
 
+        case types.UNIT_GET_TASK: 
+            return {
+                ...state,
+                current: { // TODO: filter by unit id
+                    ...state.current,
+                    status: 'work',
+                },
+            }
+
         default:
             return state
     }
