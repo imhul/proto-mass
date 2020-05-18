@@ -1,6 +1,5 @@
-import React, { useEffect, useCallback } from 'react';
+import React, { useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-// import { MapProvider, Map } from "./Map";
 import { IsometricMap, IsometricTile } from './Map';
 import VisibilitySensor from 'react-visibility-sensor';
 
@@ -11,7 +10,6 @@ import {
     mockedMap, 
     playSFX, 
     getTileById,
-    getGround,
 } from '../../utils';
 
 // Components
@@ -33,7 +31,6 @@ const GameMap = () => {
     const dispatch = useDispatch();
 
     const onMapLoaded = useCallback(isVisible => {
-        console.info('isVisible: ', isVisible);
         if (isVisible) {
             dispatch({ type: 'MAP_LOADED' });
             dispatch({ type: 'LOADING_GAME', payload: getRandomInt(40, 60) })
@@ -53,7 +50,7 @@ const GameMap = () => {
 
     // render
     const MapLoader = () => {
-        const loadMap = mockedMap.map((tileId, index) => { // mocked tileList[]
+        const loadMap = mockedMap.map((tileId, index) => { // mocked getGround factory util
             const x = index % mapWidth;
             const y = Math.floor(index / mapWidth);
             const result = [
@@ -95,19 +92,6 @@ const GameMap = () => {
 
 export default GameMap;
 
-//     // const { size } = useSelector(state => state.stage);
-//     const { mapPosition, isDragg } = useSelector(state => state.map);
-//     const { current } = useSelector(state => state.unit);
-//     const { settings } = useSelector(state => state.game);
-//     const { isFullscreen } = useSelector(state => state.stage);
-//     const [ keysPressed, setKeysPressed] = useState({});
-
-//     const onKeyUp = event => {
-//         if (isFullscreen && event.code === 'KeyM') {
-//             dispatch({ type: 'TOGGLE_DRAWER' });
-//             dispatch({ type: 'TOGGLE_PAUSE_GAME' });
-//         }
-//     }
 
 //     const onKeyDown = useCallback(event => {
 //         console.info("event.code: ", event.code);
@@ -154,4 +138,4 @@ export default GameMap;
 //                     break;
 //             }
 //         }
-//     }, [dispatch, isDragg, mapPosition.x, mapPosition.y, current.status]);
+

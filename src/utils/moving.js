@@ -1,3 +1,7 @@
+//////////////////////////////////////////
+/////// Old "UNIT WALKING" version ///////
+//////////////////////////////////////////
+
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
@@ -13,11 +17,11 @@ class Unit extends Component {
     constructor(props) {
         super(props);
         const botImages = [botPart1, botPart2, botPart3, botPart4];
-        // this.textures = [];
-        // for (let i=0; i < botImages.length; i++) {
-        //     const texture = new Texture.from(botImages[i]);
-        //     this.textures.push(texture);
-        // };
+        this.textures = [];
+        for (let i=0; i < botImages.length; i++) {
+            const texture = new Texture.from(botImages[i]);
+            this.textures.push(texture);
+        };
         const defaultIcon = `url(${cursor}),auto`;
         const hoverIcon = `url(${cursor}),auto`;
         props.app.renderer.plugins.interaction.cursorStyles.default = defaultIcon;
@@ -122,23 +126,19 @@ class Unit extends Component {
         
         const { units } = this.props;
         
-        return <div></div>
-            // <AnimatedSprite 
-            //     x={units.current.position.x} 
-            //     y={units.current.position.y}
-            //     textures={this.textures}
-            //     isPlaying={true}
-            //     initialFrame={0}
-            //     animationSpeed={0.1}
-            //     interactive={true}
-            //     buttonMode={true}
-            //     pointerdown={event => this.onSprite(event)}
-            // />
-        
+        return <AnimatedSprite 
+            x={units.current.position.x} 
+            y={units.current.position.y}
+            textures={this.textures}
+            isPlaying={true}
+            initialFrame={0}
+            animationSpeed={0.1}
+            interactive={true}
+            buttonMode={true}
+            pointerdown={event => this.onSprite(event)}
+        />
     }
 }
-
-// const Unit = withPixiApp(GameUnit);
 
 function mapDispatchToProps(dispatch) {
     return {

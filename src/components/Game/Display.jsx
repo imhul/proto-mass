@@ -6,9 +6,6 @@ import { Zoom } from 'react-scaling';
 import { DndProvider } from 'react-dnd';
 import Backend from 'react-dnd-html5-backend';
 
-// Utils
-import { playSFX } from '../../utils';
-
 // Components
 import DnD from './DnD';
 import Preloader from './Preloader';
@@ -16,8 +13,10 @@ import Preloader from './Preloader';
 // Hooks
 import useDOMState from '../../hooks/dom';
 
-// Sounds
+// Utils
+// import { playSFX } from '../../utils';
 // TODO: UNCOMMENT !!! INTRO SOUND !!!
+// Sounds
 // import introSFX from '../../assets/sound/loading.ogg';
 
 const Display = () => {
@@ -25,7 +24,7 @@ const Display = () => {
     const dispatch = useDispatch();
     const dom = useDOMState();
     const { zoom, isDraggable } = useSelector(state => state.map);
-    const { loadingPercent, isGameInit, isMapLoaded, isGameLoaded, isMapVisible, settings } = useSelector(state => state.game);
+    const { loadingPercent, isGameInit, isMapLoaded, isGameLoaded } = useSelector(state => state.game);
     const { isFullscreen } = useSelector(state => state.stage);
 
     useEffect(() => {
@@ -60,16 +59,12 @@ const Display = () => {
     }, [dispatch]);
 
     const onKeydown = useCallback(e => {
-        if (e.code === 'ControlLeft' && e.keyCode === 17 && !isDraggable) {
-            dispatch({ type: 'MAP_IS_DRAGGABLE'})
-        }
-    }, [dispatch, isDraggable]);
+        console.info("onKeydown event: ", e);
+    }, []);
 
     const onKeyup = useCallback(e => {
-        if (e.code === 'ControlLeft' && e.keyCode === 17 && isDraggable) {
-            dispatch({ type: 'MAP_NO_DRAGGABLE'})
-        }
-    }, [dispatch, isDraggable]);
+        console.info("onKeydown event: ", e);
+    }, []);
 
     const onResize = useCallback(output => {
         if (!isGameInit) dispatch({ type: 'RESIZE', payload: output });

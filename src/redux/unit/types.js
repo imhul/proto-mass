@@ -2,6 +2,8 @@ export const types = {
     UNIT_CREATED:           'UNIT_CREATED',
     UNIT_KILLED:            'UNIT_KILLED',
     UNIT_DIED:              'UNIT_DIED',
+
+    UNIT_STATS_TOGGLE:      'UNIT_STATS_TOGGLE',
     
     UNIT_INIT_POSITION:     'UNIT_INIT_POSITION',
     UNIT_START_WALKING:     'UNIT_START_WALKING',

@@ -24,20 +24,10 @@ const HomePage = () => {
 
     const rondomArr = new Array(getRandom(20, 40)).fill({'type': 1}, 0);
 
-    // const starsStyles = {
-    //     position: 'absolute',
-    //     width: '100%',
-    //     top: 64,
-    //     left: 0,
-    //     opacity: 0.4,
-    // };
-
     return <WindowSizeListener
                 onResize={output => dispatch({ type: 'RESIZE', payload: output })}
             >
                 <Layout>
-                    {/* <img src={stars} className="stars-bg" style={starsStyles} />
-                    <img src={stars3} className="stars-bg" style={starsStyles} /> */}
                     <h1 className="hero">proto-mass</h1>
                     <h2 className="hero-desc">sandbox</h2>
                     <div className="home-scene">

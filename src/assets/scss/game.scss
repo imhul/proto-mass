@@ -78,9 +78,17 @@
 				user-select: none;
 			}
 			& > .unit-wrapper {
-				z-index: 8;
 				& > img {
 					transform: rotateY(60deg);
+				}
+				.unit-stats {
+					position: absolute;
+					bottom: 40px;
+					left: -40px;
+					transform: rotateY(60deg);
+					color: #fff;
+					background-color: #222;
+					z-index: 999;
 				}
 			}
 			.wall {

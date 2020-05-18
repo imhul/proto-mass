@@ -5,13 +5,18 @@ import update from 'immutability-helper';
 export default function unitReducer(state = initState, action) {
     switch (action.type) {
 
+        case types.UNIT_STATS_TOGGLE:
+            return {
+                ...state,
+                isUnitStatsShown: !state.isUnitStatsShown,
+            }
+
         case types.UNIT_CREATED: 
             return {
                 ...state,
                 unitList: update(state.unitList, 
                     { $push: [action.payload] }
                 ),
-                totalUnits: state.totalUnits + 1,
             }
 
         case types.UNIT_INIT_POSITION: 

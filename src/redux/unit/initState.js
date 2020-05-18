@@ -1,42 +1,75 @@
 export const initState = {
+    unitsLimit: 1,
     unitList: [],
-    totalUnits: 0,
-    createdUnits: 0,
+    isUnitStatsShown: true,
     current: {
         id: "",
         name: "",
-        status: "absent",
+        status: "search", // walk, work, attak, rest, search, dead
         stats: {
-            level: 0,
-            skills: [
-                {
-                    id: "",
-                    name: "",
-                    status: "",
-                    level: "",
-                    pointsToNewLevel: 0,
-                    bonus: {},
-                },
-            ],
-            health: 0,
-            damage: 0,
+            level: 0, // max 20
+            health: 0, // h-points
+            damage: 0, // h-points
             speed: 1.5,
-            healthPoints: 0,
-            pointsToNewLevel: 0,
+            healthPoints: 0, // h-points
+            pointsToNextLevel: 0, // max 20
         },
         position: {
             x: 0,
             y: 0,
         },
+        skills: [
+            {
+                id: "",
+                name: "",
+                status: "",
+                progress: "", // x-points
+                level: 0, // max 20
+                levelName: "trainee", // medium, prime
+                pointsToNextLevel: 0, // x-points
+                bonus: {
+                    id: "",
+                    name: "",
+                    value: 0,
+                },
+            },
+        ],
         technologies: [
             {
                 id: "",
+                name: "",
                 status: "",
-                progress: "",
+                progress: "", // x-points
+                level: 0, // max 20
+                levelName: "trainee", // medium, prime
+                pointsToNextLevel: 0, // x-points
+                bonus: {
+                    id: "",
+                    name: "",
+                    value: 0,
+                },
             },
         ],
+        professions: [
+            {
+                id: "",
+                name: "constructor", // constructor, collector, protector, numerator
+                status: "",
+                progress: "", // x-points
+                level: 0, // max 20
+                levelName: "trainee", // medium, prime
+                pointsToNextLevel: 0, // x-points
+                bonus: {
+                    id: "",
+                    name: "",
+                    value: 0,
+                },
+            },
+        ],
+        // backpack
         itemsStorage: [],
-        items: [
+        // wear
+        items: [ 
             {
                 id: "",
                 name: "",

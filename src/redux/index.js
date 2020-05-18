@@ -8,7 +8,7 @@ import gameReducer from './game/reducer';
 import stageReducer from './stage/reducer';
 import mapReducer from './map/reducer';
 import unitReducer from './unit/reducer';
-
+import taskReducer from './task/reducer';
 
 export default history => combineReducers({
   router: connectRouter(history),
@@ -18,6 +18,7 @@ export default history => combineReducers({
   stage: stageReducer,
   map: mapReducer,
   unit: unitReducer,
+  task: taskReducer,
   firebase: firebaseReducer,
   firestore: firestoreReducer,
 });
