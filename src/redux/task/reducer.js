@@ -11,6 +11,7 @@ export default function taskReducer(state = initState, action) {
                 taskList: update(state.taskList, 
                     { $push: [action.payload] }
                 ),
+                taskLimit: state.taskLimit + 1,
             }
 
         case types.TASK_DONE:

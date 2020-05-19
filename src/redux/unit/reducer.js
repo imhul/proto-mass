@@ -64,12 +64,12 @@ export default function unitReducer(state = initState, action) {
             }
 
         case types.UNIT_GET_TASK: 
+            // const current = unitList[]
             return {
                 ...state,
-                current: { // TODO: filter by unit id
-                    ...state.current,
-                    status: 'work',
-                },
+                // unitList: update(state.unitList, 
+                //     { $push: [action.payload] }
+                // ),
             }
 
         default:

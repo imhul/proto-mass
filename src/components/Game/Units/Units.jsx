@@ -10,7 +10,7 @@ const Units = props => {
     
     // Effects
     const dispatch = useDispatch();
-    const { taskList, pendingList } = useSelector(state => state.task);
+    const { taskList, pendingList, taskLimit } = useSelector(state => state.task);
     const { 
         unitsLimit, 
         unitList,
@@ -20,6 +20,7 @@ const Units = props => {
     const getUnit = useCallback(() => {
         const idLength = new Array(16);
         const name = uuidv5(`bot#${getRandomInt(100, 1001)}`, idLength);
+        const profId = uuidv5(`task.profession#${getRandomInt(100, 1001)}`, idLength);
         const userId = uuidv5(name, idLength);
         const unit = {
             id: userId,
@@ -37,6 +38,7 @@ const Units = props => {
                 x: getRandomInt(13, 18),
                 y: getRandomInt(13, 18),
             },
+            task: null,
             skills: [
                 {
                     id: "",
@@ -71,11 +73,11 @@ const Units = props => {
             ],
             professions: [
                 {
-                    id: "",
+                    id: profId,
                     name: "constructor", // constructor, collector, protector, numerator
                     status: "",
                     progress: "", // x-points
-                    level: 0, // max 20
+                    level: 1, // max 20
                     levelName: "trainee", // medium, prime
                     pointsToNextLevel: 0, // x-points
                     bonus: {
@@ -108,42 +110,59 @@ const Units = props => {
         const taskId = uuidv5(`task#${getRandomInt(100, 1001)}`, idLength);
         const task = {
             id: taskId,
-            status: "await", // awayt, progress, paused, done
+            status: "await", // await, progress, paused, done
             level: 0,
-            profession: "collector",
+            type: "construct", // construct, collect, fight
+            workerId: "",
+            profession: "constructor",
             professionLevel: "trainee",
+            positions: [
+                {
+                    x: 24, // getRandomInt(1, 31)
+                    y: 24, // getRandomInt(1, 31)
+                },
+            ],
         }; 
 
-        const limit = taskList.filter(item => item.id === task.id);
+        const copies = taskList.filter(item => item.id === task.id);
 
-        if (task && limit.length < 1 ) {
-            dispatch({ type: 'TASK_ADD', payload: task });
+        if (task && copies.length < 1) {
+            if (taskList.length < 1 || taskList.length > taskLimit) {
+                dispatch({ type: 'TASK_ADD', payload: task });
+            }
         }
-    }, [ dispatch, taskList ]);
-
-    useEffect(() => getUnit(), [getUnit]);
+        
+    }, [ dispatch, taskList, taskLimit ]);
 
     useEffect(() => getTask(), [getTask]);
-
-    const getUnitProfessionName = useCallback((unit, profession) => {
-        const professions = unit.professions;
-        const profUnit = professions.filter(prof => prof.name === profession);
-        return profUnit.length > 0
+    useEffect(() => getUnit(), [getUnit]);
+    
+    const isUnitProfessionMatchTask = useCallback((unit, task) => {
+        const unitProfessionsList = unit.professions;
+        const taskProfession = task.profession;
+        const whoIsPro = unitProfessionsList.filter(prof => prof.name === taskProfession);
+        return whoIsPro.length > 0
     }, []);
 
     const taskSearch = useCallback(unit => {
-        if (unitList.length > 0) {
+        if (unitList.length > 0 && unit.task === null) {
+            const relevantTask = taskList.filter(task => isUnitProfessionMatchTask(unit, task)); 
             if (pendingList.length > 0) {
                 const currentTask = pendingList.filter(task => task.workerId === unit.id);
+                console.info("currentTask: ", currentTask);
                 dispatch({ type: 'UNIT_GET_TASK', payload: currentTask });
-            } else if (pendingList.length === 0 && taskList.length > 0) {
-                 const relevantTask = taskList.filter(task => getUnitProfessionName(unit, task.profession)); 
+            } else if (pendingList.length === 0 && taskList.length > 0 && relevantTask.length <= taskList.length) {
+                 console.info("relevantTask: ", relevantTask);
                  dispatch({ type: 'UNIT_GET_TASK', payload: relevantTask });
             }
         }
-    }, [ unitList, taskList, pendingList, dispatch ]);
+    }, [ unitList, taskList, pendingList, isUnitProfessionMatchTask, dispatch ]);
     
-    const units = unitList.map(unit => (
+    useEffect(() => {
+        const searching = unitList.map(unit => unit.status === "search" && taskSearch(unit))
+    }, [ taskSearch, unitList ]);
+
+    const unitsRender = unitList.map(unit => (
         <div 
             key={`animated-unit-wrapper-${unit.name}`}
             className="react-isometric-object-wrapper active unit-wrapper"
@@ -161,13 +180,11 @@ const Units = props => {
                     {JSON.stringify(unit.position)}
                 </div>
             }
-            {
-                unit.status === "search" && taskSearch(unit)
-            }
             <AnimatedTexture
                 id={unit.id}
                 width={props.width}
                 height={props.height}
+                onClick={() => getTask()}
                 onPointerEnter={() => dispatch({ type: 'UNIT_STATS_TOGGLE' })}
                 onPointerLeave={() => dispatch({ type: 'UNIT_STATS_TOGGLE' })}
                 delay={200}
@@ -181,7 +198,7 @@ const Units = props => {
         </div>
     ));
 
-    return units
+    return unitsRender
 };
 
 export default Units;

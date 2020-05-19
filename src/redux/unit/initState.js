@@ -18,6 +18,14 @@ export const initState = {
             x: 0,
             y: 0,
         },
+        task: null, 
+        // {
+        //     id: "",
+        //     status: "", // await, progress, paused, done
+        //     level: 0,
+        //     profession: "",
+        //     professionLevel: "",
+        // },
         skills: [
             {
                 id: "",
