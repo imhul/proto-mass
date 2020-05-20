@@ -10,7 +10,12 @@ const Units = props => {
     
     // Effects
     const dispatch = useDispatch();
-    const { taskList, pendingList, taskLimit } = useSelector(state => state.task);
+    const { isGameInit } = useSelector(state => state.game);
+    const { 
+        taskList, 
+        pendingList, 
+        taskLimit 
+    } = useSelector(state => state.task);
     const { 
         unitsLimit, 
         unitList,
@@ -114,12 +119,17 @@ const Units = props => {
             level: 0,
             type: "construct", // construct, collect, fight
             workerId: "",
+            priority: 1,
             profession: "constructor",
             professionLevel: "trainee",
             positions: [
                 {
                     x: 24, // getRandomInt(1, 31)
                     y: 24, // getRandomInt(1, 31)
+                },
+                {
+                    x: 8, // getRandomInt(1, 31)
+                    y: 12, // getRandomInt(1, 31)
                 },
             ],
         }; 
@@ -145,18 +155,45 @@ const Units = props => {
     }, []);
 
     const taskSearch = useCallback(unit => {
-        if (unitList.length > 0 && unit.task === null) {
-            const relevantTask = taskList.filter(task => isUnitProfessionMatchTask(unit, task)); 
+        if (unitList.length > 0 && unit.task === null && isGameInit) {
             if (pendingList.length > 0) {
-                const currentTask = pendingList.filter(task => task.workerId === unit.id);
-                console.info("currentTask: ", currentTask);
-                dispatch({ type: 'UNIT_GET_TASK', payload: currentTask });
-            } else if (pendingList.length === 0 && taskList.length > 0 && relevantTask.length <= taskList.length) {
-                 console.info("relevantTask: ", relevantTask);
-                 dispatch({ type: 'UNIT_GET_TASK', payload: relevantTask });
+                const currentTask = pendingList.filter(task => 
+                    task.workerId === unit.id
+                );
+                dispatch({ type: 'UNIT_GET_TASK', payload: { 
+                    task: currentTask, 
+                    userId: unit.id
+                }});
+                dispatch({ type: 'TASK_CONTINUED', payload: {
+                    taskId: currentTask.id,
+                    unitId: unit.id
+                }});
+            } else if (
+                pendingList.length === 0 && 
+                taskList.length > 0 && 
+                !unit.task) 
+            {
+                const relevantTask = taskList.filter(task => 
+                    isUnitProfessionMatchTask(unit, task)
+                ); 
+                dispatch({ type: 'UNIT_GET_TASK', payload: { 
+                    task: relevantTask, 
+                    unitId: unit.id
+                }});
+                dispatch({ type: 'TASK_ACCEPTED', payload: {
+                    taskId: relevantTask[0].id,
+                    unitId: unit.id
+                }});
             }
         }
-    }, [ unitList, taskList, pendingList, isUnitProfessionMatchTask, dispatch ]);
+    }, [ 
+        isGameInit, 
+        unitList, 
+        taskList, 
+        pendingList, 
+        isUnitProfessionMatchTask, 
+        dispatch
+    ]);
     
     useEffect(() => {
         const searching = unitList.map(unit => unit.status === "search" && taskSearch(unit))

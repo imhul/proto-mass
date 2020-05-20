@@ -1,8 +1,8 @@
 import { types } from './types';
 
-export const unitBorn = () => ({
+export const unitBorn = unit => ({
     type: types.UNIT_CREATED,
-    payload: {}
+    payload: unit,
 });
 
 export const initPosition = position => {
