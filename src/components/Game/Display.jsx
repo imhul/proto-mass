@@ -9,6 +9,7 @@ import Backend from 'react-dnd-html5-backend';
 // Components
 import DnD from './DnD';
 import Preloader from './Preloader';
+import TimeMachine from './TimeMachine';
 
 // Hooks
 import useDOMState from '../../hooks/dom';
@@ -102,15 +103,18 @@ const Display = () => {
                 <div id="bg-parallax"></div>
                 <div id="mg-parallax"></div>
                 <div id="fg-parallax"></div>
-                    <Zoom 
-                        zoom={zoom} 
-                        style={{ 'cursor': isDraggable ? 'grab' : 'default' }}
-                    >
-                        <DndProvider backend={Backend}>
-                            <DnD />
-                        </DndProvider>
-                    </Zoom>
-
+                <Zoom 
+                    zoom={zoom} 
+                    style={{ 'cursor': isDraggable ? 'grab' : 'default' }}
+                >
+                    <DndProvider backend={Backend}>
+                        <DnD />
+                    </DndProvider>
+                </Zoom>
+                
+                {
+                    isGameInit ? <TimeMachine /> : null 
+                }
             </Fullscreen>
         </WindowSizeListener>
     </>

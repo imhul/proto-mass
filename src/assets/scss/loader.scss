@@ -1,6 +1,27 @@
 .Preloader {
     width: 50%;
     position: absolute;
+    &.mini {
+        width: 100%;
+        position: relative;
+        .ant-progress-text {
+            top: -30px;
+            width: 85px;
+        }
+        .ant-progress-outer {
+            .ant-progress-inner {
+                border: 1px solid #33F6F9;
+            }
+        }
+    }
+    &.medium {
+        position: relative;
+        .ant-progress-outer {
+            .ant-progress-inner {
+                border: 2px solid #33F6F9;
+            }
+        }
+    }
     .ant-progress-outer {
         margin: 0;
         padding: 0;

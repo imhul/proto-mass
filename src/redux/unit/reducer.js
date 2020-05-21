@@ -26,15 +26,8 @@ export default function unitReducer(state = initState, action) {
         case types.UNIT_GET_TASK: 
             const task = action.payload.task[0];
             const updateTask = update(task, {
-                // id: task.id,
                 status: { $set: "accepted" }, // accepted, await, progress, paused, done
-                // level: task.level,
-                // type: task.type, // construct, collect, fight
                 workerId: { $set: currentUnit.id },
-                // priority: task.priority,
-                // profession: task.profession,
-                // professionLevel: task.professionLevel,
-                // positions: task.positions
             });
 
             const updateUnitTask = update(currentUnit, {
@@ -48,19 +41,6 @@ export default function unitReducer(state = initState, action) {
                 unitList: update(state.unitList, 
                     { $merge: [updateUnitTask] }
                 ),
-            }
-
-        case types.UNIT_INIT_POSITION: 
-            return {
-                ...state,
-                current: {
-                    ...state.current,
-                    status: 'search',
-                    position: {
-                        x: action.payload.x,
-                        y: action.payload.y,
-                    }
-                },
             }
 
         case types.UNIT_START_WALKING: 

@@ -44,7 +44,7 @@ firebase.auth().onAuthStateChanged(async user => {
 });
 
 const userRef = firestore.collection('users');
-console.info('userRef: ', userRef);
+// console.info('userRef: ', userRef);
 
 export const history = createBrowserHistory();
 const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;

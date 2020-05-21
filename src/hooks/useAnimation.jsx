@@ -1,6 +1,6 @@
-import { useRef, useEffect, useCallback } from 'react';
+import { useRef, useEffect } from 'react';
 
-const Animation = callback => {
+const useAnimation = callback => {
 
     const requestRef = useRef();
     const previousTimeRef = useRef();
@@ -20,4 +20,4 @@ const Animation = callback => {
     }, []);
 }
 
-export default Animation;
+export default useAnimation;

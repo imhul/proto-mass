@@ -15,4 +15,7 @@ export const types = {
     SAVE_GAME:                  'SAVE_GAME',
     SET_VOLUME:                 'SET_VOLUME',
     TOGGLE_DRAWER:              'TOGGLE_DRAWER',
+    SET_MINUTES:                'SET_MINUTES',
+    SET_HOURS:                  'SET_HOURS',
+    SET_DAYS:                   'SET_DAYS',
 };

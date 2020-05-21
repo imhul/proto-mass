@@ -1,0 +1,13 @@
+.TimeMachine {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 110px;
+    right: 90px;
+    .hours {
+        font-family: "PressStart2P-Regular";
+        color: #33F6F9;
+        font-size: 1em;
+        text-align: center;
+    }
+}

@@ -120,6 +120,8 @@ const Units = props => {
             type: "construct", // construct, collect, fight
             workerId: "",
             priority: 1,
+            progress: 0, // from 0 to progressPoints
+            progressPoints: 8,
             profession: "constructor",
             professionLevel: "trainee",
             positions: [

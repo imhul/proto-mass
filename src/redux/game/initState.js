@@ -54,6 +54,11 @@ export const initState = {
             },
         },
     },
+    time: {
+        minutes: 0,
+        hours: 0,
+        days: 0,
+    },
     game: {},
     error: {},
 };

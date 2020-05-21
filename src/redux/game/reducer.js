@@ -1,5 +1,6 @@
 import { types } from './types';
 import { initState } from './initState';
+import update from 'immutability-helper';
 
 export default function gameReducer(state = initState, action) {
     switch (action.type) {
@@ -98,6 +99,34 @@ export default function gameReducer(state = initState, action) {
                 ...state,
                 isGameMenuOpen: !state.isGameMenuOpen,
             }
+
+        case types.SET_MINUTES: {
+            return {
+                ...state,
+                time: update(state.time, {
+                    minutes: {$set: action.payload}
+                }),
+            }
+        }
+
+        case types.SET_HOURS: {
+            return {
+                ...state,
+                time: {
+                    ...state.time,
+                    hours: state.time.hours + 1
+                },
+            }
+        }
+
+        case types.SET_DAYS: {
+            return {
+                ...state,
+                time: update(state.time, {
+                    days: { $set: state.time.days + 1 }
+                }),
+            }
+        }
 
         default:
             return state
