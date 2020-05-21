@@ -26,7 +26,6 @@
   },
   "dependencies": {
     "antd": "^3.25.2",
-    "audio-loader": "^1.0.3",
     "connected-react-router": "^6.6.0",
     "firebase": "^7.14.3",
     "history": "^4.10.1",
@@ -36,7 +35,6 @@
     "moment": "^2.24.0",
     "node-sass": "^4.13.0",
     "react": "^16.13.1",
-    "react-audio-player": "^0.11.1",
     "react-avatar-generator": "^1.0.3",
     "react-cookie": "^4.0.1",
     "react-dnd": "^10.0.2",
@@ -56,6 +54,7 @@
     "redux": "^4.0.4",
     "redux-firestore": "^0.13.0",
     "redux-logger": "^3.0.6",
+    "reselect": "^4.0.0",
     "sprite-react": "^0.2.1",
     "uifx": "^2.0.7",
     "uuid": "^3.3.3"
