@@ -33,7 +33,7 @@ const firebaseConfig = {
 //   pass: process.env.REACT_APP_USER_PASS
 // };
 
-// firebase.initializeApp(firebaseConfig);
+firebase.initializeApp(firebaseConfig);
 // const firestore = firebase.firestore();
 // firebase.auth().onAuthStateChanged(async user => {
 //   if (!user) {
