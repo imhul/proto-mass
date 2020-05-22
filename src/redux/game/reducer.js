@@ -100,10 +100,19 @@ export default function gameReducer(state = initState, action) {
                 isGameMenuOpen: !state.isGameMenuOpen,
             }
 
+        case types.TIME_MACHINE_INIT:
+            return {
+                ...state,
+                gameTime: update(state.gameTime, {
+                    isTimeMachineInit: {$set: true}
+                }),
+            }
+
+
         case types.SET_MINUTES: {
             return {
                 ...state,
-                time: update(state.time, {
+                gameTime: update(state.gameTime, {
                     minutes: {$set: action.payload}
                 }),
             }
@@ -112,9 +121,9 @@ export default function gameReducer(state = initState, action) {
         case types.SET_HOURS: {
             return {
                 ...state,
-                time: {
-                    ...state.time,
-                    hours: state.time.hours + 1
+                gameTime: {
+                    ...state.gameTime,
+                    hours: state.gameTime.hours + 1
                 },
             }
         }
@@ -122,9 +131,10 @@ export default function gameReducer(state = initState, action) {
         case types.SET_DAYS: {
             return {
                 ...state,
-                time: update(state.time, {
-                    days: { $set: state.time.days + 1 }
-                }),
+                gameTime: {
+                    ...state.gameTime,
+                    days: state.gameTime.days + 1 
+                },
             }
         }
 

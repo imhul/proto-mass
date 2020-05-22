@@ -1,6 +1,5 @@
 import { types } from './types';
 import { initState } from './initState';
-import update from 'immutability-helper';
 
 export default function mapReducer(state = initState, action) {
     switch (action.type) {
