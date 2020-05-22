@@ -28,22 +28,22 @@ const firebaseConfig = {
 //   profile: { email: process.env.REACT_APP_USER_EMAIL }
 // };
 
-const credentials = {
-  email: process.env.REACT_APP_USER_EMAIL,
-  pass: process.env.REACT_APP_USER_PASS
-};
+// const credentials = {
+//   email: process.env.REACT_APP_USER_EMAIL,
+//   pass: process.env.REACT_APP_USER_PASS
+// };
 
-firebase.initializeApp(firebaseConfig);
-const firestore = firebase.firestore();
-firebase.auth().onAuthStateChanged(async user => {
-  if (!user) {
-    await firebase.auth()
-    .signInWithEmailAndPassword(credentials.email, credentials.pass)
-    .then(data => console.info('data: ', data)) // signInAnonymously();
-  }
-});
+// firebase.initializeApp(firebaseConfig);
+// const firestore = firebase.firestore();
+// firebase.auth().onAuthStateChanged(async user => {
+//   if (!user) {
+//     await firebase.auth()
+//     .signInWithEmailAndPassword(credentials.email, credentials.pass)
+//     .then(data => console.info('data: ', data)) // signInAnonymously();
+//   }
+// });
 
-const userRef = firestore.collection('users');
+// const userRef = firestore.collection('users');
 // console.info('userRef: ', userRef);
 
 export const history = createBrowserHistory();
