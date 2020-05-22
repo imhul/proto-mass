@@ -5,10 +5,15 @@
     top: 110px;
     right: 90px;
     z-index: 999;
-    .hours {
-        font-family: "PressStart2P-Regular";
-        color: #33F6F9;
-        font-size: 1em;
-        text-align: center;
+    color: #33F6F9;
+    background-color: #051C5F;
+    border: 3px solid #33F6F9;
+    padding: 25px;
+    font-family: "PressStart2P-Regular";
+    font-size: 1em;
+    button {
+        border: 2px solid #33F6F9;
+        background-color: #F804FB;
+        margin: 0 5px;
     }
 }

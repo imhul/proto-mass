@@ -16,7 +16,7 @@ const Timer = ({ expiryTimestamp }) => {
     }, [dispatch]);
     
     const now = new Date();
-    now.setSeconds(now.getSeconds() + 6);
+    now.setSeconds(now.getSeconds() + 24);
 
     const {
         seconds,
@@ -35,52 +35,43 @@ const Timer = ({ expiryTimestamp }) => {
         dispatch({ type: 'SET_HOURS' });
         restart(now);
         console.warn('onExpire called');
-        if (gameTime.hours % 60 === 1 && gameTime.hours > 59) {
+        if (gameTime.hours % 24 === 0 && gameTime.hours > 23) {
             dispatch({ type: 'SET_DAYS' });
         }
-    }, [ dispatch, restart, now, gameTime.hours ]);
+    }, [ dispatch, restart, gameTime.hours ]);
+
+    const gameHours = 24 - seconds;
+    const gameDayPercent = gameHours * 4.16;
 
     return (
         <div style={{ textAlign: 'center' }}>
-            <div style={{ fontSize: '30px' }}>
-                <span>{days}</span>:
-                <span>{hours}</span>:
-                <span>{minutes}</span>:
-                <span>{seconds}</span>
+            <div>
+                <span>Day: {gameTime.days}</span> <span>Hour: {gameHours}</span>
             </div>
-            <p>{isRunning ? 'Running' : 'Not running'}</p>
-            <button onClick={start}>Start</button>
+            <div>
+                <Preloader 
+                    percent={gameDayPercent} 
+                    class="medium" 
+                    strokeWidth={10} 
+                    format={null} />
+            </div>
             <button onClick={pause}>Pause</button>
             <button onClick={resume}>Resume</button>
-            <button onClick={() => restart(now)}>Restart</button>
         </div>
-    );
-}
+    )
+};
 
 const TimeMachine = () => {
 
     // const dispatch = useDispatch();
     const time = new Date();
-    time.setSeconds(time.getSeconds() + 6); // 1 minute timer
+    time.setSeconds(time.getSeconds() + 24); // 1 minute timer
 
     return (
         <div className="TimeMachine">
             <Timer expiryTimestamp={time} />
         </div>
-    );
-}
-
-//         <Preloader 
-//             percent={roundedMinutes % 100} 
-//             class="mini" 
-//             strokeWidth={10} 
-//             format={null} />
-
-//         <Preloader 
-//             percent={hours % 100} 
-//             class="mini" 
-//             strokeWidth={10} 
-//             format=" h" />
-
+    )
+};
 
 export default TimeMachine;
