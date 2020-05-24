@@ -2,6 +2,7 @@ import React, { useEffect, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import AnimatedTexture from '../Map/AnimatedTexture';
 import uuidv5 from 'uuid/v5';
+// import { firestore } from '../../../redux/store';
 
 // Utils
 import { getRandomInt } from '../../../utils';
@@ -21,6 +22,13 @@ const Units = props => {
         unitList,
         isUnitStatsShown
     } = useSelector(state => state.unit);
+
+    // useEffect(() => {
+    //     const userRef = firestore.collection('users');
+    //     userRef.get().then(data => {
+    //         console.info('data: ', data);
+    //     });
+    // }, []);
 
     const getUnit = useCallback(() => {
         const idLength = new Array(16);

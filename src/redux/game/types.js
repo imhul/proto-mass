@@ -4,7 +4,6 @@ export const types = {
     LOADING_GAME_COMPLETE:      'LOADING_GAME',
     MAP_LOADED:                 'MAP_LOADED',
     MAP_LOADING:                'MAP_LOADING',
-    TIME_MACHINE_INIT:          'TIME_MACHINE_INIT',
     INIT_GAME:                  'INIT_GAME',
     START_GAME:                 'START_GAME',
     STOP_GAME:                  'STOP_GAME',
@@ -16,7 +15,4 @@ export const types = {
     SAVE_GAME:                  'SAVE_GAME',
     SET_VOLUME:                 'SET_VOLUME',
     TOGGLE_DRAWER:              'TOGGLE_DRAWER',
-    SET_MINUTES:                'SET_MINUTES',
-    SET_HOURS:                  'SET_HOURS',
-    SET_DAYS:                   'SET_DAYS',
 };

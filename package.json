@@ -53,6 +53,7 @@
     "redux": "^4.0.4",
     "redux-firestore": "^0.13.0",
     "redux-logger": "^3.0.6",
+    "redux-timer-middleware": "^1.0.0",
     "reselect": "^4.0.0",
     "sprite-react": "^0.2.1",
     "uifx": "^2.0.7",

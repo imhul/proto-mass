@@ -6151,7 +6151,7 @@ internal-ip@^4.2.0:
     default-gateway "^4.2.0"
     ipaddr.js "^1.9.0"
 
-invariant@^2.2.2, invariant@^2.2.4:
+invariant@^2.0.0, invariant@^2.2.2, invariant@^2.2.4:
   version "2.2.4"
   resolved "https://registry.yarnpkg.com/invariant/-/invariant-2.2.4.tgz#610f3c92c9359ce1db616e538008d23ff35158e6"
   integrity sha512-phJfQVBuaJM5raOpJjSfkiD6BpbCE4Ns//LaXl6wGYtUBY83nWS6Rf9tXm2e8VaK60JEjYldbPif/A2B1C2gNA==
@@ -10415,6 +10415,13 @@ redux-logger@^3.0.6:
   integrity sha1-91VZZvMJjzyIYExEnPC69XeCdL8=
   dependencies:
     deep-diff "^0.3.5"
+
+redux-timer-middleware@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/redux-timer-middleware/-/redux-timer-middleware-1.0.0.tgz#0ace86615a1406a8e8c9136937ce8b66d4d73118"
+  integrity sha512-HysWzz9TXXDKcf+nGERRSGTDQ57ks8DD7y3xzxhumqMyN/jyHmnyOA86cpT5ZDt1LnY4+UPc5B2Iugi9vLQ08Q==
+  dependencies:
+    invariant "^2.0.0"
 
 redux@^4.0.4:
   version "4.0.5"

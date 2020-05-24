@@ -1,6 +1,10 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useTimer } from 'react-timer-hook';
+import { 
+    START_TIMER, 
+    STOP_TIMER
+} from 'redux-timer-middleware';
 
 // Components
 import Preloader from './Preloader';
@@ -8,45 +12,44 @@ import Preloader from './Preloader';
 const Timer = ({ expiryTimestamp }) => {
 
     const dispatch = useDispatch();
-    const { gameTime } = useSelector(state => state.game);
 
     // Init
     useEffect(() => {
         dispatch({ type: 'TIME_MACHINE_INIT' })
     }, [dispatch]);
     
+    const { 
+        isTimeMachineInit, 
+        gameMinutes,
+        gameHours,
+        gameDays,
+        gameYears,
+    } = useSelector(state => state.time);
+    
     const now = new Date();
     now.setSeconds(now.getSeconds() + 24);
 
     const {
         seconds,
-        minutes,
-        hours,
-        days,
-        isRunning,
-        start,
         pause,
         resume,
         restart,
     } = useTimer({
-        expiryTimestamp, onExpire: () => onHourExpire()});
+        expiryTimestamp, 
+        onExpire: () => onHourExpire()
+    });
 
     const onHourExpire = useCallback(() => {
-        dispatch({ type: 'SET_HOURS' });
-        restart(now);
-        console.warn('onExpire called');
-        if (gameTime.hours % 24 === 0 && gameTime.hours > 23) {
-            dispatch({ type: 'SET_DAYS' });
-        }
-    }, [ dispatch, restart, gameTime.hours ]);
+        restart(now)
+    }, [ restart, now ]);
 
-    const gameHours = 24 - seconds;
-    const gameDayPercent = gameHours * 4.16;
+    const gameHoursCount = 24 - seconds;
+    const gameDayPercent = gameHoursCount * 4.16;
 
     return (
         <div style={{ textAlign: 'center' }}>
             <div>
-                <span>Day: {gameTime.days}</span> <span>Hour: {gameHours}</span>
+                <span>Day: {gameDays}</span> <span>Hour: {gameHours % 23}</span>
             </div>
             <div>
                 <Preloader 
@@ -63,9 +66,31 @@ const Timer = ({ expiryTimestamp }) => {
 
 const TimeMachine = () => {
 
-    // const dispatch = useDispatch();
+    const dispatch = useDispatch();
     const time = new Date();
     time.setSeconds(time.getSeconds() + 24); // 1 minute timer
+
+    useEffect(() => {
+        dispatch({ 
+            type: START_TIMER,
+            payload: {
+                actionName: 'SET_HOURS',
+                timerName: 'hoursTimer',
+                // actionPayload, // action payload that will be dispatched each timer interval
+                // timerPeriod, // how many timer ticks should work timer
+                // timerInterval = 1000, // timer interval, default - 1s
+            }
+        });
+        return () => {
+            dispatch({ 
+                type: STOP_TIMER,
+                payload: {
+                    actionName: 'CLEAR_HOURS_TIMER',
+                    timerName: 'hoursTimer',
+                }
+            });
+        }
+    }, [dispatch]);
 
     return (
         <div className="TimeMachine">
