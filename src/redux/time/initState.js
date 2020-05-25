@@ -1,8 +1,7 @@
 export const initState = {
     isTimeMachineInit: false,
-    gameMinutes: 0,
     gameHours: 0,
-    gameDays: 0,
-    gameYears: 0,
+    gameDays: 1,
+    gameYears: 1,
     error: {},
 };
