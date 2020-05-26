@@ -1,3 +1,3 @@
-import Display from './Display';
+import Display from './UI/Display';
 
 export default Display;

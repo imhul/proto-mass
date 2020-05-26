@@ -4,8 +4,8 @@ import { useHistory } from "react-router-dom";
 import { Drawer, Typography } from 'antd';
 
 // Components
-import SoundSlider from './SoundSlider';
-import Notify from '../Output/Notify';
+import SoundSlider from '../../Output/SoundSlider';
+import Notify from '../../Output/Notify';
 
 const { Title } = Typography;
 

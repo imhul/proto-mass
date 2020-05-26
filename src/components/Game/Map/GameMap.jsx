@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { IsometricMap, IsometricTile } from './Map';
+import { IsometricMap, IsometricTile } from '.';
 import VisibilitySensor from 'react-visibility-sensor';
 
 // Utils
@@ -10,14 +10,14 @@ import {
     mockedMap, 
     playSFX, 
     getTileById,
-} from '../../utils';
+} from '../../../utils';
 
 // Components
-import Objects from './Objects';
-import Units from './Units';
+import Objects from '../Objects';
+import Units from '../Units';
 
 // Sounds
-import MapClick from '../../assets/sound/map_click.ogg';
+import MapClick from '../../../assets/sound/map_click.ogg';
 
 const GameMap = () => { 
 

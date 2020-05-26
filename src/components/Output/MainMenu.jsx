@@ -5,7 +5,7 @@ import { Menu } from 'antd';
 
 // Components
 import UserMenu from './UserMenu';
-import GameMenu from './GameMenu';
+import GameMenu from '../Game/UI/GameMenu';
 
 const MainMenu = () => {
 

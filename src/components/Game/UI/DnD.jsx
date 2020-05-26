@@ -4,7 +4,7 @@ import { useDrop, useDrag } from 'react-dnd';
 import update from 'immutability-helper';
 
 // Components
-import GameMap from './GameMap';
+import GameMap from '../Map';
 
 const boxStyle = {
     position: 'absolute',

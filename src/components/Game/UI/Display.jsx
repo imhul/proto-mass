@@ -12,7 +12,7 @@ import Preloader from './Preloader';
 import TimeMachine from './TimeMachine';
 
 // Hooks
-import useDOMState from '../../hooks/dom';
+import useDOMState from '../../../hooks/dom';
 
 // Utils
 // import { playSFX } from '../../utils';

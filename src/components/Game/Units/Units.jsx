@@ -1,6 +1,6 @@
 import React, { useEffect, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import AnimatedTexture from '../Map/AnimatedTexture';
+import { AnimatedTexture } from '../Map';
 import uuidv5 from 'uuid/v5';
 // import { firestore } from '../../../redux/store';
 

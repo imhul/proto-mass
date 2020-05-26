@@ -2,34 +2,34 @@
 	from {
 		background-position: 5% 5%;
 	}
-	to { 
+	to {
 		background-position: 1300% 5%;
 	}
 }
 
 .game-active {
-    cursor: url('../img/cur.gif') !important;
+	cursor: url("../img/cur.gif") !important;
 
 	// background
-	background: radial-gradient(circle, rgba(17,23,25,1) 80%, rgba(10,13,15,1) 100%);
+	background: radial-gradient(circle, rgba(17, 23, 25, 1) 80%, rgba(10, 13, 15, 1) 100%);
 
 	#bg-game {
 		background: url(../img/parallax_3.png) repeat 50% 50%;
 		background-size: cover;
 		position: absolute;
-		top: 0; 
-		left: 0; 
-		right: 0; 
+		top: 0;
+		left: 0;
+		right: 0;
 		bottom: 0;
 		z-index: 1;
 	}
-	
+
 	#bg-parallax {
 		background: url(../img/parallax_1.png) repeat 5% 5%;
 		position: absolute;
-		top: 0; 
-		left: 0; 
-		right: 0; 
+		top: 0;
+		left: 0;
+		right: 0;
 		bottom: 0;
 		z-index: 2;
 		animation-name: starMove;
@@ -37,13 +37,13 @@
 		animation-timing-function: linear;
 		animation-iteration-count: infinite;
 	}
-	
+
 	#mg-parallax {
 		background: url(../img/parallax_2.png) repeat 20% 20%;
 		position: absolute;
-		top: 0; 
-		left: 0; 
-		right: 0; 
+		top: 0;
+		left: 0;
+		right: 0;
 		bottom: 0;
 		z-index: 3;
 		animation-name: starMove;
@@ -51,13 +51,13 @@
 		animation-timing-function: linear;
 		animation-iteration-count: infinite;
 	}
-	
+
 	#fg-parallax {
 		background: url(../img/parallax_2.png) repeat 35% 35%;
 		position: absolute;
-		top: 0; 
-		left: 0; 
-		right: 0; 
+		top: 0;
+		left: 0;
+		right: 0;
 		bottom: 0;
 		z-index: 4;
 		animation-name: starMove;
@@ -66,10 +66,37 @@
 		animation-iteration-count: infinite;
 	}
 
-	// isometric fixes
 	.react-isometric-map-wrapper {
+		--p-ratio: 1.4142;
+		--p-map-width: var(--map-width, 1);
+		--p-map-height: var(--map-height, 1);
+		--p-map-max-dimension: var(--map-max-dimension, var(--p-map-width));
+		--p-tile-size: calc(var(--tile-size, 48) / var(--p-ratio));
+		--p-v-tile-size: var(--tile-size, 48);
+		--p-slab-size: var(--slab-size, 12);
+		--p-size-unit: var(--size-unit, 1px);
+		--p-margin-top: var(--margin-top, 12);
+		--p-margin-left: var(--margin-left, 12);
+		--p-margin-right: var(--margin-right, 12);
+		--p-margin-bottom: var(--margin-bottom, 12);
+		--p-center-y: calc(var(--p-map-max-dimension) * var(--p-tile-size) / 2);
+		--p-map-offset-y: var(--map-offset-y, 0);
+		--p-center-x: calc((var(--p-map-width) + var(--map-height) - 1) * var(--p-tile-size) / 2);
+		width: calc(var(--p-size-unit) * (var(--p-v-tile-size) * (var(--p-map-width) + var(--p-map-height) + 5) / 2));
+		height: calc(var(--p-size-unit) * (var(--p-map-offset-y) + var(--p-map-max-dimension) * var(--p-v-tile-size)));
 		z-index: 5;
+
 		.react-isometric-map {
+			width: calc(var(--p-map-width) * var(--p-tile-size) * var(--p-size-unit));
+			height: calc(var(--p-map-height) * var(--p-tile-size) * var(--p-size-unit));
+			display: grid;
+			grid-template-columns: repeat(var(--p-map-width), calc(var(--p-size-unit) * var(--p-tile-size)));
+			grid-template-rows: repeat(var(--p-map-height), calc(var(--p-size-unit) * var(--p-tile-size)));
+			transform: translate(
+					calc(var(--p-size-unit) * (var(--p-tile-size) * 3 - var(--p-tile-size))),
+					calc(var(--p-size-unit) * (var(--p-center-y) + var(--p-map-offset-y)))
+				)
+				rotateX(60deg) rotateZ(45deg);
 			transform-origin: right center;
 			position: absolute;
 			user-select: none;
@@ -91,20 +118,151 @@
 					z-index: 999;
 				}
 			}
-			.wall {
-				display: none;
-			}
-			.react-isometric-object {
-				user-select: none;
-				bottom: 20px;
-				left: -3px;
+			.react-isometric-object-wrapper {
+				opacity: 0.5;
+				pointer-events: none;
+				--p-z: var(--z, 0);
+				--p-elevation: calc(var(--z) * var(--p-slab-size) * var(--p-size-unit) * var(--p-ratio));
+				--p-margin: calc(-1 * var(--p-size-unit) * var(--p-margin-bottom) * var(--p-ratio));
+				position: relative;
+				grid-column: calc(1 + var(--x));
+				grid-row: calc(1 + var(--y));
+				width: calc(var(--p-size-unit) * var(--p-tile-size));
+				height: calc(var(--p-size-unit) * var(--p-tile-size));
+				z-index: calc((var(--x) + var(--y) * var(--p-tile-size)) / 2 + 6);
+				transform: rotateZ(-45deg) scale(var(--p-ratio));
+				&.active {
+					pointer-events: auto;
+					opacity: 1;
+				}
+				.react-isometric-object {
+					position: absolute;
+					user-select: none;
+					bottom: 20px;
+					left: -3px;
+					// left: calc(var(--p-size-unit) * (var(--p-tile-size) - var(--object-width) / var(--p-ratio)) / 2);
+					// --p-bottom: calc(var(--p-margin) + var(--p-elevation));
+					// bottom: var(--p-bottom);
+					width: calc(var(--p-size-unit) * var(--object-width) / var(--p-ratio));
+					height: calc(var(--p-size-unit) * var(--object-height) * 2 / var(--p-ratio));
+
+					img {
+						pointer-events: none;
+						width: 100%;
+						height: 100%;
+					}
+				}
 			}
 			.react-isometric-tile {
+				--p-z: var(--z, 0);
+				--p-left-z: var(--left-z, var(--p-z, 0));
+				--p-right-z: var(--right-z, var(--p-z, 0));
+				--p-elevation: calc(-1 * var(--z) * var(--p-slab-size) * var(--p-size-unit) * var(--p-ratio));
+				grid-column: calc(1 + var(--x));
+				grid-row: calc(1 + var(--y));
+				position: relative;
+				width: calc(var(--p-size-unit) * var(--p-tile-size));
+				height: calc(var(--p-size-unit) * var(--p-tile-size));
+				transform: translate(var(--p-elevation), var(--p-elevation));
+				// z-index: calc((var(--x) + var(--y) * var(--p-tile-size)) / 2);
 				z-index: 7;
 				& > .floor {
-					background: rgba(0,0,0,0);
+					width: calc(var(--p-size-unit) * var(--p-tile-size));
+					height: calc(var(--p-size-unit) * var(--p-tile-size));
+					box-sizing: border-box;
+					position: absolute;
+					background: rgba(0, 0, 0, 0);
 					border: 0;
 					z-index: 8;
+					// z-index: calc((var(--x) + var(--y) * var(--p-tile-size)) / 2 + 3);
+				}
+				& > .wall {
+					box-sizing: border-box;
+					position: absolute;
+					background: white;
+					&.left {
+						border: 1px solid red;
+						width: calc(var(--p-size-unit) * var(--p-tile-size));
+						height: calc(var(--p-size-unit) * var(--p-slab-size) * var(--p-left-z) * var(--p-ratio));
+						transform: translateY(calc(var(--p-size-unit) * var(--p-tile-size))) skewX(45deg);
+						transform-origin: right top;
+						z-index: calc((var(--x) + var(--y) * var(--p-tile-size)) / 2 + 2);
+					}
+					&.right {
+						border: 1px solid blue;
+						height: calc(var(--p-size-unit) * var(--p-tile-size));
+						width: calc(var(--p-size-unit) * var(--p-slab-size) * var(--p-right-z) * var(--p-ratio));
+						transform: translateX(calc(var(--p-size-unit) * var(--p-tile-size))) skewY(45deg);
+						transform-origin: left top;
+						z-index: calc((var(--x) + var(--y) * var(--p-tile-size)) / 2 + 1);
+					}
+				}
+				.textures-group {
+					pointer-events: none;
+					position: relative;
+					transform: rotateZ(-45deg) scale(var(--p-ratio));
+					width: calc(var(--p-size-unit) * var(--p-tile-size));
+					height: calc(var(--p-size-unit) * (var(--p-tile-size)));
+					--p-inverse-ratio: calc(1.24266482568174);
+					.floor {
+						position: absolute;
+						left: calc(
+							var(--p-size-unit) * -1 * (var(--p-margin-left) + var(--p-tile-size) / 2) / var(--p-ratio) +
+								1px
+						);
+						right: calc(var(--p-size-unit) * var(--p-margin-right) / var(--p-ratio));
+						top: calc(-1 * var(--p-size-unit) * var(--p-margin-top) / var(--p-ratio) + 1px);
+						bottom: calc(-1 * var(--p-size-unit) * var(--p-margin-bottom) / var(--p-ratio));
+						transform-origin: center center;
+						transform: scale(calc(1 / var(--p-ratio))) scaleY(2);
+						z-index: calc((var(--x) + var(--y) * var(--p-tile-size)) / 2 + 4);
+					}
+					.top {
+						position: absolute;
+						top: calc(var(--p-size-unit) * (var(--p-tile-size)) / var(--p-ratio) - 1px);
+						transform: scale(calc(1 / var(--p-ratio))) scaleY(2);
+						&.left {
+							left: calc(var(--p-size-unit) * -1 * (var(--p-tile-size) / 2) / var(--p-ratio) - 1px);
+						}
+						&.right {
+							right: calc(var(--p-size-unit) * -1 * (var(--p-tile-size) / 2) / var(--p-ratio) - 1px);
+						}
+						z-index: calc((var(--x) + var(--y) * var(--p-tile-size)) / 2 + 3);
+					}
+					.middle {
+						position: absolute;
+						top: calc(
+							var(--p-size-unit) * (var(--p-tile-size)) / var(--p-ratio) + var(--p-size-unit) *
+								(var(--p-slab-size)) * var(--wall-index) * var(--p-ratio) - 1px
+						);
+						transform: scale(calc(1 / var(--p-ratio))) scaleY(2);
+						&.left {
+							left: calc(var(--p-size-unit) * -1 * (var(--p-tile-size) / 2) / var(--p-ratio) - 1px);
+						}
+						&.right {
+							right: calc(var(--p-size-unit) * -1 * (var(--p-tile-size) / 2) / var(--p-ratio) - 1px);
+						}
+						z-index: calc((var(--x) + var(--y) * var(--p-tile-size)) / 2 + 3);
+					}
+					.bottom {
+						transform: scale(calc(1 / var(--p-ratio))) scaleY(2);
+						position: absolute;
+						&.left {
+							top: calc(
+								var(--p-size-unit) * (var(--p-tile-size)) / var(--p-ratio) + var(--p-size-unit) *
+									var(--p-slab-size) * var(--p-left-z) * var(--p-ratio)
+							);
+							left: calc(var(--p-size-unit) * -1 * (var(--p-tile-size) / 2) / var(--p-ratio) - 1px);
+						}
+						&.right {
+							top: calc(
+								var(--p-size-unit) * (var(--p-tile-size)) / var(--p-ratio) + var(--p-size-unit) *
+									var(--p-slab-size) * var(--p-right-z) * var(--p-ratio)
+							);
+							right: calc(var(--p-size-unit) * -1 * (var(--p-tile-size) / 2) / var(--p-ratio) - 1px);
+						}
+						z-index: calc((var(--x) + var(--y) * var(--p-tile-size)) / 2 + 3);
+					}
 				}
 			}
 		}
