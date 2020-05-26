@@ -116,6 +116,7 @@ const Units = props => {
     }, [ dispatch, unitsLimit, unitList, user ]);
 
     const getTask = useCallback(() => {
+        // TODO: if save.units.map(unit => unit.task ? DO_TASK : GENERATE_TASK)
         const idLength = new Array(16);
         const taskId = uuidv5(`task#${getRandomInt(100, 1001)}`, idLength);
         const task = {
