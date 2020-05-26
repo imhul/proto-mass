@@ -8,12 +8,18 @@ export default function authReducer(state = initState, action) {
             return {
                 ...state,
                 isAuthenticated: true,
-                user: {
-                    login: action.payload.login,
-                    pass: action.payload.pass,
-                    remember: action.payload.remember,
-                    id: action.payload.id,
-                    avatar: action.payload.avatar,
+                error: {},
+                user: action.payload,
+            }
+        }
+
+        case types.SET_AUTH_ERROR: {
+            return {
+                ...state,
+                isAuthenticated: false,
+                error: {
+                    title: action.payload.error.code,
+                    desc: action.payload.error.message,
                 },
             }
         }

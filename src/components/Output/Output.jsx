@@ -11,7 +11,7 @@ import MainFooter from './MainFooter';
 import HomePage from '../HomePage';
 import AuthContainer from '../AuthContainer';
 import NoFound from '../NoFound';
-import LoginPage from '../Login';
+import Login from '../Login';
 import Display from '../Game';
 
 const { Content } = Layout;
@@ -34,7 +34,7 @@ const Output = ({ history }) => {
                             <HomePage />
                         </Route>
                         <Route path="/login">
-                            <LoginPage />
+                            <Login />
                         </Route>
                         <Route path="/error">
                             <NoFound />

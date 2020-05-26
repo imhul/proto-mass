@@ -23,6 +23,12 @@ export default function unitReducer(state = initState, action) {
                 ),
             }
 
+        case types.UNITS_LOADED: 
+            return {
+                ...state,
+                unitList: action.payload,
+            }
+
         case types.UNIT_GET_TASK: 
             const task = action.payload.task[0];
             const updateTask = update(task, {

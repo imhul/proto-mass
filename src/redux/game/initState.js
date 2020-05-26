@@ -15,44 +15,22 @@ export const initState = {
     colonyName: "",
     taskList: [],
     save: {
-        units: [],
-        colony: {
-            id: "",
-            name: "",
-            constructions: [],
-        },
-        world: {
-            constructions: [
-                {
-                    id: "",
-                    path: [],
-                },
-            ],
-            enemies: {
-                units: [
-                    {
-                        id: "",
-                        stats: {
-                            health: 0,
-                            damage: 0,
-                            healthPoints: 0,
-                        },
-                        status: "",
-                        type: "",
-                        position: {
-                            x: 0,
-                            y: 0,
-                        },
-                    },
-                ],
-                constructions: [
-                    {
-                        id: "",
-                        path: [],
-                    },
-                ],
-            },
-        },
+        // id: "",
+        // gameHours: 0,
+        // colony: {
+        //     id: "",
+        //     name: "",
+        //     level: 0,
+        // },
+        // settings: {
+        //     volume: 0.5,
+        //     zoom: 100,
+        //     isFullscreen: false,
+        // },
+        // objects: [],
+        // map: [],
+        // units: [],
+        // taskList: [],
     },
     game: {},
     error: {},

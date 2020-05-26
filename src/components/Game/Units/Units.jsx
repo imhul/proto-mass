@@ -2,7 +2,6 @@ import React, { useEffect, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { AnimatedTexture } from '../Map';
 import uuidv5 from 'uuid/v5';
-// import { firestore } from '../../../redux/store';
 
 // Utils
 import { getRandomInt } from '../../../utils';
@@ -11,112 +10,110 @@ const Units = props => {
     
     // Effects
     const dispatch = useDispatch();
+    const { user } = useSelector(state => state.auth);
     const { isGameInit } = useSelector(state => state.game);
+
     const { 
         taskList, 
         pendingList, 
         taskLimit 
     } = useSelector(state => state.task);
+
     const { 
         unitsLimit, 
         unitList,
         isUnitStatsShown
     } = useSelector(state => state.unit);
 
-    // useEffect(() => {
-    //     const userRef = firestore.collection('users');
-    //     userRef.get().then(data => {
-    //         console.info('data: ', data);
-    //     });
-    // }, []);
-
     const getUnit = useCallback(() => {
-        const idLength = new Array(16);
-        const name = uuidv5(`bot#${getRandomInt(100, 1001)}`, idLength);
-        const profId = uuidv5(`task.profession#${getRandomInt(100, 1001)}`, idLength);
-        const userId = uuidv5(name, idLength);
-        const unit = {
-            id: userId,
-            name: name,
-            status: "search", // walk, work, attak, rest, search, dead
-            stats: {
-                level: getRandomInt(0, 4),
-                health: 100,
-                damage: 0,
-                speed: 1.5,
-                healthPoints: 100,
-                pointsToNewLevel: 0,
-            },
-            position: {
-                x: getRandomInt(13, 18),
-                y: getRandomInt(13, 18),
-            },
-            task: null,
-            skills: [
-                {
-                    id: "",
-                    name: "",
-                    status: "",
-                    progress: "", // x-points
-                    level: 0, // max 20
-                    levelName: "trainee", // medium, prime
-                    pointsToNextLevel: 0, // x-points
-                    bonus: {
+        if (!user.save.units && user.save.units.length === 0) {
+            const idLength = new Array(16);
+            const name = uuidv5(`bot#${getRandomInt(100, 1001)}`, idLength);
+            const profId = uuidv5(`task.profession#${getRandomInt(100, 1001)}`, idLength);
+            const userId = uuidv5(name, idLength);
+            const unit = {
+                id: userId,
+                name: name,
+                status: "search", // walk, work, attak, rest, search, dead
+                isEnemy: false,
+                stats: {
+                    level: getRandomInt(0, 4),
+                    health: 100,
+                    damage: 0,
+                    speed: 1.5,
+                    healthPoints: 100,
+                    pointsToNewLevel: 0,
+                },
+                position: {
+                    x: getRandomInt(13, 18),
+                    y: getRandomInt(13, 18),
+                },
+                task: null,
+                skills: [
+                    {
                         id: "",
                         name: "",
-                        value: 0,
+                        status: "",
+                        progress: 0, // x-points
+                        level: 0, // max 20
+                        levelName: "trainee", // medium, prime
+                        pointsToNextLevel: 0, // x-points
+                        bonus: {
+                            id: "",
+                            name: "",
+                            value: 0,
+                        },
                     },
-                },
-            ],
-            technologies: [
-                {
-                    id: "",
-                    name: "",
-                    status: "",
-                    progress: "", // x-points
-                    level: 0, // max 20
-                    levelName: "trainee", // medium, prime
-                    pointsToNextLevel: 0, // x-points
-                    bonus: {
+                ],
+                technologies: [
+                    {
                         id: "",
                         name: "",
-                        value: 0,
+                        status: "",
+                        progress: "", // x-points
+                        level: 0, // max 20
+                        levelName: "trainee", // medium, prime
+                        pointsToNextLevel: 0, // x-points
+                        bonus: {
+                            id: "",
+                            name: "",
+                            value: 0,
+                        },
                     },
-                },
-            ],
-            professions: [
-                {
-                    id: profId,
-                    name: "constructor", // constructor, collector, protector, numerator
-                    status: "",
-                    progress: "", // x-points
-                    level: 1, // max 20
-                    levelName: "trainee", // medium, prime
-                    pointsToNextLevel: 0, // x-points
-                    bonus: {
+                ],
+                professions: [
+                    {
+                        id: profId,
+                        name: "constructor", // constructor, collector, protector, numerator
+                        status: "",
+                        progress: "", // x-points
+                        level: 1, // max 20
+                        levelName: "trainee", // medium, prime
+                        pointsToNextLevel: 0, // x-points
+                        bonus: {
+                            id: "",
+                            name: "",
+                            value: 0,
+                        },
+                    },
+                ],
+                // unit backpack items
+                itemsStorage: [],
+                // unit wear
+                items: [ 
+                    {
                         id: "",
                         name: "",
-                        value: 0,
+                        type: "",
+                        stats: {},
                     },
-                },
-            ],
-            // unit backpack items
-            itemsStorage: [],
-            // unit wear
-            items: [ 
-                {
-                    id: "",
-                    name: "",
-                    type: "",
-                    stats: {},
-                },
-            ],
-        }; 
-
-        if (unit && unitList < unitsLimit) {
-            dispatch({ type: 'UNIT_CREATED', payload: unit });
+                ],
+            }; 
+            if (unit && unitList < unitsLimit) {
+                dispatch({ type: 'UNIT_CREATED', payload: unit });
+            }
         }
-    }, [ dispatch, unitsLimit, unitList ]);
+    }, [ dispatch, unitsLimit, unitList, user ]);
 
     const getTask = useCallback(() => {
         const idLength = new Array(16);
@@ -154,8 +151,15 @@ const Units = props => {
         
     }, [ dispatch, taskList, taskLimit ]);
 
-    useEffect(() => getTask(), [getTask]);
-    useEffect(() => getUnit(), [getUnit]);
+    useEffect(() => {
+        // if (!user.save || !user.save.units || user.save.units.length === 0) getTask()
+        getTask()
+    }, [getTask, user]);
+
+    useEffect(() => {
+        // if (!user.save || !user.save.units || user.save.units.length === 0) getUnit()
+        getUnit()
+    }, [getUnit, user]);
     
     const isUnitProfessionMatchTask = useCallback((unit, task) => {
         const unitProfessionsList = unit.professions;
@@ -206,7 +210,7 @@ const Units = props => {
     ]);
     
     useEffect(() => {
-        const searching = unitList.map(unit => unit.status === "search" && taskSearch(unit))
+        unitList.map(unit => unit.status === "search" && taskSearch(unit))
     }, [ taskSearch, unitList ]);
 
     const unitsRender = unitList.map(unit => (

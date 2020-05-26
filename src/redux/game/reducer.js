@@ -85,6 +85,12 @@ export default function gameReducer(state = initState, action) {
                 save: action.payload,
             }
 
+        case types.LOAD_GAME_SAVE:
+            return {
+                ...state,
+                save: action.payload,
+            }
+
         case types.SET_VOLUME:
             return {
                 ...state,
