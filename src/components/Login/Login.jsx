@@ -6,7 +6,6 @@ import { Card, Form, Icon, Input, Button, Checkbox } from 'antd';
 import { useCookies, withCookies } from 'react-cookie';
 import Notify from '../Output/Notify';
 import uuidv5 from 'uuid/v5';
-import _ from 'lodash';
 
 const FormItem = Form.Item;
 
@@ -17,8 +16,6 @@ const LoginForm = props => {
     const dispatch = useDispatch();
     const { getFieldDecorator } = props.form;
     const { isAuthenticated, user } = useSelector(state => state.auth);
-    const { save } = useSelector(state => state.game);
-    const { unitList } = useSelector(state => state.unit);
     const [cookies, setCookie, removeCookie] = useCookies(['userId']);
     const { cookiesFromProps } = props.cookies;
     const isHasCookies = props.cookies.HAS_DOCUMENT_COOKIE;
@@ -29,27 +26,22 @@ const LoginForm = props => {
 
     // mocked login
     useEffect(() => {
-        const collection = firestore.collection('users').doc('N0iQ4vJiMKXOsPKoMOyK').get()
+        const collection = firestore.collection('users')
+            .doc('N0iQ4vJiMKXOsPKoMOyK')
+            .get()
             .then(doc => {
                 const data = doc.data();
                 // console.info('doc.id: ', doc.id);
                 if (data) {
-                    dispatch({ type: 'SET_AUTH_LOGIN', payload: data });
-                    if (_.isEmpty(save)) {
-                        dispatch({ 
-                            type: 'LOAD_GAME_SAVE', 
-                            payload: data.save 
-                        });
-                    }
-                    if (_.isEmpty(unitList)) {
-                        dispatch({ 
-                            type: 'UNITS_LOADED', 
-                            payload: data.save.units
-                        });
+                    if (!isAuthenticated) {
+                        dispatch({ type: 'SET_AUTH_LOGIN', payload: data });
                     }
                 }
             }).catch(error => {
-                dispatch({ type: 'SET_AUTH_ERROR', payload: error });
+                dispatch({ type: 'SET_AUTH_ERROR', payload: {
+                    code: `Error: ${error.code ? error.code : 'unknown!'}`,
+                    message: `Description: ${error.message ? error.message : error}`,
+                }});
                 Notify({
                     type: "warn",
                     message: `Error: ${error.code ? error.code : 'unknown!'}`,
@@ -58,7 +50,7 @@ const LoginForm = props => {
                     duration: 3
                 })
             });
-    }, [ dispatch, save, unitList ]);
+    }, [ dispatch, isAuthenticated ]);
 
     const onSubmit = e => {
         e.preventDefault();

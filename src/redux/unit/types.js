@@ -1,6 +1,6 @@
 export const types = {
     UNIT_CREATED:           'UNIT_CREATED',
-    UNITS_LOADED:           'UNITS_LOADED',
+    UNITS_LOAD:           'UNITS_LOAD',
     UNIT_KILLED:            'UNIT_KILLED',
     UNIT_DIED:              'UNIT_DIED',
 

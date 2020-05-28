@@ -23,7 +23,7 @@ export default function unitReducer(state = initState, action) {
                 ),
             }
 
-        case types.UNITS_LOADED: 
+        case types.UNITS_LOAD: 
             return {
                 ...state,
                 unitList: action.payload,

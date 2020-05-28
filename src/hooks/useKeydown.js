@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 
-export default function useKeydown() {
+export const useKeydown = () => {
     const [keysPressed, setKeyPressed] = useState(new Set([]));
 
     const onKeyDown = useCallback(({ key }) => {
@@ -22,5 +22,5 @@ export default function useKeydown() {
         };
     }, [onKeyUp, onKeyDown]);
 
-  return keysPressed;
-}
+  return keysPressed
+};

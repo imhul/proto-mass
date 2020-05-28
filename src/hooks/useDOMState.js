@@ -4,7 +4,7 @@ function getDOM() {
     return { readyState: document.readyState };
 }
 
-function useDOMState() {
+export const useDOMState = () => {
     const [readyState, setReadyState] = useState(getDOM());
 
     function handleDOM() {
@@ -21,5 +21,3 @@ function useDOMState() {
 
     return readyState;
 };
-
-export default useDOMState;

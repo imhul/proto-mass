@@ -51,7 +51,6 @@ const Objects = ({ width, height, type }) => {
         {
             dispatch({ type: 'OBJECTS_CREATED', payload: objects });
         }
-        console.info("objects: ", objects);
     }, [objectsLimit, dispatch, idLength, isObjectsCreation, objectList.length, type]);
     
     return objectList.map((obj, index) => 

@@ -5,6 +5,7 @@ import Fullscreen from 'react-full-screen';
 import { Zoom } from 'react-scaling';
 import { DndProvider } from 'react-dnd';
 import Backend from 'react-dnd-html5-backend';
+import _ from 'lodash';
 
 // Components
 import DnD from './DnD';
@@ -12,7 +13,7 @@ import Preloader from './Preloader';
 import TimeMachine from './TimeMachine';
 
 // Hooks
-import useDOMState from '../../../hooks/dom';
+import { useDOMState } from '../../../hooks';
 
 // Utils
 // import { playSFX } from '../../utils';
@@ -25,8 +26,20 @@ const Display = () => {
     const dispatch = useDispatch();
     const dom = useDOMState();
     const { zoom, isDraggable } = useSelector(state => state.map);
-    const { loadingPercent, isGameInit, isMapLoaded, isGameLoaded } = useSelector(state => state.game);
+    const { loadingPercent, isGameInit, isMapLoaded, isGameLoaded, save } = useSelector(state => state.game);
     const { isFullscreen } = useSelector(state => state.stage);
+    const { user } = useSelector(state => state.auth);
+    const { auth, profile } = useSelector(state => state.firebase);
+    const { unitList } = useSelector(state => state.unit);
+
+    useEffect(() => {
+        if (_.isEmpty(save)) {
+            dispatch({ 
+                type: 'LOAD_GAME_SAVE', 
+                payload: user.save 
+            });
+        }
+    }, [dispatch, user.save, save ]);
 
     useEffect(() => {
         let step1, step2;

@@ -14,7 +14,7 @@ const MainMenu = () => {
     const { isGameInit } = useSelector(state => state.game);
 
     const onWebMenuClick = e => {
-        console.log('click ', e);
+        // console.log('click ', e);
         history.push(e.key)
     };
 

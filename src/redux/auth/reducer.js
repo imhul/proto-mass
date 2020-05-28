@@ -18,8 +18,8 @@ export default function authReducer(state = initState, action) {
                 ...state,
                 isAuthenticated: false,
                 error: {
-                    title: action.payload.error.code,
-                    desc: action.payload.error.message,
+                    title: action.payload.code,
+                    desc: action.payload.message,
                 },
             }
         }
