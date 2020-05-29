@@ -17,11 +17,24 @@ export default function gameReducer(state = initState, action) {
                 isMapVisible: false,
             }
 
+        case types.START_OR_LOAD_MODAL_CLOSE:
+            return {
+                ...state,
+                isStartOrLoadModalOpen: false,
+            }
+
+        case types.LOAD_GAME_SAVE:
+            return {
+                ...state,
+                save: action.payload,
+                isLoadSavedGame: true,
+            }
+
         case types.LOADING_GAME: 
             return {
                 ...state,
                 loadingPercent: action.payload,
-                isGameLoaded: action.payload > 60 ? true : false,
+                isGameLoaded: action.payload > 99 ? true : false,
             }
 
         case types.INIT_GAME:
@@ -80,12 +93,6 @@ export default function gameReducer(state = initState, action) {
             }
 
         case types.SAVE_GAME:
-            return {
-                ...state,
-                save: action.payload,
-            }
-
-        case types.LOAD_GAME_SAVE:
             return {
                 ...state,
                 save: action.payload,

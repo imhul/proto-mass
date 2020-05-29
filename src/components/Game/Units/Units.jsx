@@ -19,9 +19,8 @@ const Units = props => {
         isUnitStatsShown
     } = useSelector(state => state.unit);
 
-    
-
     // TODO: if save.units.map(unit => unit.task ? DO_TASK : GENERATE_TASK)
+    // TODO: if save.units { load } else { useGetUnit }
     
     const isUnitProfessionMatchTask = useCallback((unit, task) => {
         const unitProfessionsList = unit.professions;

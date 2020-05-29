@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { useSelector } from 'react-redux';
-import { useHistory, useLocation } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { Menu } from 'antd';
 
 // Components
@@ -10,13 +10,12 @@ import GameMenu from '../Game/UI/GameMenu';
 const MainMenu = () => {
 
     const history = useHistory();
-    const location = useLocation();
     const { isGameInit } = useSelector(state => state.game);
 
-    const onWebMenuClick = e => {
+    const onWebMenuClick = useCallback(e => {
         // console.log('click ', e);
         history.push(e.key)
-    };
+    }, [ history ]);
 
     return (
         <>
@@ -32,7 +31,7 @@ const MainMenu = () => {
                             <span>Game</span>
                         </Menu.Item>
                     </Menu>
-                    { location.pathname !== '/login' ? <UserMenu /> : null } 
+                    <UserMenu />
                 </> : <GameMenu />
             }
         </>

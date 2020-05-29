@@ -1,5 +1,5 @@
 export const initState = {
-    isAppInit: true,
+    isAppInit: false,
     isAppLoad: false,
     notify: {
         key: '',

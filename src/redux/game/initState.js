@@ -1,5 +1,9 @@
 export const initState = {
     loadingPercent: 0,
+    isLoadSavedGame: false, // loaded or synthesized
+    isStartInfoModalOpen: false,
+    isStartOrLoadModalOpen: true,
+    isGameMenuOpen: false,
     isMapLoaded: false,
     isMapVisible: true,
     isGameLoaded: false,
@@ -11,7 +15,6 @@ export const initState = {
     settings: {
         volume: 0.5,
     },
-    isGameMenuOpen: false,
     colonyName: "",
     taskList: [],
     save: {
@@ -32,6 +35,5 @@ export const initState = {
         // units: [],
         // taskList: [],
     },
-    game: {},
     error: {},
 };

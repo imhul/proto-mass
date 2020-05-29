@@ -1,5 +1,7 @@
 import React, { useEffect, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+
+// Helpers
 import WindowSizeListener from 'react-window-size-listener';
 import Fullscreen from 'react-full-screen';
 import { Zoom } from 'react-scaling';
@@ -11,6 +13,8 @@ import _ from 'lodash';
 import DnD from './DnD';
 import Preloader from './Preloader';
 import TimeMachine from './TimeMachine';
+import StartOrLoadModal from '../Modals/StartOrLoad';
+import StartInfo from '../Modals/StartInfo';
 
 // Hooks
 import { useDOMState } from '../../../hooks';
@@ -26,36 +30,38 @@ const Display = () => {
     const dispatch = useDispatch();
     const dom = useDOMState();
     const { zoom, isDraggable } = useSelector(state => state.map);
-    const { loadingPercent, isGameInit, isMapLoaded, isGameLoaded, save } = useSelector(state => state.game);
+    const { 
+        isStartOrLoadModalOpen,
+        loadingPercent, 
+        isGameInit, 
+        isMapLoaded, 
+        isGameLoaded, 
+        save 
+    } = useSelector(state => state.game);
     const { isFullscreen } = useSelector(state => state.stage);
     const { user } = useSelector(state => state.auth);
     const { auth, profile } = useSelector(state => state.firebase);
     const { unitList } = useSelector(state => state.unit);
 
     useEffect(() => {
-        if (_.isEmpty(save)) {
-            dispatch({ 
-                type: 'LOAD_GAME_SAVE', 
-                payload: user.save 
-            });
-        }
-    }, [dispatch, user.save, save ]);
 
-    useEffect(() => {
-        let step1, step2;
-        if (dom.readyState === "complete" && isMapLoaded && !isGameInit) {
-            step1 = setTimeout(() => dispatch({ type: 'LOADING_GAME', payload: 99 }), 1000);
-        }
-        if (isGameLoaded && !isGameInit) {
-            step2 = setTimeout(() => dispatch({ type: 'INIT_GAME' }), 500);
-        }
+    }, [ dispatch ]);
 
-        return () => {
-            clearTimeout(step1);
-            clearTimeout(step2);
-        }
+    // useEffect(() => {
+    //     let step1, step2;
+    //     if (dom.readyState === "complete" && isMapLoaded && !isGameInit) {
+    //         step1 = setTimeout(() => dispatch({ type: 'LOADING_GAME', payload: 99 }), 1000);
+    //     }
+    //     if (isGameLoaded && !isGameInit) {
+    //         step2 = setTimeout(() => dispatch({ type: 'INIT_GAME' }), 500);
+    //     }
+
+    //     return () => {
+    //         clearTimeout(step1);
+    //         clearTimeout(step2);
+    //     }
         
-    }, [dispatch, isMapLoaded, isGameLoaded, isGameInit, dom.readyState]);
+    // }, [dispatch, isMapLoaded, isGameLoaded, isGameInit, dom.readyState]);
 
     // TODO: UNCOMMENT !!! INTRO SOUND !!!
     // useEffect(() => playSFX(introSFX, settings.volume), [settings.volume]);
@@ -97,39 +103,43 @@ const Display = () => {
             window.removeEventListener('keyup', onKeyup);
         };
     }, [prevent, onWheel, onKeydown, onKeyup]);
+
+    // <Preloader percent={loadingPercent} />
     
     return <>
         { 
-            !isGameInit ? <Preloader 
-                percent={loadingPercent} 
-            /> : null 
-        }
-        <WindowSizeListener
-            onResize={output => onResize(output)}
-        >
-            <Fullscreen 
-                enabled={isFullscreen} 
-                onChange={isFull => 
-                    dispatch({ type: 'FULLSCREEN', payload: isFull })}
-            >
-                <div id="bg-game"></div>
-                <div id="bg-parallax"></div>
-                <div id="mg-parallax"></div>
-                <div id="fg-parallax"></div>
-                <Zoom 
-                    zoom={zoom} 
-                    style={{ 'cursor': isDraggable ? 'grab' : 'default' }}
-                >
-                    <DndProvider backend={Backend}>
-                        <DnD />
-                    </DndProvider>
-                </Zoom>
-                
+            !isGameInit && isStartOrLoadModalOpen ? <StartOrLoadModal /> :
+            <> 
                 {
-                    isGameInit ? <TimeMachine /> : null 
+                   !isGameInit && <Preloader percent={loadingPercent} />
                 }
-            </Fullscreen>
-        </WindowSizeListener>
+                <WindowSizeListener
+                    onResize={output => onResize(output)}
+                >
+                    <Fullscreen 
+                        enabled={isFullscreen} 
+                        onChange={isFull => 
+                            dispatch({ type: 'FULLSCREEN', payload: isFull })}
+                    >
+                        <div id="bg-game"></div>
+                        <div id="bg-parallax"></div>
+                        <div id="mg-parallax"></div>
+                        <div id="fg-parallax"></div>
+                        <Zoom zoom={zoom} 
+                            style={{ 'cursor': isDraggable ? 'grab' : 'default' }}
+                        >
+                            <DndProvider backend={Backend}>
+                                <DnD />
+                            </DndProvider>
+                        </Zoom>
+                        
+                        {
+                            isGameInit ? <TimeMachine /> : null 
+                        }
+                    </Fullscreen>
+                </WindowSizeListener>
+            </>
+        }
     </>
 };
 

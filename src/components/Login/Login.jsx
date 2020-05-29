@@ -1,11 +1,13 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory, useLocation } from "react-router-dom";
 import { firestore } from '../../redux/store';
-import { Card, Form, Icon, Input, Button, Checkbox } from 'antd';
 import { useCookies, withCookies } from 'react-cookie';
-import Notify from '../Output/Notify';
 import uuidv5 from 'uuid/v5';
+
+// Components
+import { Card, Form, Icon, Input, Button, Checkbox } from 'antd';
+import Notify from '../Output/Notify';
 
 const FormItem = Form.Item;
 
@@ -16,6 +18,7 @@ const LoginForm = props => {
     const dispatch = useDispatch();
     const { getFieldDecorator } = props.form;
     const { isAuthenticated, user } = useSelector(state => state.auth);
+    const { profile, auth } = useSelector(state => state.firebase);
     const [cookies, setCookie, removeCookie] = useCookies(['userId']);
     const { cookiesFromProps } = props.cookies;
     const isHasCookies = props.cookies.HAS_DOCUMENT_COOKIE;
@@ -33,15 +36,17 @@ const LoginForm = props => {
                 const data = doc.data();
                 // console.info('doc.id: ', doc.id);
                 if (data) {
-                    if (!isAuthenticated) {
+                    if (!isAuthenticated && profile.isLoaded && auth.isLoaded) {
                         dispatch({ type: 'SET_AUTH_LOGIN', payload: data });
                     }
                 }
             }).catch(error => {
-                dispatch({ type: 'SET_AUTH_ERROR', payload: {
-                    code: `Error: ${error.code ? error.code : 'unknown!'}`,
-                    message: `Description: ${error.message ? error.message : error}`,
-                }});
+                dispatch({
+                    type: 'SET_AUTH_ERROR', payload: {
+                        code: `Error: ${error.code ? error.code : 'unknown!'}`,
+                        message: `Description: ${error.message ? error.message : error}`,
+                    }
+                });
                 Notify({
                     type: "warn",
                     message: `Error: ${error.code ? error.code : 'unknown!'}`,
@@ -50,9 +55,9 @@ const LoginForm = props => {
                     duration: 3
                 })
             });
-    }, [ dispatch, isAuthenticated ]);
+    }, [ profile, auth, dispatch, isAuthenticated ]);
 
-    const onSubmit = e => {
+    const onSubmit = useCallback(e => {
         e.preventDefault();
         props.form.validateFields((error, values) => {
 
@@ -79,19 +84,16 @@ const LoginForm = props => {
                 //     } 
                 //   });
 
-                //   if (isAuthenticated) setTimeout(() =>
-                //     history.replace('./game'),
-                //   2000);
-                // }
-                console.warn('Received values: ', values);
+                if (isAuthenticated) history.replace('./game');
+
             } else {
                 console.warn('Received values error: ', error);
             }
         });
-    };
+    }, [ isAuthenticated, history, props.form ]); // dispatch
 
     return (
-        <Card className="Login">
+        <Card className="Login game-modal">
             <p className="hello">Hello, voyager!</p>
             <Form onSubmit={(form) => onSubmit(form)} className="login-form">
                 <FormItem>
@@ -122,12 +124,12 @@ const LoginForm = props => {
                     })(<Checkbox>Remember me</Checkbox>)}
                     <Button type="primary" htmlType="submit" className="login-form-button">
                         Login
-          </Button>
+                    </Button>
                 </FormItem>
                 <FormItem>
                     <a className="login-form-forgot" href="/reset">
                         Forgot password?
-            </a>
+                    </a>
                     <br />
                     <a href="/register">Register now!</a>
                 </FormItem>

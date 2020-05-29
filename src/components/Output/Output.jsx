@@ -20,8 +20,11 @@ const Output = ({ history }) => {
 
     const dispatch = useDispatch();
     const { isGameInit } = useSelector(state => state.game);
+    const { isAppInit } = useSelector(state => state.app);
 
-    useEffect(() => { dispatch({ type: 'APP_INIT' }) }, [dispatch]);
+    useEffect(() => { 
+        if (!isAppInit) dispatch({ type: 'APP_INIT' }) 
+    }, [ isAppInit, dispatch ]);
 
     return (
         <ConnectedRouter history={history}>

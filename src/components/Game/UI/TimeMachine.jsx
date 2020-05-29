@@ -10,11 +10,7 @@ import Preloader from './Preloader';
 
 const TimeMachine = () => {
 
-    // Init
     const dispatch = useDispatch();
-    useEffect(() => {
-        dispatch({ type: 'TIME_MACHINE_INIT' })
-    }, [dispatch]);
 
     const { 
         isTimeMachineInit, 

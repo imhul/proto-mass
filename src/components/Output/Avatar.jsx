@@ -1,27 +1,31 @@
-import React, { useState } from 'react';
+import React, { useCallback } from 'react';
 import { useSelector, useDispatch }  from 'react-redux';
 import AvatarGenerator from 'react-avatar-generator';
-import _ from 'lodash';
 
 const Avatar = () => {
     const dispatch = useDispatch();
-    const { user } = useSelector(state => state.auth);
-    const { isAppInit } = useSelector(state => state.app);
-    const [isAvatarDone, setAvatarDone] = useState(false);
+    const { isAuthenticated, user } = useSelector(state => state.auth);
 
-    const setAvatar = (avatar) => {
-        if (_.isEmpty(user) && !isAvatarDone && isAppInit) {
-            setAvatarDone(true);
-            dispatch({ type: 'SET_AVATAR', payload: avatar })
-        }
-    }
+    const setAvatar = useCallback(avatar => {
+        dispatch({ type: 'SET_AVATAR', payload: avatar })
+    }, [ dispatch ]);
     
-    return <AvatarGenerator 
-        ref={avatar => avatar && !isAvatarDone ? setAvatar(avatar.getImageData()) : null}
-        colors={['#69179B', '#0F072F']}
-        backgroundColor="#F804FB"
-        sizing="8"
-    />;
-  }
+    return (
+        <>
+            { isAuthenticated ?
+                <>
+                    { user.avatar ? <img src={user.avatar} width="30" height="30" alt="user avatar" /> :
+                        <AvatarGenerator 
+                            ref={avatar => avatar ? setAvatar(avatar.getImageData()) : null}
+                            colors={['#69179B', '#0F072F']}
+                            backgroundColor="#F804FB"
+                            sizing="10"
+                        />
+                    }
+                </> : null
+            }
+        </>
+    )
+};
 
-  export default Avatar;
+export default Avatar;
