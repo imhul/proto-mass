@@ -12,6 +12,7 @@ const StartInfo = () => {
 
     const onStartGame = useCallback(() => {
         if (!isTimeMachineInit && isGameInit) {
+            dispatch({ type: 'START_GAME' });
             dispatch({ type: 'TIME_MACHINE_INIT' });
             dispatch({ type: 'START_INFO_MODAL_CLOSE' });
         }
@@ -21,9 +22,14 @@ const StartInfo = () => {
         <Card className="game-modal">
             <p className="hello">Hello, voyager!</p>
 
-            <p className="info">Start Game Information</p>
+            <p className="info">Wellcome!</p>
 
-            <Button onClick={() => onStartGame()}>Start</Button>
+            <Button 
+                onClick={() => onStartGame()}
+                className="game-btn"
+            >
+                Start
+            </Button>
         </Card>
     );
 }

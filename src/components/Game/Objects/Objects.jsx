@@ -1,8 +1,7 @@
-import React, { useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import React, { useEffect, useCallback } from 'react';
+import { useSelector, useDispatch  } from 'react-redux';
 import IsometricObject from '../Map/IsometricObject';
 import uuidv5 from 'uuid/v5';
-
 
 // Utils
 import { getRandomInt } from '../../../utils';
@@ -14,10 +13,43 @@ const Objects = ({ width, height, type }) => {
     // Effects
     const dispatch = useDispatch();
     const { objectsLimit, objectList, isObjectsCreation } = useSelector(state => state.map);
+    const { isMapLoaded } = useSelector(state => state.game);
+    const { isFirstResize } = useSelector(state => state.stage);
+
+    const indicateStart = useCallback(() => {
+        dispatch({ 
+            type: 'LOADING_GAME_UPDATE', 
+            payload: getRandomInt(21, 45),
+            meta: "start creating objects"
+        })
+    }, [dispatch]);
+
+    const indicateDone = useCallback(() => {
+        dispatch({ 
+            type: 'LOADING_GAME_UPDATE', 
+            payload: getRandomInt(45, 56), 
+            meta: "objects is created" 
+        })
+    }, [dispatch]);
 
     useEffect(() => {
-        if (objectList.length === 0 && !isObjectsCreation) dispatch({ type: 'OBJECTS_CREATION_START' });
-    }, [dispatch, isObjectsCreation, objectList.length]);
+        if (objectList.length === 0 && 
+            !isObjectsCreation && 
+            isMapLoaded && 
+            isFirstResize)
+        {
+            dispatch({ type: 'OBJECTS_CREATION_START' });
+            indicateStart();
+            
+        }
+    }, [
+        dispatch, 
+        isObjectsCreation, 
+        objectList.length, 
+        isMapLoaded,
+        indicateStart,
+        isFirstResize
+    ]);
 
     useEffect(() => {
         const objects = Array.from(
@@ -50,10 +82,19 @@ const Objects = ({ width, height, type }) => {
             isObjectsCreation) 
         {
             dispatch({ type: 'OBJECTS_CREATED', payload: objects });
+            indicateDone();
         }
-    }, [objectsLimit, dispatch, idLength, isObjectsCreation, objectList.length, type]);
+    }, [
+        objectsLimit, 
+        dispatch, 
+        idLength, 
+        isObjectsCreation, 
+        objectList.length, 
+        type,
+        indicateDone
+    ]);
     
-    return objectList.map((obj, index) => 
+    return objectList.map((obj) => 
         <IsometricObject
             key={`object${obj.id}`}
             x={obj.position.x}

@@ -1,5 +1,5 @@
 import { useEffect, useCallback } from "react";
-import { useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 // Utils
 import { getRandomInt } from '../utils';
@@ -9,10 +9,12 @@ import _ from 'lodash';
 // props:
 // @name: string
 // @isEnemy: boolean
+// @limit: number
 
-export const useGetUnit = ({ name, isEnemy }) => {
+export const useGetUnit = ({ name, isEnemy, limit }) => {
 
     const dispatch = useDispatch();
+    const { unitList } = useSelector(state => state.unit);
     const getUnit = useCallback(() => {
 
         const idLength = new Array(16);
@@ -96,10 +98,10 @@ export const useGetUnit = ({ name, isEnemy }) => {
                 // },
             ],
         }; 
-        if (!_.isEmpty(unit)) {
+        if (!_.isEmpty(unit) && limit === unitList.length) {
             dispatch({ type: 'UNIT_CREATED', payload: unit });
         }
-    }, [ dispatch, isEnemy, name ]);
+    }, [ dispatch, isEnemy, name, limit, unitList.length ]);
 
     useEffect(() => {
         getUnit()

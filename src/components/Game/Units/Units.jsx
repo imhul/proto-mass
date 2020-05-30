@@ -2,13 +2,15 @@ import React, { useEffect, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { AnimatedTexture } from '../Map';
 
+// hooks
+import { useGetUnit, useGetTask } from '../../../hooks';
+
 const Units = props => {
     
     // Effects
     const dispatch = useDispatch();
-    const { user } = useSelector(state => state.auth);
+    // const { user } = useSelector(state => state.auth);
     const { isGameInit } = useSelector(state => state.game);
-
     const {
         taskList, 
         pendingList,  
@@ -19,8 +21,22 @@ const Units = props => {
         isUnitStatsShown
     } = useSelector(state => state.unit);
 
-    // TODO: if save.units.map(unit => unit.task ? DO_TASK : GENERATE_TASK)
+    const newUnit = { 
+        name: `bot01101-${unitList.length + 1}`, 
+        isEnemy: false, 
+        limit: unitList.length + 1 
+    };
+
+    const newEnemy = { 
+        name: `enemy01101-${unitList.length + 1}`, 
+        isEnemy: true, 
+        limit: unitList.length + 1 
+    };
+
+    // TODO: if save.units.map(unit => unit.task ? DO_TASK )
     // TODO: if save.units { load } else { useGetUnit }
+
+    useGetUnit(newUnit);
     
     const isUnitProfessionMatchTask = useCallback((unit, task) => {
         const unitProfessionsList = unit.professions;

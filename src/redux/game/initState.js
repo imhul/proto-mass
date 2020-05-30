@@ -2,6 +2,7 @@ export const initState = {
     loadingPercent: 0,
     isLoadSavedGame: false, // loaded or synthesized
     isStartInfoModalOpen: false,
+    preloaderTitle: "",
     isStartOrLoadModalOpen: true,
     isGameMenuOpen: false,
     isMapLoaded: false,

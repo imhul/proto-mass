@@ -10,7 +10,8 @@ export default function stageReducer(state = initState, action) {
                 size: {
                     width: action.payload.windowWidth,
                     height: action.payload.windowHeight,
-                }
+                },
+                isFirstResize: true,
             }
 
         case types.FULLSCREEN: 

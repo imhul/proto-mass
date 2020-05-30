@@ -4,17 +4,29 @@ import { initState } from './initState';
 export default function gameReducer(state = initState, action) {
     switch (action.type) {
 
+        case types.SINTHESIZE_NEW_GAME:
+            return {
+                ...state,
+                preloaderTitle: "start synthesizing a new game",
+                isLoadSavedGame: false,
+                loadingPercent: 1,
+            }
+
         case types.MAP_LOADED: 
             return {
                 ...state,
                 isMapLoaded: true,
                 isMapVisible: true,
+                loadingPercent: action.payload,
+                preloaderTitle: "map is loaded",
             }
 
         case types.MAP_LOADING: 
             return {
                 ...state,
                 isMapVisible: false,
+                loadingPercent: action.payload,
+                preloaderTitle: "start loading map",
             }
 
         case types.START_OR_LOAD_MODAL_CLOSE:
@@ -30,11 +42,12 @@ export default function gameReducer(state = initState, action) {
                 isLoadSavedGame: true,
             }
 
-        case types.LOADING_GAME: 
+        case types.LOADING_GAME_UPDATE: 
             return {
                 ...state,
                 loadingPercent: action.payload,
-                isGameLoaded: action.payload > 99 ? true : false,
+                isGameLoaded: action.payload > 98 ? true : false,
+                preloaderTitle: action.meta ? action.meta : "...",
             }
 
         case types.INIT_GAME:
@@ -42,6 +55,9 @@ export default function gameReducer(state = initState, action) {
                 ...state,
                 isGameInit: true,
                 isMapVisible: true,
+                isGameLoaded: true,
+                preloaderTitle: 'Complete!',
+                loadingPercent: 100,
             }
 
         case types.START_GAME:

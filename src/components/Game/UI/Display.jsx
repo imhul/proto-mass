@@ -20,7 +20,7 @@ import StartInfo from '../Modals/StartInfo';
 import { useDOMState } from '../../../hooks';
 
 // Utils
-// import { playSFX } from '../../utils';
+import { getRandomInt, playSFX } from '../../../utils';
 // TODO: UNCOMMENT !!! INTRO SOUND !!!
 // Sounds
 // import introSFX from '../../assets/sound/loading.ogg';
@@ -30,38 +30,52 @@ const Display = () => {
     const dispatch = useDispatch();
     const dom = useDOMState();
     const { zoom, isDraggable } = useSelector(state => state.map);
+    const { isFullscreen, isFirstResize } = useSelector(state => state.stage);
+    // const { user } = useSelector(state => state.auth);
+    // const { auth, profile } = useSelector(state => state.firebase);
+    // const { unitList } = useSelector(state => state.unit);
     const { 
         isStartOrLoadModalOpen,
         loadingPercent, 
         isGameInit, 
         isMapLoaded, 
         isGameLoaded, 
-        save 
+        isGameStarted,
+        // isLoadSavedGame,
     } = useSelector(state => state.game);
-    const { isFullscreen } = useSelector(state => state.stage);
-    const { user } = useSelector(state => state.auth);
-    const { auth, profile } = useSelector(state => state.firebase);
-    const { unitList } = useSelector(state => state.unit);
 
     useEffect(() => {
+        let step1, step2;
 
-    }, [ dispatch ]);
+        if (!isStartOrLoadModalOpen && !isGameInit) {  
+            if (dom.readyState === "complete" && isMapLoaded) {
+                step1 = setTimeout(() => 
+                dispatch({ 
+                    type: 'LOADING_GAME_UPDATE', 
+                    payload: 99, 
+                    meta: 'almost all ready' 
+                }), 1000);
+            }
+            if (isGameLoaded) {
+                step2 = setTimeout(() => 
+                dispatch({ 
+                    type: 'INIT_GAME', 
+                }), 1000);
+            }
+        }
 
-    // useEffect(() => {
-    //     let step1, step2;
-    //     if (dom.readyState === "complete" && isMapLoaded && !isGameInit) {
-    //         step1 = setTimeout(() => dispatch({ type: 'LOADING_GAME', payload: 99 }), 1000);
-    //     }
-    //     if (isGameLoaded && !isGameInit) {
-    //         step2 = setTimeout(() => dispatch({ type: 'INIT_GAME' }), 500);
-    //     }
-
-    //     return () => {
-    //         clearTimeout(step1);
-    //         clearTimeout(step2);
-    //     }
-        
-    // }, [dispatch, isMapLoaded, isGameLoaded, isGameInit, dom.readyState]);
+        return () => {
+            clearTimeout(step1);
+            clearTimeout(step2);
+        }
+    }, [
+        dispatch, 
+        isStartOrLoadModalOpen,
+        isMapLoaded, 
+        isGameLoaded, 
+        isGameInit, 
+        dom.readyState
+    ]);
 
     // TODO: UNCOMMENT !!! INTRO SOUND !!!
     // useEffect(() => playSFX(introSFX, settings.volume), [settings.volume]);
@@ -87,8 +101,17 @@ const Display = () => {
     }, []);
 
     const onResize = useCallback(output => {
-        if (!isGameInit) dispatch({ type: 'RESIZE', payload: output });
-    }, [dispatch, isGameInit]);
+        if (!isFirstResize) {
+            dispatch({ type: 'RESIZE', payload: output });
+            dispatch({ 
+                type: 'LOADING_GAME_UPDATE', 
+                payload: getRandomInt(45, 69),
+                meta: "coordinate calculation"
+            })
+        } else {
+            dispatch({ type: 'RESIZE', payload: output });
+        }
+    }, [dispatch, isFirstResize]);
 
     useEffect(() => {
         window.addEventListener('contextmenu', prevent);
@@ -103,8 +126,6 @@ const Display = () => {
             window.removeEventListener('keyup', onKeyup);
         };
     }, [prevent, onWheel, onKeydown, onKeyup]);
-
-    // <Preloader percent={loadingPercent} />
     
     return <>
         { 
@@ -130,11 +151,14 @@ const Display = () => {
                         >
                             <DndProvider backend={Backend}>
                                 <DnD />
+                                {
+                                    isGameLoaded && isGameInit && !isGameStarted ? <StartInfo /> : null
+                                }
                             </DndProvider>
                         </Zoom>
-                        
+
                         {
-                            isGameInit ? <TimeMachine /> : null 
+                            isGameInit && isGameStarted ? <TimeMachine /> : null 
                         }
                     </Fullscreen>
                 </WindowSizeListener>

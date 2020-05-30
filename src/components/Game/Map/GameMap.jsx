@@ -27,17 +27,16 @@ const GameMap = () => {
     const tileSize = 42;
 
     // effects
-    const { settings, isGameInit } = useSelector(state => state.game);
+    const { settings, isGameInit, isMapLoaded } = useSelector(state => state.game);
     const dispatch = useDispatch();
 
     const onMapLoaded = useCallback(isVisible => {
-        if (isVisible) {
-            dispatch({ type: 'MAP_LOADED' });
-            dispatch({ type: 'LOADING_GAME', payload: getRandomInt(40, 60) })
-        } else {
-            dispatch({ type: 'MAP_LOADING' });
+        if (isVisible && !isMapLoaded) {
+            dispatch({ type: 'MAP_LOADED', payload: getRandomInt(11, 21) });
+        } else if (!isVisible && !isMapLoaded) {
+            dispatch({ type: 'MAP_LOADING', payload: getRandomInt(5, 11) });
         }
-    }, [dispatch]);
+    }, [dispatch, isMapLoaded]);
 
     const onMapClick = useCallback((x, y, id) => {
         playSFX(MapClick, settings.volume);
