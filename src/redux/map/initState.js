@@ -2,6 +2,7 @@ export const initState = {
     objectsLimit: 30,
     objectList: [],
     isObjectsCreation: false,
+    isObjectsCreated: false,
     mapAction: {
         x: 0,
         y: 0,

@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { memo, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { IsometricMap, IsometricTile } from '.';
 import VisibilitySensor from 'react-visibility-sensor';
@@ -19,7 +19,7 @@ import Units from '../Units';
 // Sounds
 import MapClick from '../../../assets/sound/map_click.ogg';
 
-const GameMap = () => { 
+const GameMap = memo(() => { 
 
     // map constants
     const mapWidth = 30;
@@ -87,7 +87,7 @@ const GameMap = () => {
             </VisibilitySensor>
         </IsometricMap>
     );
-};
+});
 
 export default GameMap;
 

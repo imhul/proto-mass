@@ -15,12 +15,13 @@ export const useGetUnit = ({ name, isEnemy, limit }) => {
 
     const dispatch = useDispatch();
     const { unitList } = useSelector(state => state.unit);
+    const { isObjectsCreated } = useSelector(state => state.map);
+    const { isMapLoaded, isLoadSavedGame } = useSelector(state => state.game);
     const getUnit = useCallback(() => {
 
         const idLength = new Array(16);
         const unitName = name ? name : uuidv5(`bot#${getRandomInt(100, 1001)}`, idLength);
         const userId = uuidv5(unitName, idLength);
-
         const unit = {
             id: userId,
             name: unitName,
@@ -98,12 +99,18 @@ export const useGetUnit = ({ name, isEnemy, limit }) => {
                 // },
             ],
         }; 
-        if (!_.isEmpty(unit) && limit === unitList.length) {
+        console.log('useGetUnit limit: ', limit);
+        if (!_.isEmpty(unit) && limit !== unitList.length) {
             dispatch({ type: 'UNIT_CREATED', payload: unit });
+            dispatch({ 
+                type: 'LOADING_GAME_UPDATE', 
+                payload: getRandomInt(51, 81), 
+                meta: "units  is created" 
+            });
         }
-    }, [ dispatch, isEnemy, name, limit, unitList.length ]);
+    }, [ dispatch, isEnemy, name, limit, unitList ]);
 
     useEffect(() => {
-        getUnit()
-    }, [getUnit]);
+        if (!isLoadSavedGame && isMapLoaded && isObjectsCreated) getUnit();
+    }, [getUnit, isLoadSavedGame, isMapLoaded, isObjectsCreated, dispatch]);
 };

@@ -1,16 +1,19 @@
-import React, { useEffect, useCallback } from 'react';
+import React, { memo, useEffect, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { AnimatedTexture } from '../Map';
 
 // hooks
 import { useGetUnit, useGetTask } from '../../../hooks';
 
-const Units = props => {
+const Units = memo(props => {
     
     // Effects
     const dispatch = useDispatch();
     // const { user } = useSelector(state => state.auth);
-    const { isGameInit } = useSelector(state => state.game);
+    const { 
+        isGameInit, 
+    } = useSelector(state => state.game);
+
     const {
         taskList, 
         pendingList,  
@@ -24,18 +27,18 @@ const Units = props => {
     const newUnit = { 
         name: `bot01101-${unitList.length + 1}`, 
         isEnemy: false, 
-        limit: unitList.length + 1 
+        limit: 1 
     };
 
     const newEnemy = { 
         name: `enemy01101-${unitList.length + 1}`, 
         isEnemy: true, 
-        limit: unitList.length + 1 
+        limit: 1 
     };
 
     // TODO: if save.units.map(unit => unit.task ? DO_TASK )
     // TODO: if save.units { load } else { useGetUnit }
-
+    
     useGetUnit(newUnit);
     
     const isUnitProfessionMatchTask = useCallback((unit, task) => {
@@ -131,6 +134,12 @@ const Units = props => {
     ));
 
     return unitsRender
-};
+}, function areEqual(prevProps, nextProps) {
+    /*
+    возвращает true, если nextProps рендерит
+    тот же результат что и prevProps,
+    иначе возвращает false
+    */
+  });
 
 export default Units;

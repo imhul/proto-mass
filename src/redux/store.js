@@ -1,5 +1,6 @@
 
 import { createStore, applyMiddleware, compose } from 'redux';
+import thunk from 'redux-thunk';
 import logger from 'redux-logger';
 import { routerMiddleware } from 'connected-react-router';
 import { createBrowserHistory } from 'history';
@@ -50,15 +51,17 @@ firebase.auth().onAuthStateChanged(async user => {
 export const history = createBrowserHistory();
 
 const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+const middleware = [
+    thunk,
+    routerMiddleware(history),
+    timerMiddleware,
+    logger
+];
 
 export const store = createStore(
     rootReducer(history),
     composeEnhancer(
-        applyMiddleware(
-            routerMiddleware(history),
-            timerMiddleware,
-            logger,
-        ),
+        applyMiddleware(...middleware),
     ),
 );
 

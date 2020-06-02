@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from 'react';
+import React, { memo, useEffect, useCallback } from 'react';
 import { useSelector, useDispatch  } from 'react-redux';
 import IsometricObject from '../Map/IsometricObject';
 import uuidv5 from 'uuid/v5';
@@ -6,7 +6,7 @@ import uuidv5 from 'uuid/v5';
 // Utils
 import { getRandomInt } from '../../../utils';
 
-const Objects = ({ width, height, type }) => {
+const Objects = memo(({ width, height, type }) => {
 
     const idLength = new Array(16);
 
@@ -19,7 +19,7 @@ const Objects = ({ width, height, type }) => {
     const indicateStart = useCallback(() => {
         dispatch({ 
             type: 'LOADING_GAME_UPDATE', 
-            payload: getRandomInt(21, 45),
+            payload: getRandomInt(31, 41),
             meta: "start creating objects"
         })
     }, [dispatch]);
@@ -27,7 +27,7 @@ const Objects = ({ width, height, type }) => {
     const indicateDone = useCallback(() => {
         dispatch({ 
             type: 'LOADING_GAME_UPDATE', 
-            payload: getRandomInt(45, 56), 
+            payload: getRandomInt(41, 51), 
             meta: "objects is created" 
         })
     }, [dispatch]);
@@ -107,6 +107,6 @@ const Objects = ({ width, height, type }) => {
             style={{ zIndex: obj.position.x + 10 }}
         />
     )
-};
+});
 
 export default Objects;

@@ -16,6 +16,7 @@ export default function mapReducer(state = initState, action) {
                 ...state,
                 objectList: action.payload,
                 isObjectsCreation: false,
+                isObjectsCreated: true,
             }
         }
 

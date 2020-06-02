@@ -48,7 +48,7 @@ const Display = () => {
         let step1, step2;
 
         if (!isStartOrLoadModalOpen && !isGameInit) {  
-            if (dom.readyState === "complete" && isMapLoaded) {
+            if (dom.readyState === "complete" && isMapLoaded && loadingPercent !== 99) {
                 step1 = setTimeout(() => 
                 dispatch({ 
                     type: 'LOADING_GAME_UPDATE', 
@@ -105,7 +105,7 @@ const Display = () => {
             dispatch({ type: 'RESIZE', payload: output });
             dispatch({ 
                 type: 'LOADING_GAME_UPDATE', 
-                payload: getRandomInt(45, 69),
+                payload: getRandomInt(21, 31),
                 meta: "coordinate calculation"
             })
         } else {
