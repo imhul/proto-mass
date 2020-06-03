@@ -1,6 +1,6 @@
 export const initState = {
     taskList: [],
     pendingList: [],
-    taskLimit: 0,
+    taskLimit: 1,
     error: {},
 };

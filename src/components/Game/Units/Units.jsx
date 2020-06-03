@@ -11,7 +11,7 @@ const Units = memo(props => {
     const dispatch = useDispatch();
     // const { user } = useSelector(state => state.auth);
     const { 
-        isGameInit, 
+        isGameStarted, 
     } = useSelector(state => state.game);
 
     const {
@@ -38,7 +38,7 @@ const Units = memo(props => {
     // TODO: if save.units { load } else { useGetUnit }
     
     useGetUnit(newUnit);
-    // useGetTask();
+    useGetTask();
 
     const taskSearch = useCallback(unit => {
 
@@ -49,8 +49,7 @@ const Units = memo(props => {
             return whoIsPro.length > 0
         };
         
-        if (unitList.length > 0 && unit.task === null && isGameInit) {
-            console.info("taskSearch");
+        if (unitList.length > 0 && unit.task === null) {
             if (pendingList.length > 0) {
                 const currentTask = pendingList.filter(task => 
                     task.workerId === unit.id
@@ -81,8 +80,7 @@ const Units = memo(props => {
                 }});
             }
         }
-    }, [ 
-        isGameInit, 
+    }, [  
         unitList, 
         taskList, 
         pendingList,
@@ -90,8 +88,8 @@ const Units = memo(props => {
     ]);
     
     useEffect(() => {
-        unitList.map(unit => unit.status === "search" && taskSearch(unit))
-    }, [ taskSearch, unitList ]);
+        isGameStarted && unitList.map(unit => unit.status === "search" && taskSearch(unit))
+    }, [ isGameStarted, taskSearch, unitList ]);
 
     const OnAnimatedTextureClick = useCallback((x, y, data) => {
         // playSFX(MapClick, settings.volume);

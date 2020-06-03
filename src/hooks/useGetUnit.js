@@ -64,23 +64,37 @@ export const useGetUnit =  ({ name, isEnemy }) => {
             //         },
             //     },
             technologies: [],
-                // {
-                //     id: "",
-                //     name: "", // TODO: need special randomizer from list!
-                //     status: "",
-                //     progress: "", // x-points
-                //     level: 0, // max 20
-                //     levelName: "trainee", // medium, prime
-                //     pointsToNextLevel: 0, // x-points
-                //     bonus: {
-                //         id: "",
-                //         name: "",
-                //         value: 0,
-                //     },
-                // },
-
-            professions: [],
-                // {
+            // {
+            //     id: "",
+            //     name: "", // TODO: need special randomizer from list!
+            //     status: "",
+            //     progress: "", // x-points
+            //     level: 0, // max 20
+            //     levelName: "trainee", // medium, prime
+            //     pointsToNextLevel: 0, // x-points
+            //     bonus: {
+            //         id: "",
+            //         name: "",
+            //         value: 0,
+            //     },
+            // },
+            professions: [
+                {
+                    id: "",
+                    name: "constructor", // constructor, collector, protector, numerator
+                    status: "",
+                    progress: "", // x-points
+                    level: 0, // max 20
+                    levelName: "trainee", // medium, prime
+                    pointsToNextLevel: 0, // x-points
+                    bonus: {
+                        id: "",
+                        name: "",
+                        value: 0,
+                    },
+                },
+            ],
+            // {
                 //     id: profId,
                 //     name: "constructor", 
                 //     status: "",

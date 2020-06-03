@@ -4,6 +4,9 @@ import { useSelector } from 'react-redux';
 // Components
 import GameInfoBlock from './GameInfoBlock';
 
+// images
+import botSrc from '../../../assets/sprites/animations/bot/bot_0_0.2s.png';
+
 const UserActionInfo = memo(() => {
 
     const { userAction } = useSelector(state => state.map)
@@ -26,10 +29,12 @@ const UserActionInfo = memo(() => {
                                 }
                                 { 
                                     userAction.data.src && <div>
-                                        <img src={userAction.data.src} alt={`game ${userAction.objectType}`} />
+                                        <img 
+                                            src={userAction.objectType === "unit" ? botSrc : userAction.data.src} 
+                                            alt={`game ${userAction.objectType}`} 
+                                        />
                                     </div>
                                 }
-                                
                             </>
                         }
                     </>

@@ -15,7 +15,7 @@ const GameMenu = memo(() => {
     const dispatch = useDispatch();
     // const { isFullscreen } = useSelector(state => state.stage);
     const { isGameMenuOpen } = useSelector(state => state.game);
-    const { clickPosition, isDraggable } = useSelector(state => state.map);
+    const { clickPosition, isDraggable, zoom } = useSelector(state => state.map);
     const { unitList } = useSelector(state => state.unit);
 
     const onExit = () => {
@@ -63,6 +63,7 @@ const GameMenu = memo(() => {
                 <i 
                     className="anticon game-menu-text-btn touchable" 
                     onClick={() => dispatch({ type: 'MAP_DECREASE'}) }>-</i>
+                <span>{ ` ${zoom}% ` }</span>
                 <i 
                     className="anticon game-menu-text-btn touchable" 
                     onClick={() => dispatch({ type: 'MAP_INCREASE'}) }>+</i>

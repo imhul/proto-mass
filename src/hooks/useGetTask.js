@@ -9,12 +9,13 @@ import _ from 'lodash';
 export const useGetTask = props => {
 
     const { taskList, taskLimit } = useSelector(state => state.task);
+    const { unitList } = useSelector(state => state.unit);
+    const { isGameInit } = useSelector(state => state.game);
     const dispatch = useDispatch();
     const getTask = useCallback(() => {
 
         const idLength = new Array(16);
         const taskId = uuidv5(`task#${getRandomInt(100, 1001)}`, idLength);
-
         const task = {
             id: taskId,
             status: "await", // await, progress, paused, done
@@ -43,6 +44,6 @@ export const useGetTask = props => {
     }, [ dispatch, taskLimit, taskList, props ]);
 
     useEffect(() => {
-        getTask()
-    }, [getTask])
+        if (unitList.length > 0 && isGameInit) getTask()
+    }, [getTask, unitList, isGameInit])
 };
