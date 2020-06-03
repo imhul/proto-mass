@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { memo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useDrop, useDrag } from 'react-dnd';
 import update from 'immutability-helper';
@@ -17,7 +17,7 @@ const ItemTypes = {
     MAP: 'map',
 };
 
-export const GameMapDrag = ({ left, top }) => {
+export const GameMapDrag = memo(({ left, top }) => {
     
     const [, drag] = useDrag({
         item: { 
@@ -36,9 +36,9 @@ export const GameMapDrag = ({ left, top }) => {
            <GameMap />
         </div>
     )
-};
+});
 
-const DnD = () => {
+const DnD = memo(() => {
 
     const { size } = useSelector(state => state.stage);
     const [box, setBox] = useState({ top: -310, left: 0 });
@@ -74,6 +74,6 @@ const DnD = () => {
             <GameMapDrag left={box.left} top={box.top} />
         </div>
     )
-};
+});
 
 export default DnD;

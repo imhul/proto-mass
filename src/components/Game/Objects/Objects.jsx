@@ -4,7 +4,11 @@ import IsometricObject from '../Map/IsometricObject';
 import uuidv5 from 'uuid/v5';
 
 // Utils
-import { getRandomInt } from '../../../utils';
+import { 
+    getRandomInt, 
+    getObjectById,
+    // playSFX,
+} from '../../../utils';
 
 const Objects = memo(({ width, height, type }) => {
 
@@ -93,6 +97,27 @@ const Objects = memo(({ width, height, type }) => {
         type,
         indicateDone
     ]);
+
+    const onObjectClick = useCallback((x, y, id) => {
+        // playSFX(MapClick, settings.volume);
+        dispatch({ type: 'USER_ACTION', payload: {
+            x: x, 
+            y: y,
+            objectType: "object",
+            actionType: "click",
+            data: getObjectById(id),
+        }})
+    }, [dispatch]);
+
+    const onObjectHover = useCallback((x, y, id) => {
+        dispatch({ type: 'USER_ACTION', payload: {
+            x: x, 
+            y: y,
+            objectType: "object",
+            actionType: "hover",
+            data: getObjectById(id),
+        }})
+    }, [dispatch]);
     
     return objectList.map((obj) => 
         <IsometricObject
@@ -105,6 +130,8 @@ const Objects = memo(({ width, height, type }) => {
             frames={[require(`../../../assets/sprites/object_${obj.typeId}.png`)]}
             active={true}
             style={{ zIndex: obj.position.x + 10 }}
+            onClick={() => onObjectClick(obj.position.x, obj.position.y, obj.typeId)}
+            onPointerEnter={() => onObjectHover(obj.position.x, obj.position.y, obj.typeId)}
         />
     )
 });

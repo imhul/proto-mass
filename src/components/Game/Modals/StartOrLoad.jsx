@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { memo, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from "react-router-dom";
 import _ from 'lodash';
@@ -6,7 +6,7 @@ import _ from 'lodash';
 // Components
 import { Card, Button } from 'antd';
 
-const StartOrLoadModal = () => {
+const StartOrLoadModal = memo(() => {
 
     const history = useHistory();
     const dispatch = useDispatch();
@@ -55,7 +55,7 @@ const StartOrLoadModal = () => {
                 Exit Game
             </Button>
         </Card>
-    );
-}
+    )
+});
 
 export default StartOrLoadModal;

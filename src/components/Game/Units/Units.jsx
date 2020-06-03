@@ -1,4 +1,4 @@
-import React, { memo, useEffect, useCallback } from 'react';
+import React, { memo, useMemo, useEffect, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { AnimatedTexture } from '../Map';
 
@@ -26,30 +26,31 @@ const Units = memo(props => {
 
     const newUnit = { 
         name: `bot01101-${unitList.length + 1}`, 
-        isEnemy: false, 
-        limit: 1 
+        isEnemy: false,
     };
 
     const newEnemy = { 
         name: `enemy01101-${unitList.length + 1}`, 
-        isEnemy: true, 
-        limit: 1 
+        isEnemy: true,
     };
 
     // TODO: if save.units.map(unit => unit.task ? DO_TASK )
     // TODO: if save.units { load } else { useGetUnit }
     
     useGetUnit(newUnit);
-    
-    const isUnitProfessionMatchTask = useCallback((unit, task) => {
-        const unitProfessionsList = unit.professions;
-        const taskProfession = task.profession;
-        const whoIsPro = unitProfessionsList.filter(prof => prof.name === taskProfession);
-        return whoIsPro.length > 0
-    }, []);
+    // useGetTask();
 
     const taskSearch = useCallback(unit => {
+
+        const isUnitProfessionMatchTask = (unit, task) => {
+            const unitProfessionsList = unit.professions;
+            const taskProfession = task.profession;
+            const whoIsPro = unitProfessionsList.filter(prof => prof.name === taskProfession);
+            return whoIsPro.length > 0
+        };
+        
         if (unitList.length > 0 && unit.task === null && isGameInit) {
+            console.info("taskSearch");
             if (pendingList.length > 0) {
                 const currentTask = pendingList.filter(task => 
                     task.workerId === unit.id
@@ -84,8 +85,7 @@ const Units = memo(props => {
         isGameInit, 
         unitList, 
         taskList, 
-        pendingList, 
-        isUnitProfessionMatchTask, 
+        pendingList,
         dispatch
     ]);
     
@@ -93,9 +93,31 @@ const Units = memo(props => {
         unitList.map(unit => unit.status === "search" && taskSearch(unit))
     }, [ taskSearch, unitList ]);
 
-    const OnAnimatedTextureClick = useCallback(event => {
-        console.info("OnAnimatedTextureClick event: ", event)
-    }, []);
+    const OnAnimatedTextureClick = useCallback((x, y, data) => {
+        // playSFX(MapClick, settings.volume);
+        dispatch({ type: 'USER_ACTION', 
+            payload: {
+                x: x, 
+                y: y,
+                objectType: "unit",
+                actionType: "click",
+                data: data,
+            }
+        })
+    }, [dispatch]);
+
+    const OnAnimatedTextureHover = useCallback((x, y, data) => {
+        dispatch({ 
+            type: 'USER_ACTION', 
+            payload: {
+                x: x,
+                y: y,
+                objectType: "unit",
+                actionType: "hover",
+                data: data
+            }
+        })
+    }, [dispatch]);
 
     const unitsRender = unitList.map(unit => (
         <div 
@@ -119,9 +141,8 @@ const Units = memo(props => {
                 id={unit.id}
                 width={props.width}
                 height={props.height}
-                onClick={() => OnAnimatedTextureClick()}
-                onPointerEnter={() => dispatch({ type: 'UNIT_STATS_TOGGLE' })}
-                onPointerLeave={() => dispatch({ type: 'UNIT_STATS_TOGGLE' })}
+                onClick={() => OnAnimatedTextureClick(unit.position.x, unit.position.y, unit)}
+                onPointerEnter={() => OnAnimatedTextureHover(unit.position.x, unit.position.y, unit)}
                 delay={200}
                 frames={[
                     require("../../../assets/sprites/animations/bot/bot_0_0.2s.png"),

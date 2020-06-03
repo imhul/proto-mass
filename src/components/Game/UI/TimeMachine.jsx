@@ -7,6 +7,7 @@ import {
 
 // Components
 import Preloader from './Preloader';
+import GameInfoBlock from './GameInfoBlock';
 
 const TimeMachine = () => {
 
@@ -41,7 +42,7 @@ const TimeMachine = () => {
         }
     }, [ dispatch, isTimeMachineInit ]);
 
-    return isTimeMachineInit && <div className="TimeMachine">
+    return isTimeMachineInit && <GameInfoBlock>
         <div style={{ textAlign: 'center' }}>
             <div>
                 <span>Hour: {gameHours % 24}</span>
@@ -61,7 +62,7 @@ const TimeMachine = () => {
                 />
             </div>
         </div>
-    </div>
+    </GameInfoBlock>
 };
 
 export default TimeMachine;

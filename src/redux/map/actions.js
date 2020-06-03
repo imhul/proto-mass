@@ -1,7 +1,7 @@
 import { types } from './types';
 
 export const mapClick = position => ({
-    type: types.MAP_CLICK,
+    type: types.USER_ACTION,
     payload: position,
 });
 

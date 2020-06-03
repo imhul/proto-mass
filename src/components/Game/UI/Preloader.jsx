@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { useSelector } from 'react-redux';
 
 // Components
 import { Progress } from 'antd';
 
-const Preloader = props => {
+const Preloader = memo(props => {
 
     const { preloaderTitle } = useSelector(state => state.game);
     
@@ -29,6 +29,6 @@ const Preloader = props => {
         style={props.style || {}}
         format={percent => format(percent)}
     />
-};
+});
 
 export default Preloader;

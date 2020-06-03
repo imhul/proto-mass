@@ -11,20 +11,28 @@ import _ from 'lodash';
 // @isEnemy: boolean
 // @limit: number
 
-export const useGetUnit = ({ name, isEnemy, limit }) => {
+export const useGetUnit =  ({ name, isEnemy }) => {
 
     const dispatch = useDispatch();
-    const { unitList } = useSelector(state => state.unit);
+    const { unitList, unitsLimit } = useSelector(state => state.unit);
     const { isObjectsCreated } = useSelector(state => state.map);
-    const { isMapLoaded, isLoadSavedGame } = useSelector(state => state.game);
+    const { isLoadSavedGame } = useSelector(state => state.game);
+    
+    const onUnitCreated = useCallback(() => {
+        dispatch({ 
+            type: 'LOADING_GAME_UPDATE', 
+            payload: getRandomInt(51, 81), 
+            meta: "units  is created" 
+        });
+    }, [dispatch]);
+
     const getUnit = useCallback(() => {
 
         const idLength = new Array(16);
-        const unitName = name ? name : uuidv5(`bot#${getRandomInt(100, 1001)}`, idLength);
-        const userId = uuidv5(unitName, idLength);
+        const userId = uuidv5(name, idLength);
         const unit = {
             id: userId,
-            name: unitName,
+            name: name,
             status: "search", // walk, work, attak, rest, search, dead
             isEnemy: isEnemy ? isEnemy : false,
             stats: {
@@ -99,18 +107,14 @@ export const useGetUnit = ({ name, isEnemy, limit }) => {
                 // },
             ],
         }; 
-        console.log('useGetUnit limit: ', limit);
-        if (!_.isEmpty(unit) && limit !== unitList.length) {
+
+        if (!_.isEmpty(unit) && unitsLimit > unitList.length ) {
             dispatch({ type: 'UNIT_CREATED', payload: unit });
-            dispatch({ 
-                type: 'LOADING_GAME_UPDATE', 
-                payload: getRandomInt(51, 81), 
-                meta: "units  is created" 
-            });
+            onUnitCreated();
         }
-    }, [ dispatch, isEnemy, name, limit, unitList ]);
+    }, [ unitList.length, unitsLimit, isEnemy, name, onUnitCreated, dispatch ]);
 
     useEffect(() => {
-        if (!isLoadSavedGame && isMapLoaded && isObjectsCreated) getUnit();
-    }, [getUnit, isLoadSavedGame, isMapLoaded, isObjectsCreated, dispatch]);
+        if (!isLoadSavedGame && isObjectsCreated) getUnit();
+    }, [getUnit, isLoadSavedGame, isObjectsCreated]);
 };

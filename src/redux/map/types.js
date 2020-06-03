@@ -1,6 +1,6 @@
 export const types = {
 
-    MAP_CLICK:                  'MAP_CLICK',
+    USER_ACTION:                  'USER_ACTION',
     MAP_INCREASE:               'MAP_INCREASE',
     MAP_DECREASE:               'MAP_DECREASE',
     MAP_IS_DRAGGABLE:           'MAP_IS_DRAGGABLE',

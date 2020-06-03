@@ -268,4 +268,48 @@
 			}
 		}
 	}
+
+	.left-box {
+		position: absolute;
+		width: 200px;
+		z-index: 999;
+		left: 15px;
+		top: 80px;
+		& > * {
+			margin-bottom: 15px;
+		}
+	}
+
+	.right-box {
+		position: absolute;
+		width: 200px;
+		z-index: 999;
+		right: 15px;
+		top: 80px;
+		& > * {
+			margin-bottom: 15px;
+		}
+	}
+
+	.info-block {
+		font-family: "PressStart2P-Regular";
+		background-color: #051C5F;
+		border: 3px solid #33F6F9;
+		flex-direction: column;
+		color: #33F6F9;
+		font-size: 1em;
+		display: flex;
+		padding: 25px;
+		z-index: 999;
+		opacity: .5;
+		width: 100%;
+		button {
+			border: 2px solid #33F6F9;
+			background-color: #F804FB;
+			margin: 0 5px;
+		}
+		.hover-box {
+			word-break: break-word;
+		}
+	}
 }

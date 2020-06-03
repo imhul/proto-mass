@@ -1,10 +1,10 @@
-import React, { useCallback } from 'react';
+import React, { memo, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 // Components
 import { Card, Button } from 'antd';
 
-const StartInfo = () => {
+const StartInfo = memo(() => {
 
     const dispatch = useDispatch();
     const { isTimeMachineInit } = useSelector(state => state.time);
@@ -31,7 +31,7 @@ const StartInfo = () => {
                 Start
             </Button>
         </Card>
-    );
-}
+    )
+});
 
 export default StartInfo;

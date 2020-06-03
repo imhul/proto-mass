@@ -20,14 +20,10 @@ export default function mapReducer(state = initState, action) {
             }
         }
 
-        case types.MAP_CLICK: {
+        case types.USER_ACTION: {
             return {
                 ...state,
-                mapAction: {
-                    x: action.payload.x,
-                    y: action.payload.y,
-                    data: action.payload.data,
-                },
+                userAction: action.payload,
             }
         }
 

@@ -17,7 +17,6 @@ export const initState = {
         volume: 0.5,
     },
     colonyName: "",
-    taskList: [],
     save: {
         // id: "",
         // gameHours: 0,

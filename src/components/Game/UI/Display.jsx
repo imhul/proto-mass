@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from 'react';
+import React, { memo, useEffect, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 // Helpers
@@ -7,7 +7,7 @@ import Fullscreen from 'react-full-screen';
 import { Zoom } from 'react-scaling';
 import { DndProvider } from 'react-dnd';
 import Backend from 'react-dnd-html5-backend';
-import _ from 'lodash';
+// import _ from 'lodash';
 
 // Components
 import DnD from './DnD';
@@ -15,17 +15,23 @@ import Preloader from './Preloader';
 import TimeMachine from './TimeMachine';
 import StartOrLoadModal from '../Modals/StartOrLoad';
 import StartInfo from '../Modals/StartInfo';
+import LeftGameInfoPanel from './LeftGameInfoPanel';
+import RightGameInfoPanel from './RightGameInfoPanel';
+import UserActionInfo from './UserActionInfo';
 
 // Hooks
 import { useDOMState } from '../../../hooks';
 
 // Utils
-import { getRandomInt, playSFX } from '../../../utils';
+import { 
+    getRandomInt, 
+    // playSFX,
+} from '../../../utils';
 // TODO: UNCOMMENT !!! INTRO SOUND !!!
 // Sounds
 // import introSFX from '../../assets/sound/loading.ogg';
 
-const Display = () => {
+const Display = memo(() => {
 
     const dispatch = useDispatch();
     const dom = useDOMState();
@@ -44,6 +50,7 @@ const Display = () => {
         // isLoadSavedGame,
     } = useSelector(state => state.game);
 
+    // game loading
     useEffect(() => {
         let step1, step2;
 
@@ -54,13 +61,13 @@ const Display = () => {
                     type: 'LOADING_GAME_UPDATE', 
                     payload: 99, 
                     meta: 'almost all ready' 
-                }), 1000);
+                }), 500);
             }
             if (isGameLoaded) {
                 step2 = setTimeout(() => 
                 dispatch({ 
                     type: 'INIT_GAME', 
-                }), 1000);
+                }), 500);
             }
         }
 
@@ -74,12 +81,14 @@ const Display = () => {
         isMapLoaded, 
         isGameLoaded, 
         isGameInit, 
-        dom.readyState
+        dom.readyState,
+        loadingPercent
     ]);
 
     // TODO: UNCOMMENT !!! INTRO SOUND !!!
     // useEffect(() => playSFX(introSFX, settings.volume), [settings.volume]);
 
+    // display handlers
     const prevent = useCallback(e => {
         e.preventDefault();
     }, []);
@@ -158,13 +167,21 @@ const Display = () => {
                         </Zoom>
 
                         {
-                            isGameInit && isGameStarted ? <TimeMachine /> : null 
+                            isGameInit && isGameStarted ? <>
+                                <LeftGameInfoPanel />
+
+                                <RightGameInfoPanel>
+                                    <TimeMachine />
+                                    <UserActionInfo />
+                                </RightGameInfoPanel>
+                                
+                            </> : null 
                         }
                     </Fullscreen>
                 </WindowSizeListener>
             </>
         }
     </>
-};
+});
 
 export default Display;

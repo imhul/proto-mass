@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from "react-router-dom";
 import { Drawer, Typography } from 'antd';
@@ -9,7 +9,7 @@ import Notify from '../../Output/Notify';
 
 const { Title } = Typography;
 
-const GameMenu = () => {
+const GameMenu = memo(() => {
 
     const history = useHistory();
     const dispatch = useDispatch();
@@ -108,6 +108,6 @@ const GameMenu = () => {
             </Drawer>
         </>
     )
-}
+});
 
 export default GameMenu;

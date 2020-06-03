@@ -38,14 +38,26 @@ const GameMap = memo(() => {
         }
     }, [dispatch, isMapLoaded]);
 
-    const onMapClick = useCallback((x, y, id) => {
-        playSFX(MapClick, settings.volume);
-        dispatch({ type: 'MAP_CLICK', payload: {
+    const onTileClick = useCallback((x, y, id) => {
+        // playSFX(MapClick, settings.volume);
+        dispatch({ type: 'USER_ACTION', payload: {
             x: x, 
             y: y,
+            objectType: "tile", // tile, object, unit
+            actionType: "click", // click, hover, scroll, context
             data: getTileById(id),
         }})
-    }, [dispatch, settings.volume]);
+    }, [dispatch]);
+
+    const onTileHover = useCallback((x, y, id) => {
+        dispatch({ type: 'USER_ACTION', payload: {
+            x: x, 
+            y: y,
+            objectType: "tile", // tile, object, unit
+            actionType: "hover", // click, hover, scroll, context
+            data: getTileById(id),
+        }})
+    }, [dispatch]);
 
     // render
     const MapLoader = () => {
@@ -59,7 +71,8 @@ const GameMap = memo(() => {
                     y={y}
                     z={1}
                     frames={getFrames(true, tileId)}
-                    onClick={() => onMapClick(x, y, tileId)}
+                    onClick={() => onTileClick(x, y, tileId)}
+                    onPointerEnter={() => onTileHover(x, y, tileId)}
                 />
             ];
             return result;
