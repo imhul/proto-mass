@@ -47,6 +47,12 @@ export const useGetUnit =  ({ name, isEnemy }) => {
                 x: 15,
                 y: 15,
             },
+            destination: [
+                // {
+                    // x: ...,
+                    // y: ...
+                // },
+            ],
             task: null,
             skills: [],
             //     {

@@ -5,6 +5,9 @@ import { AnimatedTexture } from '../Map';
 // hooks
 import { useGetUnit, useGetTask } from '../../../hooks';
 
+// utils
+
+
 const Units = memo(props => {
     
     // Effects
@@ -33,10 +36,8 @@ const Units = memo(props => {
         name: `enemy01101-${unitList.length + 1}`, 
         isEnemy: true,
     };
-
-    // TODO: if save.units.map(unit => unit.task ? DO_TASK )
-    // TODO: if save.units { load } else { useGetUnit }
     
+    // synthesizing
     useGetUnit(newUnit);
     useGetTask();
 
@@ -86,10 +87,36 @@ const Units = memo(props => {
         pendingList,
         dispatch
     ]);
+
+    const walking = useCallback((path, walkingUnitId) => {
+        dispatch({ 
+            type: 'UNIT_START_WALKING', 
+            payload: {
+                path: path,
+                id: walkingUnitId,
+            }
+        })
+        // TODO: if (path === unitPosition) working()
+    }, [dispatch]);
+
+    const working = useCallback(task => {
+        console.info("working with task: ", task)
+    }, []);
     
     useEffect(() => {
-        isGameStarted && unitList.map(unit => unit.status === "search" && taskSearch(unit))
-    }, [ isGameStarted, taskSearch, unitList ]);
+        isGameStarted && unitList.map(unit => {
+            switch(unit.status) {
+                case "search": taskSearch(unit);
+                    break;
+                case "walk": walking(unit.task.positions, unit.id);
+                    break;
+                case "work": working(unit.task);
+                    break;
+                default: break;
+            }
+            return unit
+        })
+    }, [ isGameStarted, unitList, taskSearch, walking, working ]);
 
     const OnAnimatedTextureClick = useCallback((x, y, data) => {
         // playSFX(MapClick, settings.volume);

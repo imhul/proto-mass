@@ -52,23 +52,11 @@ export default function unitReducer(state = initState, action) {
         case types.UNIT_START_WALKING: 
             return {
                 ...state,
-                current: {
-                    ...state.current,
-                    status: 'walk',
-                },
             }
 
         case types.UNIT_WALKING: 
             return {
                 ...state,
-                current: {
-                    ...state.current,
-                    // status: 'walk',
-                    position: {
-                        x: action.payload.x,
-                        y: action.payload.y,
-                    }
-                },
             }
 
         case types.UNIT_STOP_WALKING: 

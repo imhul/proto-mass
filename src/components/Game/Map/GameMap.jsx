@@ -1,9 +1,9 @@
 import React, { memo, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { IsometricMap, IsometricTile } from '.';
-import VisibilitySensor from 'react-visibility-sensor';
 
 // Utils
+import VisibilitySensor from 'react-visibility-sensor';
 import { 
     getFrames, 
     getRandomInt, 
