@@ -27,6 +27,7 @@ export default function gameReducer(state = initState, action) {
                 isMapVisible: false,
                 loadingPercent: action.payload,
                 preloaderTitle: "start loading map",
+                isMapLoadingStarted: true,
             }
 
         case types.START_OR_LOAD_MODAL_CLOSE:

@@ -22,7 +22,7 @@ const LoginForm = props => {
     const [cookies, setCookie, removeCookie] = useCookies(['userId']);
     const { cookiesFromProps } = props.cookies;
     const isHasCookies = props.cookies.HAS_DOCUMENT_COOKIE;
-    const setUserIdCookie = (id) => {
+    const setUserIdCookie = id => {
         setCookie('userId', id, { path: '/' });
     }
 

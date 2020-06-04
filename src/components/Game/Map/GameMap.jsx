@@ -8,7 +8,7 @@ import {
     getFrames, 
     getRandomInt, 
     mockedMap, 
-    playSFX, 
+    // playSFX, 
     getTileById,
 } from '../../../utils';
 
@@ -17,7 +17,7 @@ import Objects from '../Objects';
 import Units from '../Units';
 
 // Sounds
-import MapClick from '../../../assets/sound/map_click.ogg';
+// import MapClick from '../../../assets/sound/map_click.ogg';
 
 const GameMap = memo(() => { 
 
@@ -27,16 +27,15 @@ const GameMap = memo(() => {
     const tileSize = 42;
 
     // effects
-    const { settings, isGameInit, isMapLoaded } = useSelector(state => state.game);
+    const { 
+        // settings, 
+        isGameInit, 
+        isMapLoaded, 
+        isMapVisible,
+        loadingPercent,
+        // isMapLoadingStarted
+    } = useSelector(state => state.game);
     const dispatch = useDispatch();
-
-    const onMapLoaded = useCallback(isVisible => {
-        if (isVisible && !isMapLoaded) {
-            dispatch({ type: 'MAP_LOADED', payload: getRandomInt(11, 21) });
-        } else if (!isVisible && !isMapLoaded) {
-            dispatch({ type: 'MAP_LOADING', payload: getRandomInt(5, 11) });
-        }
-    }, [dispatch, isMapLoaded]);
 
     const onTileClick = useCallback((x, y, id) => {
         // playSFX(MapClick, settings.volume);
@@ -86,20 +85,31 @@ const GameMap = memo(() => {
         return loadMap
     };
 
+    const onMapLoaded = useCallback(isVisible => {
+        console.info("isVisible: ", isVisible);
+        if ((!isMapVisible && isVisible && !isMapLoaded) || (loadingPercent > 1 && loadingPercent < 11)) {
+            dispatch({ type: 'MAP_LOADED', payload: getRandomInt(11, 21) });
+        } else if (isMapVisible && !isMapLoaded) {
+            dispatch({ type: 'MAP_LOADING', payload: getRandomInt(5, 11) });
+        }
+    }, [loadingPercent, isMapVisible, isMapLoaded, dispatch]);
+
     return (
-        <IsometricMap 
-            mapWidth={mapWidth} 
-            mapHeight={mapHeight} 
-            tileSize={tileSize} 
-            slabSize={1}
-            offsetY={0}
-            visibility={isGameInit ? 'visible' : 'hidden'}
-        >
-            <VisibilitySensor onChange={onMapLoaded}>
-                <MapLoader />
-            </VisibilitySensor>
-        </IsometricMap>
-    );
+        <VisibilitySensor onChange={onMapLoaded}>
+            <IsometricMap 
+                mapWidth={mapWidth} 
+                mapHeight={mapHeight} 
+                tileSize={tileSize} 
+                slabSize={1}
+                offsetY={0}
+                visibility={isGameInit ? 'visible' : 'hidden'}
+            >  
+                <VisibilitySensor onChange={onMapLoaded} delayedCall={true}>
+                    <MapLoader />
+                </VisibilitySensor>
+            </IsometricMap>
+        </VisibilitySensor>
+    )
 });
 
 export default GameMap;

@@ -1,4 +1,4 @@
-import React, { memo, useMemo, useEffect, useCallback } from 'react';
+import React, { memo, useEffect, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { AnimatedTexture } from '../Map';
 

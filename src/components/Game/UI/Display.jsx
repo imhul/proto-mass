@@ -111,16 +111,26 @@ const Display = memo(() => {
 
     const onResize = useCallback(output => {
         if (!isFirstResize) {
-            dispatch({ type: 'RESIZE', payload: output });
-            dispatch({ 
-                type: 'LOADING_GAME_UPDATE', 
-                payload: getRandomInt(21, 31),
-                meta: "coordinate calculation"
-            })
+            if (isMapLoaded) {
+                dispatch({ 
+                    type: 'RESIZE', 
+                    payload: output,
+                    meta: true,
+                });
+                dispatch({ 
+                    type: 'LOADING_GAME_UPDATE', 
+                    payload: getRandomInt(21, 31),
+                    meta: "coordinate calculation"
+                })
+            }
         } else {
-            dispatch({ type: 'RESIZE', payload: output });
+            dispatch({ 
+                type: 'RESIZE', 
+                payload: output, 
+                meta: false,
+            });
         }
-    }, [dispatch, isFirstResize]);
+    }, [isMapLoaded, isFirstResize, dispatch]);
 
     useEffect(() => {
         window.addEventListener('contextmenu', prevent);

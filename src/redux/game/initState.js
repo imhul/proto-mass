@@ -5,6 +5,7 @@ export const initState = {
     preloaderTitle: "",
     isStartOrLoadModalOpen: true,
     isGameMenuOpen: false,
+    isMapLoadingStarted: false,
     isMapLoaded: false,
     isMapVisible: true,
     isGameLoaded: false,

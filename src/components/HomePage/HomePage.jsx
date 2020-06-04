@@ -25,7 +25,11 @@ const HomePage = () => {
     const rondomArr = new Array(getRandom(20, 40)).fill({'type': 1}, 0);
 
     return <WindowSizeListener
-                onResize={output => dispatch({ type: 'RESIZE', payload: output })}
+                onResize={output => dispatch({ 
+                    type: 'RESIZE', 
+                    payload: output,
+                    meta: false,
+                })}
             >
                 <Layout>
                     <h1 className="hero">proto-mass</h1>
