@@ -41,6 +41,7 @@ const Units = memo(props => {
     useGetUnit(newUnit);
     useGetTask();
 
+    // unit actions
     const taskSearch = useCallback(unit => {
 
         const isUnitProfessionMatchTask = (unit, task) => {
@@ -88,14 +89,137 @@ const Units = memo(props => {
         dispatch
     ]);
 
-    const walking = useCallback((path, walkingUnitId) => {
+    const walking = useCallback((pathways, unit) => {
         dispatch({ 
             type: 'UNIT_START_WALKING', 
             payload: {
-                path: path,
-                id: walkingUnitId,
+                path: pathways,
+                id: unit.id,
+                start: {
+                    x: unit.position.x,
+                    y: unit.position.y,
+                },
+            },
+        });
+        // const pathwaysCount = pathways.length;
+        pathways.map(({destX, destY}) => {
+            const unitPosX = unit.position.x;
+            const unitPosY = unit.position.y;
+            if (destX !== unitPosX && destY !== unitPosY) {
+                // down
+                if (destY > unitPosY && destX > unitPosX) {
+                    if (destX !== unitPosX) {
+                        dispatch({ 
+                            type: 'UNIT_WALKING', 
+                            payload: {
+                                x: unitPosX,
+                                y: unitPosY + 1,
+                            },
+                        })
+                    } else if (destY !== unitPosY) {
+                        dispatch({ 
+                            type: 'UNIT_WALKING', 
+                            payload: {
+                                x: unitPosX + 1,
+                                y: unitPosY,
+                            },
+                        })
+                    } else {
+                        dispatch({ 
+                            type: 'UNIT_WALKING', 
+                            payload: {
+                                x: unitPosX + 1, 
+                                y: unitPosY + 1,
+                            },
+                        })
+                    }
+                }
+                // left
+                if (destY > unitPosY && destX < unitPosX) {
+                    if (destX !== unitPosX) {
+                        dispatch({ 
+                            type: 'UNIT_WALKING', 
+                            payload: {
+                                x: unitPosX,
+                                y: unitPosY + 1,
+                            },
+                        })
+                    } else if (destY !== unitPosY) {
+                        dispatch({ 
+                            type: 'UNIT_WALKING', 
+                            payload: {
+                                x: unitPosX - 1,
+                                y: unitPosY,
+                            },
+                        })
+                    } else {
+                        dispatch({ 
+                            type: 'UNIT_WALKING', 
+                            payload: {
+                                x: unitPosX - 1, 
+                                y: unitPosY + 1,
+                            },
+                        })
+                    }
+                }
+                // right
+                if (destY < unitPosY && destX > unitPosX) {
+                    if (destX !== unitPosX) {
+                        dispatch({ 
+                            type: 'UNIT_WALKING', 
+                            payload: {
+                                x: unitPosX,
+                                y: unitPosY - 1,
+                            },
+                        })
+                    } else if (destY !== unitPosY) {
+                        dispatch({ 
+                            type: 'UNIT_WALKING', 
+                            payload: {
+                                x: unitPosX + 1,
+                                y: unitPosY,
+                            },
+                        })
+                    } else {
+                        dispatch({ 
+                            type: 'UNIT_WALKING', 
+                            payload: {
+                                x: unitPosX + 1, 
+                                y: unitPosY - 1,
+                            },
+                        })
+                    }
+                }
+                // up
+                if (destY < unitPosY && destX < unitPosX) {
+                    if (destX !== unitPosX) {
+                        dispatch({ 
+                            type: 'UNIT_WALKING', 
+                            payload: {
+                                x: unitPosX,
+                                y: unitPosY - 1,
+                            },
+                        })
+                    } else if (destY !== unitPosY) {
+                        dispatch({ 
+                            type: 'UNIT_WALKING', 
+                            payload: {
+                                x: unitPosX - 1,
+                                y: unitPosY,
+                            },
+                        })
+                    } else {
+                        dispatch({ 
+                            type: 'UNIT_WALKING', 
+                            payload: {
+                                x: unitPosX - 1, 
+                                y: unitPosY - 1,
+                            },
+                        })
+                    }
+                }
             }
-        })
+        });
         // TODO: if (path === unitPosition) working()
     }, [dispatch]);
 
@@ -108,7 +232,7 @@ const Units = memo(props => {
             switch(unit.status) {
                 case "search": taskSearch(unit);
                     break;
-                case "walk": walking(unit.task.positions, unit.id);
+                case "walk": walking(unit.task.positions, unit);
                     break;
                 case "work": working(unit.task);
                     break;
@@ -180,6 +304,7 @@ const Units = memo(props => {
     ));
 
     return unitsRender
+    
 }, function areEqual(prevProps, nextProps) {
     /*
     возвращает true, если nextProps рендерит
