@@ -4,6 +4,9 @@
         justify-content: space-between;
         align-items: center;
         z-index: 998;
+        color: #33F6F9;
+        font-family: "PressStart2P-Regular";
+        // font-size: 26px;
         .ant-menu {
             text-transform: uppercase;
             .ant-menu-item {
@@ -36,6 +39,7 @@
                 justify-content: space-around;
                 align-items: center;
                 height: 100%;
+                font-family: "CourierPrime-Regular";
                 canvas {
                     width: 30px !important;
                     height: 30px !important;

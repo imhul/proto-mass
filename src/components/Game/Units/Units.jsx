@@ -32,10 +32,10 @@ const Units = memo(props => {
         isEnemy: false,
     };
 
-    const newEnemy = { 
-        name: `enemy01101-${unitList.length + 1}`, 
-        isEnemy: true,
-    };
+    // const newEnemy = { 
+    //     name: `enemy01101-${unitList.length + 1}`, 
+    //     isEnemy: true,
+    // };
     
     // synthesizing
     useGetUnit(newUnit);
