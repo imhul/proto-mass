@@ -55,8 +55,18 @@ export default function unitReducer(state = initState, action) {
             }
 
         case types.UNIT_WALKING: 
+            const updateUnitPosition = update(currentUnit, {
+                position: { 
+                    x: { $set: action.payload.x },
+                    y: { $set: action.payload.y },
+                 },
+            });
+
             return {
                 ...state,
+                unitList: update(state.unitList, 
+                    { $merge: [updateUnitPosition] }
+                ),
             }
 
         case types.UNIT_STOP_WALKING: 

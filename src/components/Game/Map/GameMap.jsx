@@ -86,7 +86,6 @@ const GameMap = memo(() => {
     };
 
     const onMapLoaded = useCallback(isVisible => {
-        console.info("isVisible: ", isVisible);
         if ((!isMapVisible && isVisible && !isMapLoaded) || (loadingPercent > 1 && loadingPercent < 11)) {
             dispatch({ type: 'MAP_LOADED', payload: getRandomInt(11, 21) });
         } else if (isMapVisible && !isMapLoaded) {

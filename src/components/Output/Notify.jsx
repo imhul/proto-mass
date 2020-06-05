@@ -30,6 +30,7 @@ const Notify = (notify) => {
         placement: notify.placement,
         className: "Notify",
         onClose: notify.onClose,
+        top: 80,
             // dispatch({
             //     type: 'ARCHIVE_MESSAGE',
             //     payload: notify,

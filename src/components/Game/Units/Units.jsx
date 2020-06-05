@@ -94,7 +94,7 @@ const Units = memo(props => {
             type: 'UNIT_START_WALKING', 
             payload: {
                 path: pathways,
-                id: unit.id,
+                unitId: unit.id,
                 start: {
                     x: unit.position.x,
                     y: unit.position.y,
@@ -102,26 +102,36 @@ const Units = memo(props => {
             },
         });
         // const pathwaysCount = pathways.length;
-        pathways.map(({destX, destY}) => {
+        const go = pathways.map(destination => {
             const unitPosX = unit.position.x;
             const unitPosY = unit.position.y;
-            if (destX !== unitPosX && destY !== unitPosY) {
+            if ((destination.x && 
+                unitPosX && 
+                destination.x !== unitPosX) ||
+                (destination.y && 
+                unitPosY &&
+                destination.y !== unitPosY)) 
+            {
+                console.log("go!!!");
                 // down
-                if (destY > unitPosY && destX > unitPosX) {
-                    if (destX !== unitPosX) {
+                if (destination.y > unitPosY && destination.x > unitPosX) {
+                    console.log("go down");
+                    if (destination.x !== unitPosX) {
                         dispatch({ 
                             type: 'UNIT_WALKING', 
                             payload: {
                                 x: unitPosX,
                                 y: unitPosY + 1,
+                                unitId: unit.id,
                             },
                         })
-                    } else if (destY !== unitPosY) {
+                    } else if (destination.y !== unitPosY) {
                         dispatch({ 
                             type: 'UNIT_WALKING', 
                             payload: {
                                 x: unitPosX + 1,
                                 y: unitPosY,
+                                unitId: unit.id,
                             },
                         })
                     } else {
@@ -130,26 +140,30 @@ const Units = memo(props => {
                             payload: {
                                 x: unitPosX + 1, 
                                 y: unitPosY + 1,
+                                unitId: unit.id,
                             },
                         })
                     }
                 }
                 // left
-                if (destY > unitPosY && destX < unitPosX) {
-                    if (destX !== unitPosX) {
+                else if (destination.y > unitPosY && destination.x < unitPosX) {
+                    console.log("go left");
+                    if (destination.x !== unitPosX) {
                         dispatch({ 
                             type: 'UNIT_WALKING', 
                             payload: {
                                 x: unitPosX,
                                 y: unitPosY + 1,
+                                unitId: unit.id,
                             },
                         })
-                    } else if (destY !== unitPosY) {
+                    } else if (destination.y !== unitPosY) {
                         dispatch({ 
                             type: 'UNIT_WALKING', 
                             payload: {
                                 x: unitPosX - 1,
                                 y: unitPosY,
+                                unitId: unit.id,
                             },
                         })
                     } else {
@@ -158,26 +172,30 @@ const Units = memo(props => {
                             payload: {
                                 x: unitPosX - 1, 
                                 y: unitPosY + 1,
+                                unitId: unit.id,
                             },
                         })
                     }
                 }
                 // right
-                if (destY < unitPosY && destX > unitPosX) {
-                    if (destX !== unitPosX) {
+                else if (destination.y < unitPosY && destination.x > unitPosX) {
+                    console.log("go right");
+                    if (destination.x !== unitPosX) {
                         dispatch({ 
                             type: 'UNIT_WALKING', 
                             payload: {
                                 x: unitPosX,
                                 y: unitPosY - 1,
+                                unitId: unit.id,
                             },
                         })
-                    } else if (destY !== unitPosY) {
+                    } else if (destination.y !== unitPosY) {
                         dispatch({ 
                             type: 'UNIT_WALKING', 
                             payload: {
                                 x: unitPosX + 1,
                                 y: unitPosY,
+                                unitId: unit.id,
                             },
                         })
                     } else {
@@ -186,26 +204,30 @@ const Units = memo(props => {
                             payload: {
                                 x: unitPosX + 1, 
                                 y: unitPosY - 1,
+                                unitId: unit.id,
                             },
                         })
                     }
                 }
                 // up
-                if (destY < unitPosY && destX < unitPosX) {
-                    if (destX !== unitPosX) {
+                else if (destination.y < unitPosY && destination.x < unitPosX) {
+                    console.log("go up");
+                    if (destination.x !== unitPosX) {
                         dispatch({ 
                             type: 'UNIT_WALKING', 
                             payload: {
                                 x: unitPosX,
                                 y: unitPosY - 1,
+                                unitId: unit.id,
                             },
                         })
-                    } else if (destY !== unitPosY) {
+                    } else if (destination.y !== unitPosY) {
                         dispatch({ 
                             type: 'UNIT_WALKING', 
                             payload: {
                                 x: unitPosX - 1,
                                 y: unitPosY,
+                                unitId: unit.id,
                             },
                         })
                     } else {
@@ -214,11 +236,17 @@ const Units = memo(props => {
                             payload: {
                                 x: unitPosX - 1, 
                                 y: unitPosY - 1,
+                                unitId: unit.id,
                             },
                         })
                     }
+                } else {
+                    console.log("STOP_WALKING [destination.x, unitPosX, destination.y, unitPosY]: ", destination.x, unitPosX, destination.y, unitPosY);
                 }
+            } else {
+                console.log("UNIT_WALKING error [destination.x, unitPosX, destination.y, unitPosY]: ", destination.x, unitPosX, destination.y, unitPosY);
             }
+            return null
         });
         // TODO: if (path === unitPosition) working()
     }, [dispatch]);
