@@ -2,6 +2,10 @@ import React, { memo, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { IsometricMap, IsometricTile } from '.';
 
+// Components
+import Objects from '../Objects';
+import Units from '../Units';
+
 // Utils
 import VisibilitySensor from 'react-visibility-sensor';
 import { 
@@ -11,10 +15,6 @@ import {
     // playSFX, 
     getTileById,
 } from '../../../utils';
-
-// Components
-import Objects from '../Objects';
-import Units from '../Units';
 
 // Sounds
 // import MapClick from '../../../assets/sound/map_click.ogg';

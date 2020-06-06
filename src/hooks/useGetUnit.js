@@ -39,7 +39,7 @@ export const useGetUnit =  ({ name, isEnemy }) => {
                 level: getRandomInt(0, 4),
                 health: 100,
                 damage: 0,
-                speed: 1.5,
+                speed: 900,
                 healthPoints: 100,
                 pointsToNewLevel: 0,
             },

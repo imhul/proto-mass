@@ -1,9 +1,9 @@
 import React, { memo, useEffect, useCallback } from 'react';
 import { useSelector, useDispatch  } from 'react-redux';
 import IsometricObject from '../Map/IsometricObject';
-import uuidv5 from 'uuid/v5';
 
 // Utils
+import uuidv5 from 'uuid/v5';
 import { 
     getRandomInt, 
     getObjectById,

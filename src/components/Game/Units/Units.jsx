@@ -6,7 +6,7 @@ import { AnimatedTexture } from '../Map';
 import { useGetUnit, useGetTask } from '../../../hooks';
 
 // utils
-
+import _ from 'lodash';
 
 const Units = memo(props => {
     
@@ -90,19 +90,15 @@ const Units = memo(props => {
     ]);
 
     const walking = useCallback((pathways, unit) => {
-        dispatch({ 
-            type: 'UNIT_START_WALKING', 
-            payload: {
-                path: pathways,
-                unitId: unit.id,
-                start: {
-                    x: unit.position.x,
-                    y: unit.position.y,
-                },
-            },
-        });
-        // const pathwaysCount = pathways.length;
-        const go = pathways.map(destination => {
+        //
+        // TODO: 
+        // Если y2=y1, движемся по иску, пока не станет x2=x1
+        // Если х2=х1, движемся по игреку, пока не станет у2=у1
+        // А пока y2≠y1 и х2≠х1 движемся и по иксу, и по игреку
+        // 
+
+        pathways.map(destination => {
+            let walkTime;
             const unitPosX = unit.position.x;
             const unitPosY = unit.position.y;
             if ((destination.x && 
@@ -117,131 +113,146 @@ const Units = memo(props => {
                 if (destination.y > unitPosY && destination.x > unitPosX) {
                     console.log("go down");
                     if (destination.x !== unitPosX) {
-                        dispatch({ 
+                        walkTime = setTimeout(() => dispatch({ 
                             type: 'UNIT_WALKING', 
                             payload: {
                                 x: unitPosX,
                                 y: unitPosY + 1,
                                 unitId: unit.id,
                             },
-                        })
+                        }), unit.stats.speed)
                     } else if (destination.y !== unitPosY) {
-                        dispatch({ 
+                        walkTime = setTimeout(() => dispatch({ 
                             type: 'UNIT_WALKING', 
                             payload: {
                                 x: unitPosX + 1,
                                 y: unitPosY,
                                 unitId: unit.id,
                             },
-                        })
+                        }), unit.stats.speed)
                     } else {
-                        dispatch({ 
+                        walkTime = setTimeout(() => dispatch({ 
                             type: 'UNIT_WALKING', 
                             payload: {
                                 x: unitPosX + 1, 
                                 y: unitPosY + 1,
                                 unitId: unit.id,
                             },
-                        })
+                        }), unit.stats.speed)
                     }
                 }
                 // left
                 else if (destination.y > unitPosY && destination.x < unitPosX) {
                     console.log("go left");
                     if (destination.x !== unitPosX) {
-                        dispatch({ 
+                        walkTime = setTimeout(() => dispatch({ 
                             type: 'UNIT_WALKING', 
                             payload: {
                                 x: unitPosX,
                                 y: unitPosY + 1,
                                 unitId: unit.id,
                             },
-                        })
+                        }), unit.stats.speed)
                     } else if (destination.y !== unitPosY) {
-                        dispatch({ 
+                        walkTime = setTimeout(() => dispatch({ 
                             type: 'UNIT_WALKING', 
                             payload: {
                                 x: unitPosX - 1,
                                 y: unitPosY,
                                 unitId: unit.id,
                             },
-                        })
+                        }), unit.stats.speed)
                     } else {
-                        dispatch({ 
+                        walkTime = setTimeout(() => dispatch({ 
                             type: 'UNIT_WALKING', 
                             payload: {
                                 x: unitPosX - 1, 
                                 y: unitPosY + 1,
                                 unitId: unit.id,
                             },
-                        })
+                        }), unit.stats.speed)
                     }
                 }
                 // right
                 else if (destination.y < unitPosY && destination.x > unitPosX) {
                     console.log("go right");
                     if (destination.x !== unitPosX) {
-                        dispatch({ 
+                        walkTime = setTimeout(() => dispatch({  
                             type: 'UNIT_WALKING', 
                             payload: {
                                 x: unitPosX,
                                 y: unitPosY - 1,
                                 unitId: unit.id,
                             },
-                        })
+                        }), unit.stats.speed)
                     } else if (destination.y !== unitPosY) {
-                        dispatch({ 
+                        walkTime = setTimeout(() => dispatch({ 
                             type: 'UNIT_WALKING', 
                             payload: {
                                 x: unitPosX + 1,
                                 y: unitPosY,
                                 unitId: unit.id,
                             },
-                        })
+                        }), unit.stats.speed)
                     } else {
-                        dispatch({ 
+                        walkTime = setTimeout(() => dispatch({ 
                             type: 'UNIT_WALKING', 
                             payload: {
                                 x: unitPosX + 1, 
                                 y: unitPosY - 1,
                                 unitId: unit.id,
                             },
-                        })
+                        }), unit.stats.speed)
                     }
                 }
                 // up
                 else if (destination.y < unitPosY && destination.x < unitPosX) {
                     console.log("go up");
                     if (destination.x !== unitPosX) {
-                        dispatch({ 
+                        walkTime = setTimeout(() => dispatch({ 
                             type: 'UNIT_WALKING', 
                             payload: {
                                 x: unitPosX,
                                 y: unitPosY - 1,
                                 unitId: unit.id,
                             },
-                        })
+                        }), unit.stats.speed)
                     } else if (destination.y !== unitPosY) {
-                        dispatch({ 
+                        walkTime = setTimeout(() => dispatch({ 
                             type: 'UNIT_WALKING', 
                             payload: {
                                 x: unitPosX - 1,
                                 y: unitPosY,
                                 unitId: unit.id,
                             },
-                        })
+                        }), unit.stats.speed)
                     } else {
-                        dispatch({ 
+                        walkTime = setTimeout(() => dispatch({ 
                             type: 'UNIT_WALKING', 
                             payload: {
                                 x: unitPosX - 1, 
                                 y: unitPosY - 1,
                                 unitId: unit.id,
                             },
-                        })
+                        }), unit.stats.speed)
                     }
                 } else {
-                    console.log("STOP_WALKING [destination.x, unitPosX, destination.y, unitPosY]: ", destination.x, unitPosX, destination.y, unitPosY);
+                    clearTimeout(walkTime)
+                    dispatch({ type: 'UNIT_STOP_WALKING', });
+                    if (unit.task && _.isEmpty(unit.task) && unit.status === "walk") {
+                        dispatch({ 
+                            type: 'UNIT_START_WORKING',
+                            payload: {
+                                unitId: unit.id,
+                                task: {
+                                    status: "progress",
+                                    progress: unit.task.progress < unit.task.progressPoints ? 
+                                        unit.task.progress + 1 : 
+                                        unit.task.progress,
+                                }
+                            }
+                        });
+                    }
                 }
             } else {
                 console.log("UNIT_WALKING error [destination.x, unitPosX, destination.y, unitPosY]: ", destination.x, unitPosX, destination.y, unitPosY);

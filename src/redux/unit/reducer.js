@@ -54,6 +54,11 @@ export default function unitReducer(state = initState, action) {
                 ...state,
             }
 
+        case types.UNIT_START_WORKING: 
+            return {
+                ...state,
+            }
+
         case types.UNIT_WALKING: 
             const updateUnitPosition = update(currentUnit, {
                 position: { 
