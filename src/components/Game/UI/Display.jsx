@@ -181,7 +181,7 @@ const Display = memo(() => {
                                 <LeftGameInfoPanel />
 
                                 <RightGameInfoPanel>
-                                    <TimeMachine />
+                                    {/* <TimeMachine /> */}
                                     <UserActionInfo />
                                 </RightGameInfoPanel>
                                 

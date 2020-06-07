@@ -5,3 +5,4 @@ export { mockedMap } from './mockedMap';
 export { getTileById } from './getTileById';
 export { getObjectById } from './getObjectById';
 export { getGround } from './getGround';
+export { getNewTask } from './getNewTask';

@@ -2,6 +2,11 @@ import React, { memo, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { IsometricMap, IsometricTile } from '.';
 
+// hooks
+import { 
+    // useGetUnit,
+} from '../../../hooks';
+
 // Components
 import Objects from '../Objects';
 import Units from '../Units';
@@ -14,6 +19,7 @@ import {
     mockedMap, 
     // playSFX, 
     getTileById,
+    getNewTask,
 } from '../../../utils';
 
 // Sounds
@@ -39,6 +45,14 @@ const GameMap = memo(() => {
 
     const onTileClick = useCallback((x, y, id) => {
         // playSFX(MapClick, settings.volume);
+        const props = {
+            positions: [{
+                x: x,
+                y: y,
+            },],
+        };
+        const task = getNewTask(props);
+        dispatch({ type: 'TASK_ADD', payload: task });
         dispatch({ type: 'USER_ACTION', payload: {
             x: x, 
             y: y,
