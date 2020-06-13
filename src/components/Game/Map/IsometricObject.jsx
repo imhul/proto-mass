@@ -1,16 +1,14 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
+
+// Components
+import Stats from '../UI/Stats';
+import Preloader from '../UI/Preloader';
 import { AnimatedTexture, IsometricMapEvent } from ".";
 
-/**
- * An isometric object is everything than is not  a tile or a character.
- * They can be animated and over any tile.
- * They are used for decorations than don't look like a floor pice, like trees, rocks
- * or buildings.
- *
- */
 class IsometricObject extends Component {
     static propTypes = {
+        obj: PropTypes.object.isRequired,
         /** The x position of the map (from 0 to map width - 1) */
         x: PropTypes.number.isRequired,
         /** The y position of the map (from 0 to map height - 1) */
@@ -88,6 +86,7 @@ class IsometricObject extends Component {
 
     render() {
         const {
+            obj,
             x,
             y,
             z,
@@ -114,6 +113,18 @@ class IsometricObject extends Component {
         }
         return (
             <div className={classes.join(" ")} style={vars}>
+                <Stats>
+                    {
+                        obj.stats.health === obj.stats.healthPoints ?
+                            `x:${JSON.stringify(obj.position.x)},y:${JSON.stringify(obj.position.y)}` :
+                                <Preloader
+                                    percent={obj.stats.healthPoints}
+                                    class="mini"
+                                    strokeWidth={4}
+                                    format={null}
+                                />
+                    }
+                </Stats>
                 <div className="react-isometric-object" onClick={this.onClick}>
                     {frames ? <AnimatedTexture frames={frames} delay={delay} /> : null}
                 </div>

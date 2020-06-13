@@ -6,11 +6,11 @@ import IsometricObject from '../Map/IsometricObject';
 import uuidv5 from 'uuid/v5';
 import { 
     getRandomInt, 
-    getObjectById,
+    getObjectByType,
     // playSFX,
 } from '../../../utils';
 
-const Objects = memo(({ width, height, type }) => {
+const Objects = memo(({ type }) => {
 
     const idLength = new Array(16);
 
@@ -64,7 +64,7 @@ const Objects = memo(({ width, height, type }) => {
                 const obj = {
                     id: objectId,
                     type: type,
-                    typeId: getRandomInt(1, 5),
+                    typeId: getRandomInt(1, 11),
                     status: "absent",
                     stats: {
                         health: 100,
@@ -77,9 +77,13 @@ const Objects = memo(({ width, height, type }) => {
                         z: 1
                     }
                 }; 
-                return val = obj
+                const copies = objectList.filter(item => item.position.x !== obj.position.x && item.position.y !== obj.position.y);
+                return copies < 1 ? obj : val // or null
             }
         );
+
+        
+
         if (objects && 
             objects.length === objectsLimit && 
             objects.length > objectList.length && 
@@ -92,8 +96,8 @@ const Objects = memo(({ width, height, type }) => {
         objectsLimit, 
         dispatch, 
         idLength, 
-        isObjectsCreation, 
-        objectList.length, 
+        isObjectsCreation,
+        objectList, 
         type,
         indicateDone
     ]);
@@ -105,7 +109,7 @@ const Objects = memo(({ width, height, type }) => {
             y: y,
             objectType: "object",
             actionType: "click",
-            data: getObjectById(id),
+            data: getObjectByType(id),
         }})
     }, [dispatch]);
 
@@ -115,12 +119,15 @@ const Objects = memo(({ width, height, type }) => {
             y: y,
             objectType: "object",
             actionType: "hover",
-            data: getObjectById(id),
+            data: getObjectByType(id),
         }})
     }, [dispatch]);
     
-    return objectList.map((obj) => 
-        <IsometricObject
+    return objectList.map((obj) => {
+        const height = getObjectByType(obj.typeId).height;
+        const width = getObjectByType(obj.typeId).width;
+        return <IsometricObject
+            obj={obj}
             key={`object${obj.id}`}
             x={obj.position.x}
             y={obj.position.y}
@@ -133,7 +140,7 @@ const Objects = memo(({ width, height, type }) => {
             onClick={() => onObjectClick(obj.position.x, obj.position.y, obj.typeId)}
             onPointerEnter={() => onObjectHover(obj.position.x, obj.position.y, obj.typeId)}
         />
-    )
+    })
 });
 
 export default Objects;

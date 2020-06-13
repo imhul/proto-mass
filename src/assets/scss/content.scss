@@ -1,3 +1,43 @@
+@keyframes slideDown {
+    from {
+        text-shadow: 4px 4px 0px #ff0045;
+        transform: translate(-50%, -50%) scale(.1);
+        top: -20%;
+    }
+    10% {
+        text-shadow: 2px 2px 0px #ff0045;
+    }
+    20% {
+        text-shadow: 0 0 0px #ff0045;
+    }
+    30% {
+        text-shadow: -1px -1px 0px #ff0045;
+    }
+    40% {
+        text-shadow: -2px -2px 0px #ff0045;
+    }
+    50% {
+        text-shadow: -4px -4px 0px #ff0045;
+    }
+    60% {
+        text-shadow: -2px -2px 0px #ff0045;
+    }
+    70% {
+        text-shadow: -1px -1px 0px #ff0045;
+    }
+    80% {
+        text-shadow: 0 0 0px #ff0045;
+    }
+    90% {
+        text-shadow: 2px 2px 0px #ff0045;
+    }
+    to {
+        text-shadow: 4px 4px 0px #ff0045;
+        transform: translate(-50%, -50%) scale(1);
+        top: 50%;
+    }
+}
+
 main {
     display: flex;
     padding: 25px;
@@ -17,20 +57,20 @@ main {
         &.ant-layout {
             height: calc(100vh - 133px);
             background: $transparent;
+            transform:perspective(300px) rotateX(20deg);
             .hero {
                 top: 50%;
                 left: 50%;
                 width: 100%;
-                transform: translate(-50%, -50%);
+                transform: translate(-50%, -50%) scale(1);
                 position: absolute;
                 font-family: 'NK221';
-                font-size: 10rem;
+                font-size: 13rem;
                 text-align: center;
-                color: #051C5F;
-                text-shadow: 2px 2px 0px #F804FB;
+                color: #ff85e5;
+                text-shadow: 4px 4px 0px #ff0045;
                 margin-bottom: 10px;
-                animation-duration: 20s;
-                animation-name: slideDown;
+                animation: slideDown 20s ease-in-out;
             }
             .hero-desc {
                 top: 50%;
@@ -50,56 +90,8 @@ main {
                 height: 40vh;
                 .show {
                     opacity: 1;
-                    animation-name: showFire;
                 }
             }
         }
-    }
-}
-
-@keyframes showFire {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
-}
-
-@keyframes slideDown {
-    from {
-        text-shadow: 2px 2px 0px #F804FB;
-        top: -10%;
-    }
-    10% {
-        text-shadow: 1px 1px 0px #F804FB;
-    }
-    20% {
-        text-shadow: 0 0 0px #F804FB;
-    }
-    30% {
-        text-shadow: -1px -1px 0px #F804FB;
-    }
-    40% {
-        text-shadow: -2px -2px 0px #F804FB;
-    }
-    50% {
-        text-shadow: -3px -3px 0px #F804FB;
-    }
-    60% {
-        text-shadow: -2px -2px 0px #F804FB;
-    }
-    70% {
-        text-shadow: -1px -1px 0px #F804FB;
-    }
-    80% {
-        text-shadow: 0 0 0px #F804FB;
-    }
-    90% {
-        text-shadow: 1px 1px 0px #F804FB;
-    }
-    to {
-        text-shadow: 2px 2px 0px #F804FB;
-        top: 50%;
     }
 }

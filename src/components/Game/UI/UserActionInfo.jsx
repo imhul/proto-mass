@@ -16,8 +16,8 @@ const UserActionInfo = memo(() => {
             <div className="hover-box">
                 { 
                     userAction && <>
-                        <div>{ JSON.stringify(userAction.x) }</div>
-                        <div>{ JSON.stringify(userAction.y) }</div>
+                        <div>x: { JSON.stringify(userAction.x) }</div>
+                        <div>y: { JSON.stringify(userAction.y) }</div>
                         <div>{ JSON.stringify(userAction.objectType) }</div>
                         <div>{ JSON.stringify(userAction.actionType) }</div>
                         {

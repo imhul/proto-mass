@@ -1,7 +1,6 @@
 export const initState = {
     unitsLimit: 1,
     unitList: [],
-    isUnitStatsShown: true,
     current: {
         id: "",
         name: "",
@@ -14,10 +13,17 @@ export const initState = {
             healthPoints: 0, // h-points
             pointsToNextLevel: 0, // max 20
         },
+        // isUnitStatsShown: true,
         position: {
             x: 0,
             y: 0,
         },
+        path: [
+            // {
+            //     x: ,
+            //     y: ,
+            // }
+        ],
         task: null,
         skills: [
             {

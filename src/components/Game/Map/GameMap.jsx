@@ -18,7 +18,7 @@ import {
     getRandomInt, 
     mockedMap, 
     // playSFX, 
-    getTileById,
+    getTileByType,
     getNewTask,
 } from '../../../utils';
 
@@ -58,7 +58,7 @@ const GameMap = memo(() => {
             y: y,
             objectType: "tile", // tile, object, unit
             actionType: "click", // click, hover, scroll, context
-            data: getTileById(id),
+            data: getTileByType(id),
         }})
     }, [dispatch]);
 
@@ -68,15 +68,15 @@ const GameMap = memo(() => {
             y: y,
             objectType: "tile", // tile, object, unit
             actionType: "hover", // click, hover, scroll, context
-            data: getTileById(id),
+            data: getTileByType(id),
         }})
     }, [dispatch]);
 
     // render
     const MapLoader = () => {
         const loadMap = mockedMap.map((tileId, index) => { // mocked getGround factory util
-            const x = index % mapWidth;
-            const y = Math.floor(index / mapWidth);
+            const x = (index % mapWidth) + 1;
+            const y = Math.floor(index / mapWidth) + 1;
             const result = [
                 <IsometricTile
                     key={`tile${index}`}
@@ -91,7 +91,7 @@ const GameMap = memo(() => {
             return result;
         });
         loadMap.push( 
-            <Objects width={72} height={65} type="tree" key={`objects`} />
+            <Objects type="tree" key={`objects`} />
         );
         loadMap.push(
             <Units width={40} height={79} key={`units`} />

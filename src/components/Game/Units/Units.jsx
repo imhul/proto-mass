@@ -1,12 +1,16 @@
 import React, { memo, useState, useEffect, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+
+// Components
+import Stats from '../UI/Stats';
+import Preloader from '../UI/Preloader';
 import { AnimatedTexture } from '../Map';
 
 // hooks
 import { useGetUnit, useGetTask } from '../../../hooks';
 
 // utils
-import _ from 'lodash';
+// import _ from 'lodash';
 
 const Units = memo(props => {
     
@@ -24,7 +28,7 @@ const Units = memo(props => {
 
     const { 
         unitList,
-        isUnitStatsShown
+        path,
     } = useSelector(state => state.unit);
 
     const newUnit = { 
@@ -98,158 +102,161 @@ const Units = memo(props => {
             let stepDelay;
             const unitPosX = unit.position.x;
             const unitPosY = unit.position.y;
+
+            const secondStep = () => {
+                switch(direction) {
+                    case "down": 
+                        if (destination.x === unitPosX) {
+                            stepDelay = setTimeout(() => dispatch({ 
+                                type: 'UNIT_SET_PATH_POINT', 
+                                payload: {
+                                    x: unitPosX,
+                                    y: unitPosY + 1,
+                                    unitId: unit.id,
+                                },
+                            }), unit.stats.speed)
+                        } else if (destination.y === unitPosY) {
+                            stepDelay = setTimeout(() => dispatch({ 
+                                type: 'UNIT_SET_PATH_POINT',
+                                payload: {
+                                    x: unitPosX + 1,
+                                    y: unitPosY,
+                                    unitId: unit.id,
+                                },
+                            }), unit.stats.speed)
+                        }
+                        break;
+                    case "left": 
+                        if (destination.x === unitPosX) {
+                            stepDelay = setTimeout(() => dispatch({ 
+                                type: 'UNIT_SET_PATH_POINT', 
+                                payload: {
+                                    x: unitPosX,
+                                    y: unitPosY + 1,
+                                    unitId: unit.id,
+                                },
+                            }), unit.stats.speed)
+                        } else if (destination.x !== unitPosX) {
+                            console.log("new line X");
+                            stepDelay = setTimeout(() => dispatch({ 
+                                type: 'UNIT_SET_PATH_POINT', 
+                                payload: {
+                                    x: unitPosX - 1,
+                                    y: unitPosY,
+                                    unitId: unit.id,
+                                },
+                            }), unit.stats.speed)
+                        }
+                        break;
+                    case "right": 
+                        if (destination.x === unitPosX) {
+                            stepDelay = setTimeout(() => dispatch({  
+                                type: 'UNIT_SET_PATH_POINT', 
+                                payload: {
+                                    x: unitPosX,
+                                    y: unitPosY - 1,
+                                    unitId: unit.id,
+                                },
+                            }), unit.stats.speed)
+                        } else if (destination.y === unitPosY) {
+                            stepDelay = setTimeout(() => dispatch({ 
+                                type: 'UNIT_SET_PATH_POINT', 
+                                payload: {
+                                    x: unitPosX + 1,
+                                    y: unitPosY,
+                                    unitId: unit.id,
+                                },
+                            }), unit.stats.speed)
+                        }
+                        break;
+                    case "up": 
+                        if (destination.x === unitPosX) {
+                            stepDelay = setTimeout(() => dispatch({ 
+                                type: 'UNIT_SET_PATH_POINT', 
+                                payload: {
+                                    x: unitPosX,
+                                    y: unitPosY - 1,
+                                    unitId: unit.id,
+                                },
+                            }), unit.stats.speed)
+                        } else if (destination.y === unitPosY) {
+                            dispatch({ 
+                                type: 'UNIT_SET_PATH_POINT', 
+                                payload: {
+                                    x: unitPosX - 1,
+                                    y: unitPosY,
+                                    unitId: unit.id,
+                                },
+                            });
+                        }
+                        break;
+                    default: 
+                        clearTimeout(stepDelay);
+                        break;
+                }
+            };
+            
+            const firstStep = () => {
+                // go down
+                if (destination.y > unitPosY && destination.x > unitPosX) {
+                    setDirection("down");
+                    setPathPiont(unitPosX + 1, unitPosY + 1, unit.id)
+                }
+                // go left
+                else if (destination.y > unitPosY && destination.x < unitPosX) {
+                    setDirection("left");
+                    setPathPiont(unitPosX - 1, unitPosY + 1, unit.id)
+                }
+                // go right
+                else if (destination.y < unitPosY && destination.x > unitPosX) {
+                    setDirection("right");
+                    setPathPiont(unitPosX + 1, unitPosY - 1, unit.id)
+                }
+                // go up
+                else if (destination.y < unitPosY && destination.x < unitPosX) {
+                    setDirection("up");
+                    setPathPiont(unitPosX - 1, unitPosY - 1, unit.id)
+                } 
+                // first line segment is done / start next line segment
+                else {
+                    clearTimeout(diagonalStepDelay);                   
+                    secondStep();
+                }
+            };
+
+            const setPathPiont = (x,y,id) => {
+                dispatch({ 
+                    type: 'UNIT_SET_PATH_POINT', 
+                    payload: {
+                        x: x,
+                        y: y,
+                        unitId: id,
+                    },
+                })
+            };
+
+            const doStep = (x,y,id) => {
+                // TODO walking after path exist
+                stepDelay = setTimeout(() => dispatch({ 
+                    type: 'UNIT_WALKING', 
+                    payload: {
+                        x: x,
+                        y: y,
+                        unitId: id,
+                    },
+                }), unit.stats.speed);
+            };
+
             if (destination.x && 
                 unitPosX && 
                 destination.y && 
                 unitPosY) 
             {
                 // ready to go
-                if (destination.x !== unitPosX || 
-                    destination.y !== unitPosY || 
+                if ((destination.x !== unitPosX || destination.y !== unitPosY) || 
                     (destination.x !== unitPosX && destination.y !== unitPosY))
                 {
-                    // go down
-                    if (destination.y > unitPosY && destination.x > unitPosX) {
-                        setDirection("down");
-                        diagonalStepDelay = setTimeout(() => dispatch({ 
-                            type: 'UNIT_WALKING', 
-                            payload: {
-                                x: unitPosX + 1, 
-                                y: unitPosY + 1,
-                                unitId: unit.id,
-                            },
-                        }), unit.stats.speed);
-                    }
-                    // go left
-                    else if (destination.y > unitPosY && destination.x < unitPosX) {
-                        setDirection("left");
-                        diagonalStepDelay = setTimeout(() => dispatch({ 
-                            type: 'UNIT_WALKING', 
-                            payload: {
-                                x: unitPosX - 1, 
-                                y: unitPosY + 1,
-                                unitId: unit.id,
-                            },
-                        }), unit.stats.speed);
-                    }
-                    // go right
-                    else if (destination.y < unitPosY && destination.x > unitPosX) {
-                        setDirection("right");
-                        diagonalStepDelay = setTimeout(() => dispatch({ 
-                            type: 'UNIT_WALKING', 
-                            payload: {
-                                x: unitPosX + 1, 
-                                y: unitPosY - 1,
-                                unitId: unit.id,
-                            },
-                        }), unit.stats.speed);
-                    }
-                    // go up
-                    else if (destination.y < unitPosY && destination.x < unitPosX) {
-                        setDirection("up");
-                        diagonalStepDelay = setTimeout(() => dispatch({ 
-                            type: 'UNIT_WALKING', 
-                            payload: {
-                                x: unitPosX - 1, 
-                                y: unitPosY - 1,
-                                unitId: unit.id,
-                            },
-                        }), unit.stats.speed);
-                    } 
-                    // first line segment is done / start next line segment
-                    else {
-                        clearTimeout(diagonalStepDelay);                   
-
-                        switch(direction) {
-                            case "down": 
-                                if (destination.x === unitPosX) {
-                                    stepDelay = setTimeout(() => dispatch({ 
-                                        type: 'UNIT_WALKING', 
-                                        payload: {
-                                            x: unitPosX,
-                                            y: unitPosY + 1,
-                                            unitId: unit.id,
-                                        },
-                                    }), unit.stats.speed)
-                                } else if (destination.y === unitPosY) {
-                                    stepDelay = setTimeout(() => dispatch({ 
-                                        type: 'UNIT_WALKING',
-                                        payload: {
-                                            x: unitPosX + 1,
-                                            y: unitPosY,
-                                            unitId: unit.id,
-                                        },
-                                    }), unit.stats.speed)
-                                }
-                                break;
-                            case "left": 
-                                if (destination.x === unitPosX) {
-                                    stepDelay = setTimeout(() => dispatch({ 
-                                        type: 'UNIT_WALKING', 
-                                        payload: {
-                                            x: unitPosX,
-                                            y: unitPosY + 1,
-                                            unitId: unit.id,
-                                        },
-                                    }), unit.stats.speed)
-                                } else if (destination.x !== unitPosX) {
-                                    console.log("new line X");
-                                    stepDelay = setTimeout(() => dispatch({ 
-                                        type: 'UNIT_WALKING', 
-                                        payload: {
-                                            x: unitPosX - 1,
-                                            y: unitPosY,
-                                            unitId: unit.id,
-                                        },
-                                    }), unit.stats.speed)
-                                }
-                                break;
-                            case "right": 
-                                if (destination.x === unitPosX) {
-                                    stepDelay = setTimeout(() => dispatch({  
-                                        type: 'UNIT_WALKING', 
-                                        payload: {
-                                            x: unitPosX,
-                                            y: unitPosY - 1,
-                                            unitId: unit.id,
-                                        },
-                                    }), unit.stats.speed)
-                                } else if (destination.y === unitPosY) {
-                                    stepDelay = setTimeout(() => dispatch({ 
-                                        type: 'UNIT_WALKING', 
-                                        payload: {
-                                            x: unitPosX + 1,
-                                            y: unitPosY,
-                                            unitId: unit.id,
-                                        },
-                                    }), unit.stats.speed)
-                                }
-                                break;
-                            case "up": 
-                                if (destination.x === unitPosX) {
-                                    stepDelay = setTimeout(() => dispatch({ 
-                                        type: 'UNIT_WALKING', 
-                                        payload: {
-                                            x: unitPosX,
-                                            y: unitPosY - 1,
-                                            unitId: unit.id,
-                                        },
-                                    }), unit.stats.speed)
-                                } else if (destination.y === unitPosY) {
-                                    stepDelay = setTimeout(() => dispatch({ 
-                                        type: 'UNIT_WALKING', 
-                                        payload: {
-                                            x: unitPosX - 1,
-                                            y: unitPosY,
-                                            unitId: unit.id,
-                                        },
-                                    }), unit.stats.speed);
-                                }
-                                break;
-                            default: 
-                                break;
-                        }
-                    }
+                    firstStep();
                 // unit reached destination
                 } else if (destination.x === unitPosX && destination.y === unitPosY) {
                     clearTimeout(stepDelay);
@@ -332,11 +339,19 @@ const Units = memo(props => {
                 zIndex: unit.position.x + 10
             }}
         >
-            {
-                isUnitStatsShown && <div className="unit-stats">
-                    {JSON.stringify(unit.position)}
-                </div>
-            }
+            <Stats>
+                { 
+                    unit.stats.health === unit.stats.healthPoints ? 
+                    `x:${JSON.stringify(unit.position.x)},y:${JSON.stringify(unit.position.y)}` : 
+                            <Preloader 
+                                percent={unit.stats.healthPoints} 
+                                class="mini" 
+                                strokeWidth={4} 
+                                format={null} 
+                            /> 
+                }
+            </Stats>
+
             <AnimatedTexture
                 id={unit.id}
                 width={props.width}

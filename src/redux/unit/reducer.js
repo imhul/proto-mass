@@ -9,12 +9,6 @@ export default function unitReducer(state = initState, action) {
 
     switch (action.type) {
 
-        case types.UNIT_STATS_TOGGLE:
-            return {
-                ...state,
-                isUnitStatsShown: !state.isUnitStatsShown,
-            }
-
         case types.UNIT_CREATED: 
             return {
                 ...state,
@@ -59,9 +53,10 @@ export default function unitReducer(state = initState, action) {
                 ...state,
             }
 
-        case types.UNIT_WALKING: 
+        case types.UNIT_SET_PATH_POINT: 
+            // TODO:
             const updateUnitPosition = update(currentUnit, {
-                position: { 
+                path: { 
                     x: { $set: action.payload.x },
                     y: { $set: action.payload.y },
                  },

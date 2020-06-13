@@ -7,10 +7,10 @@ import isometric_pixel_6 from '../assets/sprites/isometric_pixel_6.png';
 import isometric_pixel_7 from '../assets/sprites/isometric_pixel_7.png';
 import isometric_pixel_8 from '../assets/sprites/isometric_pixel_8.png';
 
-export const getTileById = id => {
-    switch(id) {
+export const getTileByType = type => {
+    switch(type) {
         case 1: return {
-            id: id,
+            id: type,
             name: "rock",
             status: "inactive",
             blocker: false,
@@ -20,7 +20,7 @@ export const getTileById = id => {
             src: isometric_pixel_1,
         }
         case 2: return {
-            id: id,
+            id: type,
             name: "titanum",
             status: "inactive",
             blocker: false,
@@ -30,7 +30,7 @@ export const getTileById = id => {
             src: isometric_pixel_2,
         }
         case 3: return {
-            id: id,
+            id: type,
             name: "sand",
             status: "inactive",
             blocker: false,
@@ -40,7 +40,7 @@ export const getTileById = id => {
             src: isometric_pixel_3,
         }
         case 4: return {
-            id: id,
+            id: type,
             name: "grass",
             status: "inactive",
             blocker: false,
@@ -50,7 +50,7 @@ export const getTileById = id => {
             src: isometric_pixel_4,
         }
         case 5: return {
-            id: id,
+            id: type,
             name: "platinum",
             status: "inactive",
             blocker: false,
@@ -60,7 +60,7 @@ export const getTileById = id => {
             src: isometric_pixel_5,
         }
         case 6: return {
-            id: id,
+            id: type,
             name: "resin",
             status: "inactive",
             blocker: false,
@@ -70,7 +70,7 @@ export const getTileById = id => {
             src: isometric_pixel_6,
         }
         case 7: return {
-            id: id,
+            id: type,
             name: "ferrum",
             status: "inactive",
             blocker: false,
@@ -80,7 +80,7 @@ export const getTileById = id => {
             src: isometric_pixel_7,
         }
         case 8: return {
-            id: id,
+            id: type,
             name: "uranium",
             status: "inactive",
             blocker: false,

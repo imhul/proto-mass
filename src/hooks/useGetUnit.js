@@ -47,7 +47,7 @@ export const useGetUnit =  ({ name, isEnemy }) => {
                 x: 15,
                 y: 15,
             },
-            destination: [
+            path: [
                 // {
                     // x: ...,
                     // y: ...
