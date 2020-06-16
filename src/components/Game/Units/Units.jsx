@@ -129,7 +129,10 @@ const Units = memo(props => {
                                 unitId: unit.id,
                             },
                         }), unit.stats.speed);
-                    } else secondStep(true);
+                    } else {
+                        console.info("::::collision down::::");
+                        secondStep(true);
+                    }
                 }
                 // go left
                 else if (destination.y > unitPosY && destination.x < unitPosX) {
@@ -150,7 +153,10 @@ const Units = memo(props => {
                                 unitId: unit.id,
                             },
                         }), unit.stats.speed);
-                    } else secondStep(true);
+                    } else {
+                        console.info("::::collision left::::");
+                        secondStep(true);
+                    }
                 }
                 // go right
                 else if (destination.y < unitPosY && destination.x > unitPosX) {
@@ -171,7 +177,10 @@ const Units = memo(props => {
                                 unitId: unit.id,
                             },
                         }), unit.stats.speed);
-                    } else secondStep(true);
+                    } else {
+                        console.info("::::collision right::::");
+                        secondStep(true);
+                    }
                 }
                 // go up
                 else if (destination.y < unitPosY && destination.x < unitPosX) {
@@ -192,7 +201,10 @@ const Units = memo(props => {
                                 unitId: unit.id,
                             },
                         }), unit.stats.speed);
-                    } else secondStep(true);
+                    } else {
+                        console.info("::::collision up::::");
+                        secondStep(true);
+                    }
                 } 
                 // first line segment is done / start next line segment
                 else {
