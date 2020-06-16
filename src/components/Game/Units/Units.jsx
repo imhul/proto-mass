@@ -99,7 +99,6 @@ const Units = memo(props => {
     const [ direction, setDirection ] = useState("");
 
     const walking = useCallback((pathways, unit) => {
-        const waysCount = pathways.length;
 
         pathways.map(destination => {
             let firstStepDelay;
@@ -121,7 +120,7 @@ const Units = memo(props => {
                         obj.position.x === forwardX &&
                         obj.position.y === forwardY
                     );
-                    if (collisions.length < 1) {
+                    if (collisions.length < 1 && !isCollision) {
                         firstStepDelay = setTimeout(() => dispatch({ 
                             type: 'UNIT_WALKING', 
                             payload: {
@@ -135,38 +134,65 @@ const Units = memo(props => {
                 // go left
                 else if (destination.y > unitPosY && destination.x < unitPosX) {
                     setDirection("left");
-                    firstStepDelay = setTimeout(() => dispatch({ 
-                        type: 'UNIT_WALKING', 
-                        payload: {
-                            x: unitPosX - 1,
-                            y: unitPosY + 1,
-                            unitId: unit.id,
-                        },
-                    }), unit.stats.speed);
+                    const forwardX = unitPosX + 1;
+                    const forwardY = unitPosY + 1;
+                    const collisions = objectList.filter(obj => 
+                        obj.blocker && 
+                        obj.position.x === forwardX &&
+                        obj.position.y === forwardY
+                    );
+                    if (collisions.length < 1 && !isCollision) {
+                        firstStepDelay = setTimeout(() => dispatch({ 
+                            type: 'UNIT_WALKING', 
+                            payload: {
+                                x: unitPosX - 1,
+                                y: unitPosY + 1,
+                                unitId: unit.id,
+                            },
+                        }), unit.stats.speed);
+                    } else secondStep(true);
                 }
                 // go right
                 else if (destination.y < unitPosY && destination.x > unitPosX) {
                     setDirection("right");
-                    firstStepDelay = setTimeout(() => dispatch({ 
-                        type: 'UNIT_WALKING', 
-                        payload: {
-                            x: unitPosX + 1,
-                            y: unitPosY - 1,
-                            unitId: unit.id,
-                        },
-                    }), unit.stats.speed);
+                    const forwardX = unitPosX + 1;
+                    const forwardY = unitPosY + 1;
+                    const collisions = objectList.filter(obj => 
+                        obj.blocker && 
+                        obj.position.x === forwardX &&
+                        obj.position.y === forwardY
+                    );
+                    if (collisions.length < 1 && !isCollision) {
+                        firstStepDelay = setTimeout(() => dispatch({ 
+                            type: 'UNIT_WALKING', 
+                            payload: {
+                                x: unitPosX + 1,
+                                y: unitPosY - 1,
+                                unitId: unit.id,
+                            },
+                        }), unit.stats.speed);
+                    } else secondStep(true);
                 }
                 // go up
                 else if (destination.y < unitPosY && destination.x < unitPosX) {
                     setDirection("up");
-                    firstStepDelay = setTimeout(() => dispatch({ 
-                        type: 'UNIT_WALKING', 
-                        payload: {
-                            x: unitPosX - 1,
-                            y: unitPosY - 1,
-                            unitId: unit.id,
-                        },
-                    }), unit.stats.speed);
+                    const forwardX = unitPosX + 1;
+                    const forwardY = unitPosY + 1;
+                    const collisions = objectList.filter(obj => 
+                        obj.blocker && 
+                        obj.position.x === forwardX &&
+                        obj.position.y === forwardY
+                    );
+                    if (collisions.length < 1 && !isCollision) {
+                        firstStepDelay = setTimeout(() => dispatch({ 
+                            type: 'UNIT_WALKING', 
+                            payload: {
+                                x: unitPosX - 1,
+                                y: unitPosY - 1,
+                                unitId: unit.id,
+                            },
+                        }), unit.stats.speed);
+                    } else secondStep(true);
                 } 
                 // first line segment is done / start next line segment
                 else {
@@ -298,7 +324,7 @@ const Units = memo(props => {
             }
             return null
         })
-    }, [dispatch, direction]);
+    }, [dispatch, direction, objectList]);
 
     const working = useCallback(task => {
         console.info("working with task: ", task)
