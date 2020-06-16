@@ -104,11 +104,12 @@ const Units = memo(props => {
             const unitPosY = unit.position.y;
 
             const secondStep = () => {
+                clearTimeout(diagonalStepDelay);
                 switch(direction) {
                     case "down": 
                         if (destination.x === unitPosX) {
-                            stepDelay = setTimeout(() => dispatch({ 
-                                type: 'UNIT_SET_PATH_POINT', 
+                            stepDelay = setTimeout(() => dispatch({
+                                type: 'UNIT_WALKING',  
                                 payload: {
                                     x: unitPosX,
                                     y: unitPosY + 1,
@@ -116,8 +117,8 @@ const Units = memo(props => {
                                 },
                             }), unit.stats.speed)
                         } else if (destination.y === unitPosY) {
-                            stepDelay = setTimeout(() => dispatch({ 
-                                type: 'UNIT_SET_PATH_POINT',
+                            stepDelay = setTimeout(() => dispatch({
+                                type: 'UNIT_WALKING', 
                                 payload: {
                                     x: unitPosX + 1,
                                     y: unitPosY,
@@ -128,8 +129,8 @@ const Units = memo(props => {
                         break;
                     case "left": 
                         if (destination.x === unitPosX) {
-                            stepDelay = setTimeout(() => dispatch({ 
-                                type: 'UNIT_SET_PATH_POINT', 
+                            stepDelay = setTimeout(() => dispatch({
+                                type: 'UNIT_WALKING', 
                                 payload: {
                                     x: unitPosX,
                                     y: unitPosY + 1,
@@ -137,9 +138,8 @@ const Units = memo(props => {
                                 },
                             }), unit.stats.speed)
                         } else if (destination.x !== unitPosX) {
-                            console.log("new line X");
-                            stepDelay = setTimeout(() => dispatch({ 
-                                type: 'UNIT_SET_PATH_POINT', 
+                            stepDelay = setTimeout(() => dispatch({
+                                type: 'UNIT_WALKING', 
                                 payload: {
                                     x: unitPosX - 1,
                                     y: unitPosY,
@@ -150,8 +150,8 @@ const Units = memo(props => {
                         break;
                     case "right": 
                         if (destination.x === unitPosX) {
-                            stepDelay = setTimeout(() => dispatch({  
-                                type: 'UNIT_SET_PATH_POINT', 
+                            stepDelay = setTimeout(() => dispatch({
+                                type: 'UNIT_WALKING', 
                                 payload: {
                                     x: unitPosX,
                                     y: unitPosY - 1,
@@ -159,8 +159,8 @@ const Units = memo(props => {
                                 },
                             }), unit.stats.speed)
                         } else if (destination.y === unitPosY) {
-                            stepDelay = setTimeout(() => dispatch({ 
-                                type: 'UNIT_SET_PATH_POINT', 
+                            stepDelay = setTimeout(() => dispatch({
+                                type: 'UNIT_WALKING',  
                                 payload: {
                                     x: unitPosX + 1,
                                     y: unitPosY,
@@ -172,7 +172,7 @@ const Units = memo(props => {
                     case "up": 
                         if (destination.x === unitPosX) {
                             stepDelay = setTimeout(() => dispatch({ 
-                                type: 'UNIT_SET_PATH_POINT', 
+                                type: 'UNIT_WALKING', 
                                 payload: {
                                     x: unitPosX,
                                     y: unitPosY - 1,
@@ -180,14 +180,14 @@ const Units = memo(props => {
                                 },
                             }), unit.stats.speed)
                         } else if (destination.y === unitPosY) {
-                            dispatch({ 
-                                type: 'UNIT_SET_PATH_POINT', 
+                            stepDelay = setTimeout(() => dispatch({
+                                type: 'UNIT_WALKING', 
                                 payload: {
                                     x: unitPosX - 1,
                                     y: unitPosY,
                                     unitId: unit.id,
                                 },
-                            });
+                            }), unit.stats.speed)
                         }
                         break;
                     default: 
@@ -197,25 +197,54 @@ const Units = memo(props => {
             };
             
             const firstStep = () => {
+                clearTimeout(stepDelay);
                 // go down
                 if (destination.y > unitPosY && destination.x > unitPosX) {
                     setDirection("down");
-                    setPathPiont(unitPosX + 1, unitPosY + 1, unit.id)
+                    diagonalStepDelay = setTimeout(() => dispatch({ 
+                        type: 'UNIT_WALKING', 
+                        payload: {
+                            x: unitPosX + 1,
+                            y: unitPosY + 1,
+                            unitId: unit.id,
+                        },
+                    }), unit.stats.speed);
                 }
                 // go left
                 else if (destination.y > unitPosY && destination.x < unitPosX) {
                     setDirection("left");
-                    setPathPiont(unitPosX - 1, unitPosY + 1, unit.id)
+                    diagonalStepDelay = setTimeout(() => dispatch({ 
+                        type: 'UNIT_WALKING', 
+                        payload: {
+                            x: unitPosX - 1,
+                            y: unitPosY + 1,
+                            unitId: unit.id,
+                        },
+                    }), unit.stats.speed);
                 }
                 // go right
                 else if (destination.y < unitPosY && destination.x > unitPosX) {
                     setDirection("right");
-                    setPathPiont(unitPosX + 1, unitPosY - 1, unit.id)
+                    diagonalStepDelay = setTimeout(() => dispatch({ 
+                        type: 'UNIT_WALKING', 
+                        payload: {
+                            x: unitPosX + 1,
+                            y: unitPosY - 1,
+                            unitId: unit.id,
+                        },
+                    }), unit.stats.speed);
                 }
                 // go up
                 else if (destination.y < unitPosY && destination.x < unitPosX) {
                     setDirection("up");
-                    setPathPiont(unitPosX - 1, unitPosY - 1, unit.id)
+                    diagonalStepDelay = setTimeout(() => dispatch({ 
+                        type: 'UNIT_WALKING', 
+                        payload: {
+                            x: unitPosX - 1,
+                            y: unitPosY - 1,
+                            unitId: unit.id,
+                        },
+                    }), unit.stats.speed);
                 } 
                 // first line segment is done / start next line segment
                 else {
@@ -224,28 +253,7 @@ const Units = memo(props => {
                 }
             };
 
-            const setPathPiont = (x,y,id) => {
-                dispatch({ 
-                    type: 'UNIT_SET_PATH_POINT', 
-                    payload: {
-                        x: x,
-                        y: y,
-                        unitId: id,
-                    },
-                })
-            };
 
-            const doStep = (x,y,id) => {
-                // TODO walking after path exist
-                stepDelay = setTimeout(() => dispatch({ 
-                    type: 'UNIT_WALKING', 
-                    payload: {
-                        x: x,
-                        y: y,
-                        unitId: id,
-                    },
-                }), unit.stats.speed);
-            };
 
             if (destination.x && 
                 unitPosX && 
@@ -253,12 +261,12 @@ const Units = memo(props => {
                 unitPosY) 
             {
                 // ready to go
-                if ((destination.x !== unitPosX || destination.y !== unitPosY) || 
-                    (destination.x !== unitPosX && destination.y !== unitPosY))
-                {
-                    firstStep();
+                // if ((destination.x !== unitPosX || destination.y !== unitPosY) || 
+                //     (destination.x !== unitPosX && destination.y !== unitPosY))
+                // {
+                    
                 // unit reached destination
-                } else if (destination.x === unitPosX && destination.y === unitPosY) {
+                if (destination.x === unitPosX && destination.y === unitPosY) {
                     clearTimeout(stepDelay);
                     dispatch({ type: 'UNIT_STOP_WALKING', });
                     if (unit.status === "walk") {
@@ -275,7 +283,7 @@ const Units = memo(props => {
                             }
                         });
                     }
-                }
+                } else firstStep();
             }
             return null
         })

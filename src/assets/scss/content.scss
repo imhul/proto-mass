@@ -1,38 +1,38 @@
 @keyframes slideDown {
     from {
-        text-shadow: 4px 4px 0px #ff0045;
-        transform: translate(-50%, -50%) scale(.1);
+        text-shadow: 4px -4px 0 #ff0045, 8px -8px 0 #5500ff;
+        transform: translate(-50%, -50%) scale(.4);
         top: -20%;
     }
     10% {
-        text-shadow: 2px 2px 0px #ff0045;
+        text-shadow: 4px -4px 0 #ff0045, 8px -6px 0 #5500ff;
     }
     20% {
-        text-shadow: 0 0 0px #ff0045;
+        text-shadow: 4px -3px 0 #ff0045, 8px -4px 0 #5500ff;
     }
     30% {
-        text-shadow: -1px -1px 0px #ff0045;
+        text-shadow: 4px -2px 0 #ff0045, 8px -2px 0 #5500ff;
     }
     40% {
-        text-shadow: -2px -2px 0px #ff0045;
+        text-shadow: 4px -1px 0 #ff0045, 8px -1px 0 #5500ff;
     }
     50% {
-        text-shadow: -4px -4px 0px #ff0045;
+        text-shadow: 4px 0 0 #ff0045, 8px 0 0 #5500ff;
     }
     60% {
-        text-shadow: -2px -2px 0px #ff0045;
+        text-shadow: 4px 0 0 #ff0045, 8px 1px 0 #5500ff;
     }
     70% {
-        text-shadow: -1px -1px 0px #ff0045;
+        text-shadow: 4px 1px 0 #ff0045, 8px 2px 0 #5500ff;
     }
     80% {
-        text-shadow: 0 0 0px #ff0045;
+        text-shadow: 4px 2px 0 #ff0045, 8px 4px 0 #5500ff;
     }
     90% {
-        text-shadow: 2px 2px 0px #ff0045;
+        text-shadow: 4px 3px 0 #ff0045, 8px 6px 0 #5500ff;
     }
     to {
-        text-shadow: 4px 4px 0px #ff0045;
+        text-shadow: 4px 4px 0 #ff0045, 8px 8px 0 #5500ff;
         transform: translate(-50%, -50%) scale(1);
         top: 50%;
     }
@@ -68,7 +68,7 @@ main {
                 font-size: 13rem;
                 text-align: center;
                 color: #ff85e5;
-                text-shadow: 4px 4px 0px #ff0045;
+                text-shadow: 4px 4px 0 #ff0045, 8px 8px 0 #5500ff;
                 margin-bottom: 10px;
                 animation: slideDown 20s ease-in-out;
             }
@@ -78,8 +78,7 @@ main {
                 font-family: 'NK221';
                 font-size: 4rem;
                 text-align: center;
-                animation-duration: 6s;
-                animation-name: slideDown;
+                animation: slideDown 20s ease-in-out;
                 display: none;
             }
             .home-scene {
