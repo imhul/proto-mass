@@ -26,11 +26,6 @@ const firebaseConfig = {
     messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID,
 };
 
-// const credentials = {
-//   token: process.env.REACT_APP_USER_TOKEN,
-//   profile: { email: process.env.REACT_APP_USER_EMAIL }
-// };
-
 const credentials = {
     email: process.env.REACT_APP_USER_EMAIL,
     pass: process.env.REACT_APP_USER_PASS

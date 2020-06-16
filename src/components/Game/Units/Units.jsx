@@ -107,19 +107,30 @@ const Units = memo(props => {
             const unitPosX = unit.position.x;
             const unitPosY = unit.position.y;
 
-            const firstStep = () => {
+            const firstStep = isCollision => {
+                // stop prev step
                 clearTimeout(secondStepDelay);
+
                 // go down
                 if (destination.y > unitPosY && destination.x > unitPosX) {
                     setDirection("down");
-                    firstStepDelay = setTimeout(() => dispatch({ 
-                        type: 'UNIT_WALKING', 
-                        payload: {
-                            x: unitPosX + 1,
-                            y: unitPosY + 1,
-                            unitId: unit.id,
-                        },
-                    }), unit.stats.speed);
+                    const forwardX = unitPosX + 1;
+                    const forwardY = unitPosY + 1;
+                    const collisions = objectList.filter(obj => 
+                        obj.blocker && 
+                        obj.position.x === forwardX &&
+                        obj.position.y === forwardY
+                    );
+                    if (collisions.length < 1) {
+                        firstStepDelay = setTimeout(() => dispatch({ 
+                            type: 'UNIT_WALKING', 
+                            payload: {
+                                x: unitPosX + 1,
+                                y: unitPosY + 1,
+                                unitId: unit.id,
+                            },
+                        }), unit.stats.speed);
+                    } else secondStep(true);
                 }
                 // go left
                 else if (destination.y > unitPosY && destination.x < unitPosX) {
@@ -160,12 +171,14 @@ const Units = memo(props => {
                 // first line segment is done / start next line segment
                 else {
                     clearTimeout(firstStepDelay);                   
-                    secondStep();
+                    secondStep(false);
                 }
             };
 
-            const secondStep = () => {
+            const secondStep = isCollision => {
+                // stop prev step
                 clearTimeout(firstStepDelay);
+                // next step
                 switch(direction) {
                     case "down": 
                         if (destination.x === unitPosX) {
@@ -261,9 +274,7 @@ const Units = memo(props => {
                 unitPosX && 
                 destination.y && 
                 unitPosY) 
-            {
-                // ready to go
-                    
+            {       
                 // unit reached destination
                 if (destination.x === unitPosX && destination.y === unitPosY) {
                     clearTimeout(secondStepDelay);
@@ -282,7 +293,8 @@ const Units = memo(props => {
                             }
                         });
                     }
-                } else firstStep();
+                // ready to go
+                } else firstStep(false);
             }
             return null
         })

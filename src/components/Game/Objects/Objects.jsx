@@ -46,7 +46,6 @@ const Objects = memo(({ type }) => {
         {
             dispatch({ type: 'OBJECTS_CREATION_START' });
             indicateStart();
-            
         }
     }, [
         dispatch, 
@@ -73,13 +72,17 @@ const Objects = memo(({ type }) => {
                         damage: 0,
                         healthPoints: 100,
                     },
+                    blocker: true,
                     position: {
                         x: getRandomInt(1, 31),
                         y: getRandomInt(1, 31),
                         z: 1
                     }
                 }; 
-                const copies = objectList.filter(item => item.position.x !== obj.position.x && item.position.y !== obj.position.y);
+                const copies = objectList.filter(item => 
+                    item.position.x !== obj.position.x && 
+                    item.position.y !== obj.position.y
+                );
                 return copies < 1 ? obj : val // or null
             }
         );
