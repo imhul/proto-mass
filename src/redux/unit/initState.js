@@ -18,12 +18,6 @@ export const initState = {
             x: 0,
             y: 0,
         },
-        path: [
-            // {
-            //     x: ,
-            //     y: ,
-            // }
-        ],
         task: null,
         skills: [
             {

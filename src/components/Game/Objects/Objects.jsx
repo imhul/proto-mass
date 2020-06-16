@@ -1,5 +1,7 @@
 import React, { memo, useEffect, useCallback } from 'react';
 import { useSelector, useDispatch  } from 'react-redux';
+
+// Components
 import IsometricObject from '../Map/IsometricObject';
 
 // Utils
@@ -81,8 +83,6 @@ const Objects = memo(({ type }) => {
                 return copies < 1 ? obj : val // or null
             }
         );
-
-        
 
         if (objects && 
             objects.length === objectsLimit && 
