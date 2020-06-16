@@ -53,21 +53,18 @@ export default function unitReducer(state = initState, action) {
                 ...state,
             }
 
-        case types.UNIT_SET_PATH_POINT: 
-            // TODO:
-            const updateUnitPath = update(currentUnit, {
-                path: {
-                    $push: [{ 
-                        x: action.payload.x,
-                        y: action.payload.y,
-                    }]
-                },
+        case types.UNIT_WALKING: 
+            const updateUnitPosition = update(currentUnit, {
+                position: { 
+                    x: { $set: action.payload.x },
+                    y: { $set: action.payload.y },
+                 },
             });
 
             return {
                 ...state,
                 unitList: update(state.unitList, 
-                    { $merge: [updateUnitPath] }
+                    { $merge: [updateUnitPosition] }
                 ),
             }
 
