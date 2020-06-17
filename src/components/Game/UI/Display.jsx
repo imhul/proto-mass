@@ -117,7 +117,7 @@ const Display = memo(() => {
                     payload: output,
                     meta: true,
                 });
-                dispatch({ 
+                !isGameInit && dispatch({ 
                     type: 'LOADING_GAME_UPDATE', 
                     payload: getRandomInt(21, 31),
                     meta: "coordinate calculation"
