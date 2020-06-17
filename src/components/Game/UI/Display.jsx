@@ -130,7 +130,7 @@ const Display = memo(() => {
                 meta: false,
             });
         }
-    }, [isMapLoaded, isFirstResize, dispatch]);
+    }, [isMapLoaded, isFirstResize, isGameInit, dispatch]);
 
     useEffect(() => {
         window.addEventListener('contextmenu', prevent);

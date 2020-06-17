@@ -1,5 +1,5 @@
 export const initState = {
-    objectsLimit: 30,
+    objectsLimit: 100,
     objectList: [],
     isObjectsCreation: false,
     isObjectsCreated: false,

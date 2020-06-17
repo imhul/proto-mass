@@ -120,7 +120,7 @@ const Units = memo(props => {
                         obj.position.x === forwardX &&
                         obj.position.y === forwardY
                     );
-                    if (collisions.length < 1 && !isCollision) {
+                    if (collisions.length < 1) {
                         firstStepDelay = setTimeout(() => dispatch({ 
                             type: 'UNIT_WALKING', 
                             payload: {
@@ -128,6 +128,7 @@ const Units = memo(props => {
                                 y: unitPosY + 1,
                                 unitId: unit.id,
                             },
+                            meta: "down X+ Y+",
                         }), unit.stats.speed);
                     } else {
                         console.info("::::collision down::::");
@@ -137,14 +138,14 @@ const Units = memo(props => {
                 // go left
                 else if (destination.y > unitPosY && destination.x < unitPosX) {
                     setDirection("left");
-                    const forwardX = unitPosX + 1;
+                    const forwardX = unitPosX - 1;
                     const forwardY = unitPosY + 1;
                     const collisions = objectList.filter(obj => 
                         obj.blocker && 
                         obj.position.x === forwardX &&
                         obj.position.y === forwardY
                     );
-                    if (collisions.length < 1 && !isCollision) {
+                    if (collisions.length < 1) {
                         firstStepDelay = setTimeout(() => dispatch({ 
                             type: 'UNIT_WALKING', 
                             payload: {
@@ -152,6 +153,7 @@ const Units = memo(props => {
                                 y: unitPosY + 1,
                                 unitId: unit.id,
                             },
+                            meta: "left X- Y+",
                         }), unit.stats.speed);
                     } else {
                         console.info("::::collision left::::");
@@ -162,13 +164,13 @@ const Units = memo(props => {
                 else if (destination.y < unitPosY && destination.x > unitPosX) {
                     setDirection("right");
                     const forwardX = unitPosX + 1;
-                    const forwardY = unitPosY + 1;
+                    const forwardY = unitPosY - 1;
                     const collisions = objectList.filter(obj => 
                         obj.blocker && 
                         obj.position.x === forwardX &&
                         obj.position.y === forwardY
                     );
-                    if (collisions.length < 1 && !isCollision) {
+                    if (collisions.length < 1) {
                         firstStepDelay = setTimeout(() => dispatch({ 
                             type: 'UNIT_WALKING', 
                             payload: {
@@ -176,6 +178,7 @@ const Units = memo(props => {
                                 y: unitPosY - 1,
                                 unitId: unit.id,
                             },
+                            meta: "right X+ Y-",
                         }), unit.stats.speed);
                     } else {
                         console.info("::::collision right::::");
@@ -185,14 +188,14 @@ const Units = memo(props => {
                 // go up
                 else if (destination.y < unitPosY && destination.x < unitPosX) {
                     setDirection("up");
-                    const forwardX = unitPosX + 1;
-                    const forwardY = unitPosY + 1;
+                    const forwardX = unitPosX - 1;
+                    const forwardY = unitPosY - 1;
                     const collisions = objectList.filter(obj => 
                         obj.blocker && 
                         obj.position.x === forwardX &&
                         obj.position.y === forwardY
                     );
-                    if (collisions.length < 1 && !isCollision) {
+                    if (collisions.length < 1) {
                         firstStepDelay = setTimeout(() => dispatch({ 
                             type: 'UNIT_WALKING', 
                             payload: {
@@ -200,6 +203,7 @@ const Units = memo(props => {
                                 y: unitPosY - 1,
                                 unitId: unit.id,
                             },
+                            meta: "up X- Y-",
                         }), unit.stats.speed);
                     } else {
                         console.info("::::collision up::::");
@@ -214,92 +218,160 @@ const Units = memo(props => {
             };
 
             const secondStep = isCollision => {
+                console.info("::::secondStep isCollision::::", isCollision);
                 // stop prev step
                 clearTimeout(firstStepDelay);
+
+                let forwardX;
+                let forwardY;
+
+                const collisions = objectList.filter(obj => 
+                    obj.blocker && 
+                    obj.position.x === forwardX &&
+                    obj.position.y === forwardY
+                );
+                
                 // next step
                 switch(direction) {
                     case "down": 
+                        forwardX = unitPosX + 1;
+                        forwardY = unitPosY + 1;
+                        
                         if (destination.x === unitPosX) {
-                            secondStepDelay = setTimeout(() => dispatch({
-                                type: 'UNIT_WALKING',  
-                                payload: {
-                                    x: unitPosX,
-                                    y: unitPosY + 1,
-                                    unitId: unit.id,
-                                },
-                            }), unit.stats.speed)
+                            if (collisions.length < 1) {
+                                secondStepDelay = setTimeout(() => dispatch({
+                                    type: 'UNIT_WALKING',  
+                                    payload: {
+                                        x: unitPosX,
+                                        y: unitPosY + 1,
+                                        unitId: unit.id,
+                                    },
+                                    meta: "down Y+",
+                                }), unit.stats.speed)
+                            } else {
+                                console.info("::::collision secondStep down Y+::::");
+                                firstStep(true);
+                            }
                         } else if (destination.y === unitPosY) {
-                            secondStepDelay = setTimeout(() => dispatch({
-                                type: 'UNIT_WALKING', 
-                                payload: {
-                                    x: unitPosX + 1,
-                                    y: unitPosY,
-                                    unitId: unit.id,
-                                },
-                            }), unit.stats.speed)
+                            if (collisions.length < 1) {
+                                secondStepDelay = setTimeout(() => dispatch({
+                                    type: 'UNIT_WALKING', 
+                                    payload: {
+                                        x: unitPosX + 1,
+                                        y: unitPosY,
+                                        unitId: unit.id,
+                                    },
+                                    meta: "down X+",
+                                }), unit.stats.speed)
+                            } else {
+                                console.info("::::collision secondStep down X+::::");
+                                firstStep(true);
+                            }
                         }
                         break;
                     case "left": 
+                        forwardX = unitPosX - 1;
+                        forwardY = unitPosY + 1;
                         if (destination.x === unitPosX) {
-                            secondStepDelay = setTimeout(() => dispatch({
-                                type: 'UNIT_WALKING', 
-                                payload: {
-                                    x: unitPosX,
-                                    y: unitPosY + 1,
-                                    unitId: unit.id,
-                                },
-                            }), unit.stats.speed)
+                            if (collisions.length < 1) {
+                                secondStepDelay = setTimeout(() => dispatch({
+                                    type: 'UNIT_WALKING', 
+                                    payload: {
+                                        x: unitPosX,
+                                        y: unitPosY + 1,
+                                        unitId: unit.id,
+                                    },
+                                    meta: "left Y+",
+                                }), unit.stats.speed)
+                            } else {
+                                console.info("::::collision secondStep left Y+::::");
+                                firstStep(true);
+                            }
                         } else if (destination.x !== unitPosX) {
-                            secondStepDelay = setTimeout(() => dispatch({
-                                type: 'UNIT_WALKING', 
-                                payload: {
-                                    x: unitPosX - 1,
-                                    y: unitPosY,
-                                    unitId: unit.id,
-                                },
-                            }), unit.stats.speed)
+                            if (collisions.length < 1) {
+                                secondStepDelay = setTimeout(() => dispatch({
+                                    type: 'UNIT_WALKING', 
+                                    payload: {
+                                        x: unitPosX - 1,
+                                        y: unitPosY,
+                                        unitId: unit.id,
+                                    },
+                                    meta: "left X-",
+                                }), unit.stats.speed)
+                            } else {
+                                console.info("::::collision secondStep left X-::::");
+                                firstStep(true);
+                            }
                         }
                         break;
                     case "right": 
+                        forwardX = unitPosX + 1;
+                        forwardY = unitPosY - 1;
                         if (destination.x === unitPosX) {
-                            secondStepDelay = setTimeout(() => dispatch({
-                                type: 'UNIT_WALKING', 
-                                payload: {
-                                    x: unitPosX,
-                                    y: unitPosY - 1,
-                                    unitId: unit.id,
-                                },
-                            }), unit.stats.speed)
+                            if (collisions.length < 1) {
+                                secondStepDelay = setTimeout(() => dispatch({
+                                    type: 'UNIT_WALKING', 
+                                    payload: {
+                                        x: unitPosX,
+                                        y: unitPosY - 1,
+                                        unitId: unit.id,
+                                    },
+                                    meta: "right Y-",
+                                }), unit.stats.speed)
+                            } else {
+                                console.info("::::collision secondStep right Y-::::");
+                                firstStep(true);
+                            }
                         } else if (destination.y === unitPosY) {
-                            secondStepDelay = setTimeout(() => dispatch({
-                                type: 'UNIT_WALKING',  
-                                payload: {
-                                    x: unitPosX + 1,
-                                    y: unitPosY,
-                                    unitId: unit.id,
-                                },
-                            }), unit.stats.speed)
+                            if (collisions.length < 1) {
+                                secondStepDelay = setTimeout(() => dispatch({
+                                    type: 'UNIT_WALKING',  
+                                    payload: {
+                                        x: unitPosX + 1,
+                                        y: unitPosY,
+                                        unitId: unit.id,
+                                    },
+                                    meta: "right X+",
+                                }), unit.stats.speed)
+                            } else {
+                                console.info("::::collision secondStep right X+::::");
+                                firstStep(true);
+                            }
                         }
                         break;
                     case "up": 
+                        forwardX = unitPosX - 1;
+                        forwardY = unitPosY - 1;
                         if (destination.x === unitPosX) {
-                            secondStepDelay = setTimeout(() => dispatch({ 
-                                type: 'UNIT_WALKING', 
-                                payload: {
-                                    x: unitPosX,
-                                    y: unitPosY - 1,
-                                    unitId: unit.id,
-                                },
-                            }), unit.stats.speed)
+                            if (collisions.length < 1) {
+                                secondStepDelay = setTimeout(() => dispatch({ 
+                                    type: 'UNIT_WALKING', 
+                                    payload: {
+                                        x: unitPosX,
+                                        y: unitPosY - 1,
+                                        unitId: unit.id,
+                                    },
+                                    meta: "up Y-",
+                                }), unit.stats.speed)
+                            } else {
+                                console.info("::::collision secondStep up Y-::::");
+                                firstStep(true);
+                            }
                         } else if (destination.y === unitPosY) {
-                            secondStepDelay = setTimeout(() => dispatch({
-                                type: 'UNIT_WALKING', 
-                                payload: {
-                                    x: unitPosX - 1,
-                                    y: unitPosY,
-                                    unitId: unit.id,
-                                },
-                            }), unit.stats.speed)
+                            if (collisions.length < 1) {
+                                secondStepDelay = setTimeout(() => dispatch({
+                                    type: 'UNIT_WALKING', 
+                                    payload: {
+                                        x: unitPosX - 1,
+                                        y: unitPosY,
+                                        unitId: unit.id,
+                                    },
+                                    meta: "up X-",
+                                }), unit.stats.speed)
+                            } else {
+                                console.info("::::collision secondStep up X-::::");
+                                firstStep(true);
+                            }
                         }
                         break;
                     default: 
