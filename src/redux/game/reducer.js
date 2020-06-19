@@ -1,5 +1,6 @@
 import { types } from './types';
 import { initState } from './initState';
+import update from 'immutability-helper';
 
 export default function gameReducer(state = initState, action) {
     switch (action.type) {
@@ -127,6 +128,14 @@ export default function gameReducer(state = initState, action) {
             return {
                 ...state,
                 isGameMenuOpen: !state.isGameMenuOpen,
+            }
+
+        case types.START_GAME_FORM_UPDATE:
+            return {
+                ...state,
+                startGameForm: update(state.startGameForm, 
+                    { $set: action.payload }
+                )
             }
 
         default:

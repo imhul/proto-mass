@@ -26,7 +26,8 @@
     "email": "blashirk@gmail.com"
   },
   "dependencies": {
-    "antd": "^3.25.2",
+    "@ant-design/icons": "latest",
+    "antd": "4.3.4",
     "connected-react-router": "^6.6.0",
     "firebase": "^7.14.3",
     "history": "^4.10.1",

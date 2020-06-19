@@ -12,7 +12,7 @@ const Preloader = memo(props => {
         if (props.format === null) {
             return null
         } else if (props.format === undefined) {
-            return `${preloaderTitle.length > 0 ? preloaderTitle : "loading..." } ${percent}%`
+            return `${preloaderTitle && preloaderTitle.length > 0 ? preloaderTitle : "loading..." } ${percent}%`
         } else return `${percent} ${props.format}`
     };
     

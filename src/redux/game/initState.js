@@ -17,7 +17,9 @@ export const initState = {
     settings: {
         volume: 0.5,
     },
-    colonyName: "",
+    startGameForm: {
+        colonyName: "",
+    },
     save: {
         // id: "",
         // gameHours: 0,

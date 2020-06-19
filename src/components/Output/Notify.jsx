@@ -1,9 +1,18 @@
 import React from 'react';
-// import { useSelector, useDispatch } from 'react-redux';
-import { notification, Icon } from 'antd';
+
+// Components
+import { notification } from 'antd';
+import {
+    WarningTwoTone,
+    InfoCircleTwoTone,
+    SaveTwoTone,
+    CheckCircleTwoTone,
+  } from '@ant-design/icons';
+
+// utils
 import uuidv5 from 'uuid/v5';
 
-const Notify = (notify) => {
+const Notify = notify => {
     // const dispatch = useDispatch();
     const arr = new Array(16);
     const notifyId = uuidv5(notify.message, arr);
@@ -16,16 +25,36 @@ const Notify = (notify) => {
             default: return "#33F6F9";
         }
     }
+    const icon = () => {
+        switch(notify.icon) {
+            case "warning": return <WarningTwoTone
+                theme="twoTone" 
+                twoToneColor={color()}
+            />;
+            case "info": return <InfoCircleTwoTone
+                theme="twoTone" 
+                twoToneColor={color()}
+            />;
+            case "save": return <SaveTwoTone
+                theme="twoTone" 
+                twoToneColor={color()}
+            />;
+            case "success": return <CheckCircleTwoTone
+                theme="twoTone" 
+                twoToneColor={color()}
+            />;
+            default: return <InfoCircleTwoTone
+                theme="twoTone" 
+                twoToneColor={color()}
+            />;
+        }
+    }
 
     notification.open({
         message: notify.message ? notify.message : '',
         description: notify.description ? notify.description : '',
         key: notifyId,
-        icon: <Icon 
-            type={notify.icon} 
-            theme="twoTone" 
-            twoToneColor={color()} 
-        />,
+        icon: icon(),
         duration: notify.duration,
         placement: notify.placement,
         className: "Notify",

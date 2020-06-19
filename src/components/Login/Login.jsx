@@ -3,20 +3,25 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useHistory, useLocation } from "react-router-dom";
 import { firestore } from '../../redux/store';
 import { useCookies, withCookies } from 'react-cookie';
-import uuidv5 from 'uuid/v5';
 
 // Components
-import { Card, Form, Icon, Input, Button, Checkbox } from 'antd';
+import { Card, Form, Input, Button, Checkbox } from 'antd';
+import {
+    UserOutlined,
+    LockOutlined,
+} from '@ant-design/icons';
 import Notify from '../Output/Notify';
+
+// utils
+import uuidv5 from 'uuid/v5';
 
 const FormItem = Form.Item;
 
-const LoginForm = props => {
+const NormalLoginForm = props => {
 
     const history = useHistory();
     const location = useLocation();
     const dispatch = useDispatch();
-    const { getFieldDecorator } = props.form;
     const { isAuthenticated, user } = useSelector(state => state.auth);
     const { profile, auth } = useSelector(state => state.firebase);
     const [cookies, setCookie, removeCookie] = useCookies(['userId']);
@@ -55,89 +60,72 @@ const LoginForm = props => {
                     duration: 3
                 })
             });
-    }, [ profile, auth, dispatch, isAuthenticated ]);
+    }, [profile, auth, dispatch, isAuthenticated]);
 
-    const onSubmit = useCallback(e => {
-        e.preventDefault();
-        props.form.validateFields((error, values) => {
-
-            if (!error) {
-
-                // if (values.username.length >= 4 && values.password.length >= 8) {
-                //   let newId;
-                //   if (!user.id && isHasCookies && !cookiesFromProps.userId) {
-                //     const arr = new Array(16);
-                //     newId = uuidv5(values.username, arr); 
-                //     setUserIdCookie(newId);         
-                //   } else if (isHasCookies && cookiesFromProps.userId) {
-                //     newId = cookiesFromProps.userId;
-                //   }
-
-                //   dispatch({ 
-                //     type: 'SET_AUTH_LOGIN', 
-                //     payload: { 
-                //     login: values.username, 
-                //       pass: values.password, 
-                //       remember: values.remember,
-                //       id: newId,
-                //       avatar: user.avatar,
-                //     } 
-                //   });
-
-                if (isAuthenticated) history.replace('./game');
-
-            } else {
-                console.warn('Received values error: ', error);
-            }
-        });
-    }, [ isAuthenticated, history, props.form ]); // dispatch
+    const onFinish = useCallback(values => {
+        if (isAuthenticated) history.replace('./game');
+        console.log('Received values of form: ', values);
+    }, [isAuthenticated, history]); // dispatch
 
     return (
-        <Card className="Login game-modal">
+        <Card className="game-modal">
             <p className="hello">Hello, voyager!</p>
-            <Form onSubmit={(form) => onSubmit(form)} className="login-form">
-                <FormItem>
-                    {getFieldDecorator('username', {
-                        rules: [{ required: false, message: 'Please input your username!' }], // required: true
-                    })(
-                        <Input autoComplete="off"
-                            prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
-                            placeholder="Username"
-                        />,
-                    )}
+            <Form
+                name="normal_login"
+                className="login-form"
+                initialValues={{
+                    remember: true,
+                }}
+                onFinish={onFinish}
+            >
+                <FormItem
+                    name="username"
+                    rules={[
+                        {
+                            required: false, // true
+                            message: 'Please input your Username!',
+                        },
+                    ]}
+                >
+                    <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Username" />
                 </FormItem>
-                <FormItem>
-                    {getFieldDecorator('password', {
-                        rules: [{ required: false, message: 'Please input your Password!' }], // required: true
-                    })(
-                        <Input
-                            prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
-                            type="password"
-                            placeholder="Password"
-                        />,
-                    )}
+                <FormItem
+                    name="password"
+                    rules={[
+                        {
+                            required: false, // true
+                            message: 'Please input your Password!',
+                        },
+                    ]}
+                >
+                    <Input
+                        prefix={<LockOutlined className="site-form-item-icon" />}
+                        type="password"
+                        placeholder="Password"
+                    />
                 </FormItem>
                 <FormItem className="flex-item">
-                    {getFieldDecorator('remember', {
-                        valuePropName: 'checked',
-                        initialValue: true,
-                    })(<Checkbox>Remember me</Checkbox>)}
+                    <FormItem name="remember" valuePropName="checked" noStyle>
+                        <Checkbox>Remember me</Checkbox>
+                    </FormItem>
+
                     <Button type="primary" htmlType="submit" className="login-form-button">
-                        Login
+                        Log in
                     </Button>
                 </FormItem>
+
                 <FormItem>
                     <a className="login-form-forgot" href="/reset">
                         Forgot password?
                     </a>
-                    <br />
-                    <a href="/register">Register now!</a>
+                </FormItem>
+                
+                <FormItem>
+                    <a href="/register">Registration</a>
                 </FormItem>
             </Form>
         </Card>
     );
-}
+};
 
-const Login = Form.create({ name: 'login' })(LoginForm);
-
-export default withCookies(Login);
+export default withCookies(NormalLoginForm);
