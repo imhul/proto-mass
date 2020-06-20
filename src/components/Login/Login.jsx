@@ -39,7 +39,6 @@ const NormalLoginForm = props => {
             .get()
             .then(doc => {
                 const data = doc.data();
-                // console.info('doc.id: ', doc.id);
                 if (data) {
                     if (!isAuthenticated && profile.isLoaded && auth.isLoaded) {
                         dispatch({ type: 'SET_AUTH_LOGIN', payload: data });
@@ -110,7 +109,7 @@ const NormalLoginForm = props => {
                     </FormItem>
 
                     <Button type="primary" htmlType="submit" className="login-form-button">
-                        Log in
+                        Login
                     </Button>
                 </FormItem>
 
