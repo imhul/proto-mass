@@ -11,7 +11,10 @@ body {
         }
     }
     a {
-        color: #F804FB;
+        color: $game-color-border;
+        &:hover {
+            color: $game-color;
+        }
     }
     button {
         border-radius: 0;
@@ -19,7 +22,7 @@ body {
     input {
         border-radius: 0;
         &:-internal-autofill-selected {
-            background-color: #051C5F !important;
+            background-color: $game-color-bg !important;
         }
     }
     div {
@@ -38,13 +41,14 @@ body {
         min-width: 230px;
         .ant-input-affix-wrapper {
             padding: 10px 15px;
-            color: #33F6F9;
-            background-color: #051C5F;
-            border: 2px solid #33F6F9;
-            box-shadow: 2px 2px 0 #F804FB;
+            color: $game-color-border;
+            background-color: $game-color-bg;
+            border: 2px solid $game-color;
+            box-shadow: 2px 2px 0 $game-color-border;
             border-radius: 0;
             .ant-input-prefix {
-                margin-right: 10px;
+                margin-right: 15px;
+                font-size: 16px;
             }
         }
         .ant-form-item {
@@ -56,47 +60,71 @@ body {
                 }
             }
             .ant-input {
-                color: #33F6F9;
-                border: 2px solid #33F6F9;
-                background-color: #051C5F !important;
+                color: $game-color-border;
+                border: 2px solid $game-color;
+                background-color: $game-color-bg !important;
                 border-radius: 0;
-                box-shadow: 2px 2px 0 #F804FB;
+                box-shadow: 2px 2px 0 $game-color-border;
                 padding: 5px 10px;
                 &::-webkit-input-placeholder {
-                    color: #33F6F9;
+                    color: $game-color-border;
                 }
             }
         }
         label {
             font-family: CourierPrime-Regular;
-            color: #F804FB;
+            color: $game-color-border;
             &::before {
                 font-family: CourierPrime-Regular !important;
-                color: #F804FB !important;
+                color: $game-color-border !important;
             }
         }
         .ant-btn {
-            background-color: #051C5F;
-            border: 2px solid #33F6F9;
-            box-shadow: 2px 2px 0 #F804FB;
-            color: #F804FB;
+            background-color: $game-color-bg;
+            border: 2px solid $game-color;
+            box-shadow: 2px 2px 0 $game-color-border;
+            color: $game-color-border;
             line-height: 25px;
             font-size: 14px;
             text-transform: uppercase;
             border-radius: 0;
+            &:hover {
+                background-color: $game-color-border;
+                color: $game-color;
+            }
         }
         .ant-checkbox-wrapper {
-            color: #33F6F9;
+            color: $game-color-border;
+            &:hover {
+                color: $game-color;
+                .ant-checkbox {
+                    &::after {
+                        border: 2px solid $game-color;
+                    }
+                }
+            }
             .ant-checkbox {
+                &:hover {
+                    &::after {
+                        border: 2px solid $game-color;
+                    }
+                }
                 .ant-checkbox-inner {
-                    background-color: #F804FB;
-                    border-color: #F804FB;
+                    background-color: $game-color-border;
+                    border-color: $game-color-border;
                     border-radius: 0;
                     &::after {
-                        border-color: #051C5F;
+                        border-color: $game-color-bg;
                     }
                 }
             }
         }
+    }
+}
+
+* {
+    ::selection {
+        color: $transparent;
+        background: $transparent;
     }
 }

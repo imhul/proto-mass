@@ -1,24 +1,26 @@
-import React, { useEffect } from 'react';
+import React, { useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useCookies, withCookies } from 'react-cookie';
+
+// Components
 import { Slider } from 'antd';
 
-const SoundSlider = () => {
+// Utils
+import { playSFX } from '../../utils';
+
+// Sounds
+import MapClick from '../../assets/sound/map_click.ogg';
+
+const SoundSlider = ({showResult = true}) => {
 
     const dispatch = useDispatch();
     const { settings } = useSelector(state => state.game);
-    const [cookies, setCookie] = useCookies(['volume']);
 
-    const setVolume = value => {
-        setCookie('volume', value, { path: '/' });
-        dispatch({ type: 'SET_VOLUME', payload: value });
-    }
-
-    useEffect(() => {
-        if (cookies.volume) {
-            dispatch({ type: 'SET_VOLUME', payload: +cookies.volume });
+    const setVolume = useCallback(value => {
+        playSFX(MapClick, value);
+        if (settings.volume !== value) {
+            dispatch({ type: 'SET_VOLUME', payload: value });
         }
-    }, [dispatch, cookies.volume]);
+    }, [dispatch, settings.volume]);
 
     return (
         <div className="SoundSlider">
@@ -27,23 +29,25 @@ const SoundSlider = () => {
                     min={0}
                     max={1}
                     step={0.01}
-                    onChange={value => setVolume(value)}
-                    value={settings.volume}
+                    onAfterChange={value => setVolume(value)}
+                    defaultValue={settings.volume}
                 />
             </div>
-            <div className="input">
-                <span>{settings.volume}</span>
-                {/* <InputNumber
-                    readonly
-                    min={0}
-                    max={1}
-                    step={0.01}
-                    value={settings.volume}
-                    onChange={value => dispatch({ type: 'SET_VOLUME', payload: value })}
-                /> */}
-            </div>
+            { 
+                showResult && <div className="input">
+                    <span>{settings.volume}</span>
+                    {/* <InputNumber
+                        readonly
+                        min={0}
+                        max={1}
+                        step={0.01}
+                        value={settings.volume}
+                        onChange={value => dispatch({ type: 'SET_VOLUME', payload: value })}
+                    /> */}
+                </div>
+            }
         </div>
     );
 }
 
-export default withCookies(SoundSlider);
+export default SoundSlider;

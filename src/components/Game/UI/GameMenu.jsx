@@ -1,9 +1,9 @@
 import React, { memo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from "react-router-dom";
-import { Drawer, Typography } from 'antd';
 
 // Components
+import { Drawer, Typography } from 'antd';
 import SoundSlider from '../../Output/SoundSlider';
 import Notify from '../../Output/Notify';
 
@@ -18,17 +18,17 @@ const GameMenu = memo(() => {
     const { clickPosition, isDraggable, zoom } = useSelector(state => state.map);
     const { unitList } = useSelector(state => state.unit);
 
-    const onExit = () => {
+    const onExitGame = () => {
         dispatch({ type: 'EXIT_GAME' })
         history.push('/');
     };
 
-    const onDrawer = () => {
+    const gameMenuTrigger = () => {
         dispatch({ type: 'TOGGLE_DRAWER' });
         dispatch({ type: 'TOGGLE_PAUSE_GAME' });
     }
 
-    const onSave = () => {
+    const onSaveGame = () => {
         dispatch({ 
             type: 'SAVE_GAME', 
             payload: { 
@@ -51,6 +51,10 @@ const GameMenu = memo(() => {
         })
     };
 
+    const onLoadGame = () => {
+        console.warn("onLoadGame is run!");
+    }
+
     return (
         <>
             <span className="Stats">
@@ -70,17 +74,17 @@ const GameMenu = memo(() => {
                 
                 <i 
                 className="anticon game-menu-btn touchable" 
-                onClick={() => onDrawer() }>j</i>
+                onClick={() => gameMenuTrigger() }>j</i>
             </span>
                 {/* TODO: resolve fullscreen Drawer visibility */}
             <Drawer
                 title="MENU"
                 placement="right"
                 closable={false}
-                onClose={() => onDrawer()}
+                onClose={() => gameMenuTrigger()}
                 visible={isGameMenuOpen}
             >
-                <div className="touchable" onClick={() => onDrawer()}>
+                <div className="touchable" onClick={() => gameMenuTrigger()}>
                     <i className="anticon">7</i>
                     <Title level={4}>CONTINUE</Title>
                 </div>
@@ -96,13 +100,17 @@ const GameMenu = memo(() => {
                     <Title level={4}>SOUND LEVEL</Title>
                 </div>
                 <div>
-                    <SoundSlider />
+                    <SoundSlider style={{width: 150}} />
                 </div>
-                <div className="touchable" onClick={() => onSave()}>
+                <div className="touchable" onClick={() => onSaveGame()}>
                     <i className="anticon">6</i>
                     <Title level={4}>SAVE GAME</Title>
                 </div>
-                <div className="touchable" onClick={() => onExit()}>
+                <div className="touchable" onClick={() => onLoadGame()}>
+                    <i className="anticon">6</i>
+                    <Title level={4}>LOAD GAME</Title>
+                </div>
+                <div className="touchable" onClick={() => onExitGame()}>
                     <i className="anticon">r</i>
                     <Title level={4}>EXIT GAME</Title>
                 </div>

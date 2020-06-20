@@ -1,0 +1,38 @@
+.SoundSlider {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .input {
+        width: 60px;
+        padding-left: 8px;
+        span {
+            border: 0;
+            width: 100%;
+            margin-left: 10px !important;
+            color: $game-color;
+            background-color: $transparent;
+        }
+    }
+    .slider {
+        width: 100%;
+        .ant-slider {
+            height: 18px;
+            margin: 0;
+            .ant-slider-rail {
+                background-color: $game-color-border;
+                height: 8px;
+            }
+            .ant-slider-track {
+                background-color: $game-color;
+                height: 8px;
+            }
+            .ant-slider-handle {
+                width: 18px;
+                height: 18px;
+                background-color: $game-color-border;
+                border: solid 4px $game-color;
+                border-radius: 0;
+            }
+        }
+    }
+}

@@ -10,8 +10,8 @@
 .game-active {
 	cursor: url("../img/cur.gif") !important;
 
-	// background
-	background: radial-gradient(circle, rgba(17, 23, 25, 1) 80%, rgba(10, 13, 15, 1) 100%);
+	// space background
+	background: radial-gradient(circle, #000 75%, #111719 100%);
 
 	#bg-game {
 		background: url(../img/parallax_3.png) repeat 50% 50%;
@@ -191,7 +191,7 @@
 					height: calc(var(--p-size-unit) * var(--p-tile-size));
 					box-sizing: border-box;
 					position: absolute;
-					background: rgba(0, 0, 0, 0);
+					background: $transparent;
 					border: 0;
 					z-index: 8;
 					// z-index: calc((var(--x) + var(--y) * var(--p-tile-size)) / 2 + 3);
@@ -312,10 +312,10 @@
 
 	.info-block {
 		font-family: "PressStart2P-Regular";
-		background-color: #051C5F;
-		border: 3px solid #33F6F9;
+		background-color: $game-color-bg;
+		border: 3px solid $game-color;
 		flex-direction: column;
-		color: #33F6F9;
+		color: $game-color;
 		font-size: 1em;
 		display: flex;
 		padding: 25px;
@@ -323,8 +323,8 @@
 		opacity: .8;
 		width: 100%;
 		button {
-			border: 2px solid #33F6F9;
-			background-color: #F804FB;
+			border: 2px solid $game-color;
+			background-color: $game-color-border;
 			margin: 0 5px;
 		}
 		.hover-box {

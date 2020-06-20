@@ -1,19 +1,31 @@
 .Output {
-    header {
+    .ant-layout-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
         z-index: 998;
-        color: #33F6F9;
+        color: $game-color;
+        background: $game-color-bg;
         font-family: "PressStart2P-Regular";
         // font-size: 26px;
         .ant-menu {
             text-transform: uppercase;
+            color: $game-color;; 
+            background: $game-color-bg;
             .ant-menu-item {
-                color: #33F6F9;
-                text-shadow: 1px 1px 0px #F804FB;
+                color: $game-color;
+                text-shadow: 2px 2px 0px $game-color-border;
+                border-color: $transparent;
                 &.ant-menu-item-selected {
-                    background-color: #33F6F9;
+                    background-color: $game-color;
+                    span {
+                        color: $game-color-border;
+                        text-shadow: 2px 2px 0px $game-color-bg;
+                    }
+                    i {
+                        color: $game-color-border;
+                        text-shadow: 2px 2px 0px $game-color-bg; 
+                    }
                 }
                 i {
                     font-size: 36px;
@@ -28,18 +40,19 @@
             }
         } 
         .UserMenu {
-            background-color: #051C5F;
-            box-shadow: 1px 1px 0 #F804FB;
-            border: 1px solid #33F6F9;
+            background-color: $game-color-bg;
+            box-shadow: 2px 2px 0 $game-color-border;
+            border: 2px solid $game-color;
             height: 40px;
             min-width: 150px;
-            color: #33F6F9;
+            color: $game-color;
             span {
                 display: flex;
                 justify-content: space-around;
                 align-items: center;
                 height: 100%;
                 font-family: "CourierPrime-Regular";
+                color: $game-color-border;
                 canvas {
                     width: 30px !important;
                     height: 30px !important;
@@ -49,7 +62,7 @@
         }
         .Stats {
             z-index: 999;
-            color: #33F6F9; 
+            color: $game-color; 
             font-family: "PressStart2P-Regular";
             font-size: 26px;
         }
@@ -59,41 +72,41 @@
             vertical-align: middle;
             width: 64px;
             z-index: 999;
-            color: #33F6F9;
+            color: $game-color;
         }
         .game-menu-text-btn {
             font-size: 50px;
             font-family: "PressStart2P-Regular";
             vertical-align: middle;
             z-index: 999;
-            color: #33F6F9;
+            color: $game-color;
         }
     }
 }
 
 .ant-popover {
     .ant-popover-arrow {
-        border-top-color: #33F6F9 !important;
-        border-left-color: #33F6F9 !important;
+        border-top-color: $game-color !important;
+        border-left-color: $game-color !important;
     }
     .ant-popover-inner {
         border-radius: 0;
-        background-color: #051C5F;
-        box-shadow: 1px 1px 0 #F804FB;
-        border: 3px solid #33F6F9;
+        background-color: $game-color-bg;
+        box-shadow: 2px 2px 0 $game-color-border;
+        border: 3px solid $game-color;
         .ant-popover-title {
-            color: #33F6F9;
-            border-bottom: 3px solid #33F6F9;
+            color: $game-color;
+            border-bottom: 3px solid $game-color;
         }
         .ant-popover-inner-content {
             button {
                 display: block;
                 width: 100%;
                 border-radius: 0;
-                background-color: #051C5F;
-                box-shadow: 1px 1px 0 #F804FB;
-                border: 1px solid #33F6F9;
-                color: #F804FB;
+                background-color: $game-color-bg;
+                box-shadow: 2px 2px 0 $game-color-border;
+                border: 2px solid $game-color;
+                color: $game-color-border;
                 text-transform: uppercase;
             }
         }

@@ -1,26 +1,45 @@
 .game-modal {
-    background-color: #051C5F;
-    border: 3px solid #33F6F9;
-    box-shadow: 2px 2px 0 #F804FB;
+    background-color: $game-color-bg;
+    border: 3px solid $game-color;
+    box-shadow: 2px 2px 0 $game-color-border;
     border-radius: 0;
+    max-width: 50%;
     .ant-card-body {
-        color: #33F6F9;
+        color: $game-color;
+        font-size: 16px;
         .hello {
             font-family: "PressStart2P-Regular";
-            text-shadow: 1px 1px 0 #F804FB;
+            text-shadow: 2px 2px 0 $game-color-border;
             text-align: center;
         }
         .game-btn {
-            color: #33F6F9;
-            border: 2px solid #33F6F9;
-            background-color: #051C5F;
+            color: $game-color-border;
+            border: 2px solid $game-color;
+            background-color: $game-color-bg;
             border-radius: 0;
-            box-shadow: 1px 1px 0 #F804FB;
-            margin: 35px auto;
-            display: block;
-            &:nth-child(1) {
-                margin-top: 50px !important;
+            box-shadow: 2px 2px 0 $game-color-border;
+            margin: 20px auto;
+            font-size: 16px;
+            &:hover {
+                background-color: $game-color-border;
+                color: $game-color;
             }
+        }
+        .game-menu-icon {
+            font-family: "PixelIconsCompilation";
+            vertical-align: middle;
+            font-size: 30px;
+            line-height: 30px;
+            z-index: 999;
+            color: $game-color-bg;
+            margin-right: 15px;
+        }
+        .game-menu-text-icon {
+            font-size: 30px;
+            font-family: "PressStart2P-Regular";
+            vertical-align: middle;
+            z-index: 999;
+            color: $game-color;
         }
     }
 }
@@ -32,5 +51,8 @@
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
+        &.start-game {
+            width: 600px !important;
+        }
     }
 }

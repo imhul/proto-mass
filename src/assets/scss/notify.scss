@@ -1,13 +1,13 @@
 .ant-notification {
     .Notify {
-        color: #33F6F9;
-        background-color: #051C5F;
-        border: 3px solid #33F6F9;
+        color: $game-color;
+        background-color: $game-color-bg;
+        border: 3px solid $game-color;
         .ant-notification-notice-message {
-            color: #33F6F9;
+            color: $game-color;
         }
         .anticon-close {
-            color: #33F6F9;
+            color: $game-color;
         }
     }
 }

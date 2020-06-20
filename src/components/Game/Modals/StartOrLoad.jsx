@@ -37,19 +37,25 @@ const StartOrLoadModal = memo(() => {
         <Card className="game-modal">
             <p className="hello">Hello, voyager!</p>
 
-            <Button className="game-btn"
+            <Button 
+                block={true}
+                className="game-btn"
                 onClick={() => onStartNewGame()}
             >
                 Start New Game
             </Button>
 
-            <Button className="game-btn"
+            <Button
+                block={true}
+                className="game-btn"
                 onClick={() => onLoadSavedGame()}
             >
                 Load Saved Game
             </Button>
 
-            <Button className="game-btn"
+            <Button
+                block={true}
+                className="game-btn"
                 onClick={() => onExitGame()}
             >
                 Exit Game
