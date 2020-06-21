@@ -3,14 +3,14 @@
     .ant-drawer-content-wrapper {
         z-index: 1001;
         .ant-drawer-content {
-            background-color: $game-color-bg;
-            box-shadow: -2px 0 0 $game-color-border;
+            background-color: $game-color-dark;
+            box-shadow: -2px 0 0 $game-color-darkest;
             border: 3px solid $game-color;
             .ant-drawer-wrapper-body {
                 overflow: hidden;
                 .ant-drawer-header {
                     color: $game-color;
-                    background: $game-color-bg;
+                    background: $game-color-dark;
                     border-bottom: 3px solid $game-color;
                     border-radius: 0;
                     text-align: center;

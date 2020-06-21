@@ -1,7 +1,7 @@
 .game-modal {
-    background-color: $game-color-bg;
+    background-color: $game-color-dark;
     border: 3px solid $game-color;
-    box-shadow: 2px 2px 0 $game-color-border;
+    box-shadow: 2px 2px 0 $game-color-darkest;
     border-radius: 0;
     max-width: 50%;
     .ant-card-body {
@@ -9,37 +9,8 @@
         font-size: 16px;
         .hello {
             font-family: "PressStart2P-Regular";
-            text-shadow: 2px 2px 0 $game-color-border;
+            text-shadow: 2px 2px 0 $game-color-darkest;
             text-align: center;
-        }
-        .game-btn {
-            color: $game-color-border;
-            border: 2px solid $game-color;
-            background-color: $game-color-bg;
-            border-radius: 0;
-            box-shadow: 2px 2px 0 $game-color-border;
-            margin: 20px auto;
-            font-size: 16px;
-            &:hover {
-                background-color: $game-color-border;
-                color: $game-color;
-            }
-        }
-        .game-menu-icon {
-            font-family: "PixelIconsCompilation";
-            vertical-align: middle;
-            font-size: 30px;
-            line-height: 30px;
-            z-index: 999;
-            color: $game-color-bg;
-            margin-right: 15px;
-        }
-        .game-menu-text-icon {
-            font-size: 30px;
-            font-family: "PressStart2P-Regular";
-            vertical-align: middle;
-            z-index: 999;
-            color: $game-color;
         }
     }
 }

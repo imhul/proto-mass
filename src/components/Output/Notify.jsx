@@ -18,11 +18,11 @@ const Notify = notify => {
     const notifyId = uuidv5(notify.message, arr);
     const color = () => {
         switch(notify.type) {
-            case "warn": return "#F804FB";
-            case "info": return "#33F6F9";
-            case "error": return "#F804FB";
-            case "success": return "#52c41a";
-            default: return "#33F6F9";
+            case "warn": return "#816271";
+            case "info": return "#20394F";
+            case "error": return "#811350";
+            case "success": return "#838A54";
+            default: return "#20394F";
         }
     }
     const icon = () => {

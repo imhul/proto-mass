@@ -19,7 +19,7 @@
             height: 18px;
             margin: 0;
             .ant-slider-rail {
-                background-color: $game-color-border;
+                background-color: $game-color-darkest;
                 height: 8px;
             }
             .ant-slider-track {
@@ -29,7 +29,7 @@
             .ant-slider-handle {
                 width: 18px;
                 height: 18px;
-                background-color: $game-color-border;
+                background-color: $game-color-darkest;
                 border: solid 4px $game-color;
                 border-radius: 0;
             }

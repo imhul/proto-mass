@@ -5,26 +5,26 @@
         align-items: center;
         z-index: 998;
         color: $game-color;
-        background: $game-color-bg;
+        background: $game-color-dark;
         font-family: "PressStart2P-Regular";
         // font-size: 26px;
         .ant-menu {
             text-transform: uppercase;
             color: $game-color;; 
-            background: $game-color-bg;
+            background: $game-color-dark;
             .ant-menu-item {
                 color: $game-color;
-                text-shadow: 2px 2px 0px $game-color-border;
+                text-shadow: 2px 2px 0px $game-color-darkest;
                 border-color: $transparent;
                 &.ant-menu-item-selected {
                     background-color: $game-color;
                     span {
-                        color: $game-color-border;
-                        text-shadow: 2px 2px 0px $game-color-bg;
+                        color: $game-color-darkest;
+                        text-shadow: 2px 2px 0px $game-color-dark;
                     }
                     i {
-                        color: $game-color-border;
-                        text-shadow: 2px 2px 0px $game-color-bg; 
+                        color: $game-color-darkest;
+                        text-shadow: 2px 2px 0px $game-color-dark; 
                     }
                 }
                 i {
@@ -40,8 +40,8 @@
             }
         } 
         .UserMenu {
-            background-color: $game-color-bg;
-            box-shadow: 2px 2px 0 $game-color-border;
+            background-color: $game-color-dark;
+            box-shadow: 2px 2px 0 $game-color-darkest;
             border: 2px solid $game-color;
             height: 40px;
             min-width: 150px;
@@ -52,7 +52,7 @@
                 align-items: center;
                 height: 100%;
                 font-family: "CourierPrime-Regular";
-                color: $game-color-border;
+                color: $game-color-darkest;
                 canvas {
                     width: 30px !important;
                     height: 30px !important;
@@ -91,8 +91,8 @@
     }
     .ant-popover-inner {
         border-radius: 0;
-        background-color: $game-color-bg;
-        box-shadow: 2px 2px 0 $game-color-border;
+        background-color: $game-color-dark;
+        box-shadow: 2px 2px 0 $game-color-darkest;
         border: 3px solid $game-color;
         .ant-popover-title {
             color: $game-color;
@@ -103,10 +103,10 @@
                 display: block;
                 width: 100%;
                 border-radius: 0;
-                background-color: $game-color-bg;
-                box-shadow: 2px 2px 0 $game-color-border;
+                background-color: $game-color-dark;
+                box-shadow: 2px 2px 0 $game-color-darkest;
                 border: 2px solid $game-color;
-                color: $game-color-border;
+                color: $game-color-darkest;
                 text-transform: uppercase;
             }
         }

@@ -11,7 +11,7 @@ body {
         }
     }
     a {
-        color: $game-color-border;
+        color: $game-color-darkest;
         &:hover {
             color: $game-color;
         }
@@ -22,7 +22,7 @@ body {
     input {
         border-radius: 0;
         &:-internal-autofill-selected {
-            background-color: $game-color-bg !important;
+            background-color: $game-color-dark !important;
         }
     }
     div {
@@ -41,10 +41,10 @@ body {
         min-width: 230px;
         .ant-input-affix-wrapper {
             padding: 10px 15px;
-            color: $game-color-border;
-            background-color: $game-color-bg;
+            color: $game-color-darkest;
+            background-color: $game-color-dark;
             border: 2px solid $game-color;
-            box-shadow: 2px 2px 0 $game-color-border;
+            box-shadow: 2px 2px 0 $game-color-darkest;
             border-radius: 0;
             .ant-input-prefix {
                 margin-right: 15px;
@@ -60,39 +60,27 @@ body {
                 }
             }
             .ant-input {
-                color: $game-color-border;
+                color: $game-color-darkest;
                 border: 2px solid $game-color;
-                background-color: $game-color-bg !important;
+                background-color: $game-color-dark !important;
                 border-radius: 0;
-                box-shadow: 2px 2px 0 $game-color-border;
+                box-shadow: 2px 2px 0 $game-color-darkest;
                 padding: 5px 10px;
                 &::-webkit-input-placeholder {
-                    color: $game-color-border;
+                    color: $game-color-darkest;
                 }
             }
         }
         label {
             font-family: CourierPrime-Regular;
-            color: $game-color-border;
+            color: $game-color-darkest;
             &::before {
                 font-family: CourierPrime-Regular !important;
-                color: $game-color-border !important;
-            }
-        }
-        .ant-btn {
-            background-color: $game-color-bg;
-            border: 2px solid $game-color;
-            box-shadow: 2px 2px 0 $game-color-border;
-            color: $game-color-border;
-            font-size: 16px;
-            border-radius: 0;
-            &:hover {
-                background-color: $game-color-border;
-                color: $game-color;
+                color: $game-color-darkest !important;
             }
         }
         .ant-checkbox-wrapper {
-            color: $game-color-border;
+            color: $game-color-darkest;
             &:hover {
                 color: $game-color;
                 .ant-checkbox {
@@ -108,15 +96,47 @@ body {
                     }
                 }
                 .ant-checkbox-inner {
-                    background-color: $game-color-border;
-                    border-color: $game-color-border;
+                    background-color: $game-color-darkest;
+                    border-color: $game-color-darkest;
                     border-radius: 0;
                     &::after {
-                        border-color: $game-color-bg;
+                        border-color: $game-color-dark;
                     }
                 }
             }
         }
+    }
+    .game-btn {
+        color: $game-color-darkest;
+        border: 2px solid $game-color;
+        background-color: $game-color-dark;
+        border-radius: 0;
+        box-shadow: 2px 2px 0 $game-color-darkest;
+        margin: 20px auto;
+        font-size: 16px;
+        padding: 0px 15px;
+        line-height: 32px;
+        &:hover {
+            background-color: $game-color-darkest;
+            color: $game-color;
+            border-color: $game-color;
+        }
+    }
+    .game-menu-icon {
+        font-family: "PixelIconsCompilation";
+        vertical-align: middle;
+        font-size: 30px;
+        line-height: 30px;
+        z-index: 999;
+        color: $game-color-dark;
+        margin-right: 15px;
+    }
+    .game-menu-text-icon {
+        font-size: 30px;
+        font-family: "PressStart2P-Regular";
+        vertical-align: middle;
+        z-index: 999;
+        color: $game-color;
     }
 }
 

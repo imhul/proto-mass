@@ -19,8 +19,8 @@ const Preloader = memo(props => {
     return <Progress
         className={ `Preloader ${props.class ? props.class : ''}`}
         strokeColor={props.strokeColor || {
-            from: '#1D175F',
-            to: '#8615B4',
+            from: '#997577',
+            to: '#0F2A3F',
         }}
         strokeWidth={props.strokeWidth || 30}
         strokeLinecap="square"

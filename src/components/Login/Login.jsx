@@ -108,7 +108,7 @@ const NormalLoginForm = props => {
                         <Checkbox>Remember me</Checkbox>
                     </FormItem>
 
-                    <Button type="primary" htmlType="submit" className="login-form-button">
+                    <Button type="primary" htmlType="submit" className="game-btn">
                         Login
                     </Button>
                 </FormItem>

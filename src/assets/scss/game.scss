@@ -312,7 +312,7 @@
 
 	.info-block {
 		font-family: "PressStart2P-Regular";
-		background-color: $game-color-bg;
+		background-color: $game-color-dark;
 		border: 3px solid $game-color;
 		flex-direction: column;
 		color: $game-color;
@@ -324,7 +324,7 @@
 		width: 100%;
 		button {
 			border: 2px solid $game-color;
-			background-color: $game-color-border;
+			background-color: $game-color-darkest;
 			margin: 0 5px;
 		}
 		.hover-box {
