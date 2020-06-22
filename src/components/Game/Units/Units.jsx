@@ -9,9 +9,6 @@ import { AnimatedTexture } from '../Map';
 // hooks
 import { useGetUnit, useGetTask } from '../../../hooks';
 
-// utils
-// import _ from 'lodash';
-
 const Units = memo(props => {
     
     // Effects

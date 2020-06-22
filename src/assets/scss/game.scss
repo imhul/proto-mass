@@ -311,6 +311,7 @@
 	}
 
 	.info-block {
+		text-shadow: 2px 2px 0px $game-color-darkest;
 		font-family: "PressStart2P-Regular";
 		background-color: $game-color-dark;
 		border: 3px solid $game-color;
@@ -320,8 +321,17 @@
 		display: flex;
 		padding: 25px;
 		z-index: 999;
-		opacity: .8;
+		opacity: .5;
 		width: 100%;
+		.visibility {
+			position: absolute;
+			top: 0;
+			right: 10px;
+			font-size: 20px;
+			svg {
+				box-shadow: 2px 2px 0px $game-color-darkest;
+			}
+		}
 		button {
 			border: 2px solid $game-color;
 			background-color: $game-color-darkest;

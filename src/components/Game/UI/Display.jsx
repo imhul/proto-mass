@@ -95,9 +95,9 @@ const Display = memo(() => {
 
     const onWheel = useCallback(e => {
         if (e.deltaY < 0) {
-            dispatch({ type: 'MAP_DECREASE'})
-        } else if (e.deltaY > 0) {
             dispatch({ type: 'MAP_INCREASE'})
+        } else if (e.deltaY > 0) {
+            dispatch({ type: 'MAP_DECREASE'})
         }
     }, [dispatch]);
 

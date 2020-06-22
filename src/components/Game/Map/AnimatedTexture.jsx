@@ -1,11 +1,6 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 
-/**
- * An animated texture is an image than changes frames on a regular interval
- * It's similar to a gif, but it's using a set of frames as different images.
- *
- */
 class AnimatedTexture extends Component {
     static propTypes = {
         /** Array of images the animated texture uses */
