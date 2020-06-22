@@ -233,12 +233,12 @@ const Units = memo(props => {
                 );
                 
                 // next step
-                if (!isGamePaused) switch(direction) {
+                switch(direction) {
                     case "down": 
                         forwardX = unitPosX + 1;
                         forwardY = unitPosY + 1;
                         
-                        if (destination.x === unitPosX) {
+                        if (destination.x === unitPosX && !isGamePaused) {
                             if (collisions.length < 1) {
                                 secondStepDelay = setTimeout(() => dispatch({
                                     type: 'UNIT_WALKING',  
@@ -253,7 +253,7 @@ const Units = memo(props => {
                                 console.info("::::collision secondStep down Y+::::");
                                 firstStep(true);
                             }
-                        } else if (destination.y === unitPosY) {
+                        } else if (destination.y === unitPosY && !isGamePaused) {
                             if (collisions.length < 1) {
                                 secondStepDelay = setTimeout(() => dispatch({
                                     type: 'UNIT_WALKING', 
@@ -273,7 +273,7 @@ const Units = memo(props => {
                     case "left": 
                         forwardX = unitPosX - 1;
                         forwardY = unitPosY + 1;
-                        if (destination.x === unitPosX) {
+                        if (destination.x === unitPosX && !isGamePaused) {
                             if (collisions.length < 1) {
                                 secondStepDelay = setTimeout(() => dispatch({
                                     type: 'UNIT_WALKING', 
@@ -288,7 +288,7 @@ const Units = memo(props => {
                                 console.info("::::collision secondStep left Y+::::");
                                 firstStep(true);
                             }
-                        } else if (destination.x !== unitPosX) {
+                        } else if (destination.x !== unitPosX && !isGamePaused) {
                             if (collisions.length < 1) {
                                 secondStepDelay = setTimeout(() => dispatch({
                                     type: 'UNIT_WALKING', 
@@ -308,7 +308,7 @@ const Units = memo(props => {
                     case "right": 
                         forwardX = unitPosX + 1;
                         forwardY = unitPosY - 1;
-                        if (destination.x === unitPosX) {
+                        if (destination.x === unitPosX && !isGamePaused) {
                             if (collisions.length < 1) {
                                 secondStepDelay = setTimeout(() => dispatch({
                                     type: 'UNIT_WALKING', 
@@ -323,7 +323,7 @@ const Units = memo(props => {
                                 console.info("::::collision secondStep right Y-::::");
                                 firstStep(true);
                             }
-                        } else if (destination.y === unitPosY) {
+                        } else if (destination.y === unitPosY && !isGamePaused) {
                             if (collisions.length < 1) {
                                 secondStepDelay = setTimeout(() => dispatch({
                                     type: 'UNIT_WALKING',  
@@ -343,7 +343,7 @@ const Units = memo(props => {
                     case "up": 
                         forwardX = unitPosX - 1;
                         forwardY = unitPosY - 1;
-                        if (destination.x === unitPosX) {
+                        if (destination.x === unitPosX && !isGamePaused) {
                             if (collisions.length < 1) {
                                 secondStepDelay = setTimeout(() => dispatch({ 
                                     type: 'UNIT_WALKING', 
@@ -358,7 +358,7 @@ const Units = memo(props => {
                                 console.info("::::collision secondStep up Y-::::");
                                 firstStep(true);
                             }
-                        } else if (destination.y === unitPosY) {
+                        } else if (destination.y === unitPosY && !isGamePaused) {
                             if (collisions.length < 1) {
                                 secondStepDelay = setTimeout(() => dispatch({
                                     type: 'UNIT_WALKING', 
@@ -405,7 +405,7 @@ const Units = memo(props => {
                         });
                     }
                 // ready to go
-                } else firstStep(false);
+                } else if (!isGamePaused) firstStep(false);
             }
             return null
         })

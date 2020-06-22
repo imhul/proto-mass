@@ -111,7 +111,7 @@ const GameMenuEsc = memo(() => {
                         // loading={isLoadSavedGame}
                         block={true}
                     >
-                        Load Game
+                        Load
                     </Button>
                 </Col>
                 <Col span={8}>
@@ -121,7 +121,7 @@ const GameMenuEsc = memo(() => {
                         // loading={isGameSaving}
                         block={true}
                     >
-                        Save Game
+                        Save
                     </Button>
                 </Col>
                 <Col span={8}>
@@ -130,7 +130,7 @@ const GameMenuEsc = memo(() => {
                         className="game-btn"
                         block={true}
                     >
-                        Exit Game
+                        Exit
                     </Button>
                 </Col>
             </Row>
