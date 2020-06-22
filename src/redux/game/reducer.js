@@ -120,7 +120,7 @@ export default function gameReducer(state = initState, action) {
                 },
             }
 
-        case types.TOGGLE_DRAWER:
+        case types.TOGGLE_GAME_MENU_ESC:
             return {
                 ...state,
                 isGameMenuOpen: !state.isGameMenuOpen,

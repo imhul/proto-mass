@@ -7,13 +7,13 @@ import Fullscreen from 'react-full-screen';
 import { Zoom } from 'react-scaling';
 import { DndProvider } from 'react-dnd';
 import Backend from 'react-dnd-html5-backend';
-// import _ from 'lodash';
 
 // Components
 import DnD from './DnD';
 import Preloader from './Preloader';
 import TimeMachine from './TimeMachine';
 import StartOrLoadModal from '../Modals/StartOrLoad';
+import GameMenuEsc from '../Modals/GameMenuEsc';
 import StartInfo from '../Modals/StartInfo';
 import LeftGameInfoPanel from './LeftGameInfoPanel';
 import RightGameInfoPanel from './RightGameInfoPanel';
@@ -107,7 +107,11 @@ const Display = memo(() => {
 
     const onKeyup = useCallback(e => {
         console.info("onKeydown event: ", e);
-    }, []);
+        if (e.key === 'Escape' || e.code === 'Escape') {
+            dispatch({ type: 'TOGGLE_GAME_MENU_ESC' });
+            dispatch({ type: 'TOGGLE_PAUSE_GAME' });
+        }
+    }, [dispatch]);
 
     const onResize = useCallback(output => {
         if (!isFirstResize) {
@@ -173,6 +177,7 @@ const Display = memo(() => {
                                 {
                                     isGameLoaded && isGameInit && !isGameStarted ? <StartInfo /> : null
                                 }
+                                <GameMenuEsc />
                             </DndProvider>
                         </Zoom>
 

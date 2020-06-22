@@ -8,9 +8,12 @@ const { Header } = Layout;
 
 const MainHeader = () => {
     return (
-        <Header>
-            <MainMenu />
-        </Header>
+        <>
+            <Header>
+                <MainMenu />
+            </Header>
+            <div className="header-decoration" />
+        </>
     );
 }
 

@@ -1,4 +1,12 @@
 .Output {
+    .header-decoration {
+        display: none;
+        width: 100%;
+        height: 50px;
+        position: relative;
+        top: 64px;
+        background: url('../img/pixil-frame-0.png') repeat-x top 50px left 0%;
+    }
     .ant-layout-header {
         display: flex;
         justify-content: space-between;
@@ -16,13 +24,16 @@
             .ant-menu-item {
                 color: $game-color;
                 border-color: $transparent;
+                max-height: 64px;
                 &.ant-menu-item-selected {
                     background-color: $game-color;
                     span {
                         color: $game-color-darkest;
+                        text-shadow: 2px 2px 0px $game-color-warn;
                     }
                     i {
                         color: $game-color-darkest;
+                        text-shadow: 2px 2px 0px $game-color-warn;
                     }
                 }
                 i {
@@ -51,6 +62,7 @@
                 height: 100%;
                 font-family: "CourierPrime-Regular";
                 color: $game-color-darkest;
+                text-shadow: none;
                 canvas {
                     width: 30px !important;
                     height: 30px !important;

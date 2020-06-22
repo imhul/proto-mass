@@ -1,9 +1,10 @@
-import React, { memo, useCallback, useState } from 'react';
+import React, { memo, useCallback, } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from "react-router-dom";
 
 // Components
-import { Card, Row, Col, Form, Input, Checkbox, Button, } from 'antd';
+import { Card, Row, Col, Form, Checkbox, Button, } from 'antd';
+import Notify from '../../Output/Notify';
 import SoundSlider from '../../Output/SoundSlider';
 
 const FormItem = Form.Item;
@@ -13,59 +14,49 @@ const GameMenuEsc = memo(() => {
     // effects
     const history = useHistory();
     const dispatch = useDispatch();
+    const { clickPosition } = useSelector(state => state.map);
     const { isFullscreen } = useSelector(state => state.stage);
-    const { isTimeMachineInit } = useSelector(state => state.time);
-    const { isGameInit, isLoadSavedGame, settings } = useSelector(state => state.game);
-    const [colonyName, setColonyName] = useState("Autopia");
-    const [isFirstClick, setIsFirstClick] = useState(true);
-    const [startFormFields, setStartFormFields] = useState([
-        {
-            name: "colonyName",
-            value: colonyName
-        },
-    ]);
-    
-    // handlers
-    const onFirstClick = useCallback(() => {
-        if (isFirstClick) {
-            setIsFirstClick(false);
-            setColonyName("");
-            setStartFormFields([
-                {
-                    name: "colonyName",
-                    value: ""
-                },
-            ]);
-        }
-    }, [isFirstClick, setIsFirstClick, setColonyName, setStartFormFields]);
+    const { isGameMenuOpen, startGameForm, settings } = useSelector(state => state.game);
 
+    // handlers
     const onLoadGame = useCallback(() => {
         console.warn("onLoadGame is run!");
     }, []);
+
+    const onGameContinued = useCallback(() => {
+        dispatch({ type: 'TOGGLE_GAME_MENU_ESC' });
+        dispatch({ type: 'TOGGLE_PAUSE_GAME' });
+    }, [dispatch]);
+
+    const onSaveGame = useCallback(() => {
+        dispatch({ 
+            type: 'SAVE_GAME', 
+            payload: { 
+                units: [
+                    {
+                        id: '1001',
+                        position: {
+                            x: clickPosition.x,
+                            y: clickPosition.y,
+                        },
+                    }
+                ],
+            },
+        });
+        Notify({
+            type: "info",
+            message: "Game Saved",
+            icon: "save",
+            duration: 3
+        })
+    }, [dispatch, clickPosition, ]);
 
     const onExitGame = useCallback(() => {
         dispatch({ type: 'EXIT_GAME' })
         history.push('/');
     }, [dispatch, history]);
 
-    const onStartGame = useCallback(() => {
-        if (!isTimeMachineInit && isGameInit) {
-            dispatch({ type: 'START_GAME' });
-            dispatch({ type: 'TIME_MACHINE_INIT' });
-            dispatch({ type: 'START_INFO_MODAL_CLOSE' });
-            if (startFormFields.length > 0) {
-                const colonyNamed = startFormFields.filter(input => input.name[0] === 'colonyName')[0];
-                if (colonyNamed && colonyNamed.value.length > 0) dispatch({
-                    type: 'START_GAME_FORM_UPDATE',
-                    payload: {
-                        colonyName: colonyNamed.value
-                    }
-                })
-            }
-        }
-    }, [isTimeMachineInit, isGameInit, startFormFields, dispatch]);
-
-    const setFullscreen = useCallback(checked => {
+    const onFullscreen = useCallback(checked => {
         if (!isFullscreen && checked) {
             dispatch({ type: 'FULLSCREEN', payload: true })
         } else {
@@ -73,39 +64,17 @@ const GameMenuEsc = memo(() => {
         }
     }, [isFullscreen, dispatch]);
 
-    return (
+    return isGameMenuOpen ? (
         <Card className="game-modal start-game">
 
             <p className="hello">Hello, voyager!</p>
 
-            <p className="hello">Wellcome{colonyName.length > 0 ? ` to ${colonyName}` : '!'}</p>
+            <p className="hello">Wellcome{startGameForm.colonyName.length > 0 ? ` to ${startGameForm.colonyName}` : '!'}</p>
 
             <Form
-                name="startGameForm"
-                fields={startFormFields}
+                name="escGameForm"
                 layout="vertical"
-                onFieldsChange={(changedFields, allFields) => {
-                    setStartFormFields(allFields);
-                }}
             >
-                <FormItem
-                    name="colonyName"
-                    label="Colony Name"
-                    onChange={event => setColonyName(event.target.value)}
-                    onClick={e => onFirstClick(e)}
-                    rules={[
-                        {
-                            required: true,
-                            message: 'Colony Name is required!',
-                        },
-                        {
-                            max: 20,
-                            message: 'Max Colony Name length is 20 chars max!',
-                        }
-                    ]}
-                >
-                    <Input autoComplete="off" />
-                </FormItem>
                 <FormItem
                     name="fullscreen" 
                     label="Expand to Fullscreen"
@@ -113,7 +82,7 @@ const GameMenuEsc = memo(() => {
                     labelAlign="left"
                 >
                     <Checkbox 
-                        onChange={event => setFullscreen(event.target.checked)}
+                        onChange={event => onFullscreen(event.target.checked)}
                     >
                         <span> { isFullscreen ? "YES" : "NO" }</span>
                     </Checkbox>
@@ -128,24 +97,34 @@ const GameMenuEsc = memo(() => {
 
             <Button
                 block={true}
-                onClick={() => onStartGame()}
+                onClick={() => onGameContinued()}
                 className="game-btn"
             >
-                Start
+                Continue
             </Button>
 
             <Row gutter={16}>
-                <Col span={12}>
+                <Col span={8}>
                     <Button
                         onClick={() => onLoadGame()}
                         className="game-btn"
-                        loading={isLoadSavedGame}
+                        // loading={isLoadSavedGame}
                         block={true}
                     >
                         Load Game
                     </Button>
                 </Col>
-                <Col span={12}>
+                <Col span={8}>
+                    <Button
+                        onClick={() => onSaveGame()}
+                        className="game-btn"
+                        // loading={isGameSaving}
+                        block={true}
+                    >
+                        Save Game
+                    </Button>
+                </Col>
+                <Col span={8}>
                     <Button
                         onClick={() => onExitGame()}
                         className="game-btn"
@@ -157,7 +136,7 @@ const GameMenuEsc = memo(() => {
             </Row>
 
         </Card>
-    )
+    ) : null
 });
 
 export default GameMenuEsc;

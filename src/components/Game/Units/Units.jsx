@@ -18,7 +18,8 @@ const Units = memo(props => {
     const dispatch = useDispatch();
     // const { user } = useSelector(state => state.auth);
     const { 
-        isGameStarted, 
+        isGameStarted,
+        isGamePaused,
     } = useSelector(state => state.game);
 
     const {
@@ -100,7 +101,7 @@ const Units = memo(props => {
 
     const walking = useCallback((pathways, unit) => {
 
-        pathways.map(destination => {
+        !isGamePaused && pathways.map(destination => {
             let firstStepDelay;
             let secondStepDelay;
             const unitPosX = unit.position.x;
@@ -111,7 +112,7 @@ const Units = memo(props => {
                 clearTimeout(secondStepDelay);
 
                 // go down
-                if (destination.y > unitPosY && destination.x > unitPosX) {
+                if (destination.y > unitPosY && destination.x > unitPosX && !isGamePaused) {
                     setDirection("down");
                     const forwardX = unitPosX + 1;
                     const forwardY = unitPosY + 1;
@@ -136,7 +137,7 @@ const Units = memo(props => {
                     }
                 }
                 // go left
-                else if (destination.y > unitPosY && destination.x < unitPosX) {
+                else if (destination.y > unitPosY && destination.x < unitPosX && !isGamePaused) {
                     setDirection("left");
                     const forwardX = unitPosX - 1;
                     const forwardY = unitPosY + 1;
@@ -161,7 +162,7 @@ const Units = memo(props => {
                     }
                 }
                 // go right
-                else if (destination.y < unitPosY && destination.x > unitPosX) {
+                else if (destination.y < unitPosY && destination.x > unitPosX && !isGamePaused) {
                     setDirection("right");
                     const forwardX = unitPosX + 1;
                     const forwardY = unitPosY - 1;
@@ -186,7 +187,7 @@ const Units = memo(props => {
                     }
                 }
                 // go up
-                else if (destination.y < unitPosY && destination.x < unitPosX) {
+                else if (destination.y < unitPosY && destination.x < unitPosX && !isGamePaused) {
                     setDirection("up");
                     const forwardX = unitPosX - 1;
                     const forwardY = unitPosY - 1;
@@ -232,7 +233,7 @@ const Units = memo(props => {
                 );
                 
                 // next step
-                switch(direction) {
+                if (!isGamePaused) switch(direction) {
                     case "down": 
                         forwardX = unitPosX + 1;
                         forwardY = unitPosY + 1;
@@ -408,26 +409,28 @@ const Units = memo(props => {
             }
             return null
         })
-    }, [dispatch, direction, objectList]);
+    }, [isGamePaused, dispatch, direction, objectList]);
 
     const working = useCallback(task => {
         console.info("working with task: ", task)
     }, []);
     
     useEffect(() => {
-        isGameStarted && unitList.map(unit => {
-            switch(unit.status) {
-                case "search": taskSearch(unit);
-                    break;
-                case "walk": walking(unit.task.positions, unit);
-                    break;
-                case "work": working(unit.task);
-                    break;
-                default: break;
-            }
-            return unit
-        })
-    }, [ isGameStarted, unitList, taskSearch, walking, working ]);
+        if (isGameStarted && !isGamePaused) { 
+            unitList.map(unit => {
+                switch(unit.status) {
+                    case "search": taskSearch(unit);
+                        break;
+                    case "walk": walking(unit.task.positions, unit);
+                        break;
+                    case "work": working(unit.task);
+                        break;
+                    default: break;
+                }
+                return unit
+            })
+        }
+    }, [ isGameStarted, isGamePaused, unitList, taskSearch, walking, working ]);
 
     const OnAnimatedTextureClick = useCallback((x, y, data) => {
         // playSFX(MapClick, settings.volume);

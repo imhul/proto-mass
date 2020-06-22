@@ -55,15 +55,15 @@ const StartInfo = memo(() => {
             dispatch({ type: 'START_INFO_MODAL_CLOSE' });
             if (startFormFields.length > 0) {
                 const colonyNamed = startFormFields.filter(input => input.name[0] === 'colonyName')[0];
-                if (colonyNamed && colonyNamed.value.length > 0) dispatch({
+                dispatch({
                     type: 'START_GAME_FORM_UPDATE',
                     payload: {
-                        colonyName: colonyNamed.value
+                        colonyName: colonyNamed && colonyNamed.value && colonyNamed.value.length > 0 ? colonyNamed.value : colonyName
                     }
                 })
             }
         }
-    }, [isTimeMachineInit, isGameInit, startFormFields, dispatch]);
+    }, [isTimeMachineInit, isGameInit, startFormFields, dispatch, colonyName]);
 
     const setFullscreen = useCallback(checked => {
         if (!isFullscreen && checked) {

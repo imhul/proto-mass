@@ -17,7 +17,7 @@ export const types = {
     SAVE_GAME:                  'SAVE_GAME',
     LOAD_GAME_SAVE:             'LOAD_GAME_SAVE',
     SET_VOLUME:                 'SET_VOLUME',
-    TOGGLE_DRAWER:              'TOGGLE_DRAWER',
+    TOGGLE_GAME_MENU_ESC:              'TOGGLE_GAME_MENU_ESC',
     SINTHESIZE_NEW_GAME:        'SINTHESIZE_NEW_GAME',
     START_OR_LOAD_MODAL_CLOSE:  'START_OR_LOAD_MODAL_CLOSE',
 };

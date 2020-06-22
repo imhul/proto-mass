@@ -52,6 +52,6 @@ export const setVolume = (volume) => ({
 });
 
 export const setVolume = () => ({
-    type: types.TOGGLE_DRAWER,
+    type: types.TOGGLE_GAME_MENU_ESC,
     payload: volume,
 });
