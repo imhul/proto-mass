@@ -1,8 +1,7 @@
 import React, { useEffect, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useHistory, useLocation } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { firestore } from '../../redux/store';
-import { useCookies, withCookies } from 'react-cookie';
 
 // Components
 import { Card, Form, Input, Button, Checkbox } from 'antd';
@@ -12,29 +11,18 @@ import {
 } from '@ant-design/icons';
 import Notify from '../Output/Notify';
 
-// utils
-import uuidv5 from 'uuid/v5';
-
 const FormItem = Form.Item;
 
 const NormalLoginForm = props => {
 
     const history = useHistory();
-    const location = useLocation();
     const dispatch = useDispatch();
-    const { isAuthenticated, user } = useSelector(state => state.auth);
+    const { isAuthenticated } = useSelector(state => state.auth);
     const { profile, auth } = useSelector(state => state.firebase);
-    const [cookies, setCookie, removeCookie] = useCookies(['userId']);
-    const { cookiesFromProps } = props.cookies;
-    const isHasCookies = props.cookies.HAS_DOCUMENT_COOKIE;
-    const setUserIdCookie = id => {
-        setCookie('userId', id, { path: '/' });
-    }
-
 
     // mocked login
     useEffect(() => {
-        const collection = firestore.collection('users')
+        firestore.collection('users')
             .doc('N0iQ4vJiMKXOsPKoMOyK')
             .get()
             .then(doc => {
@@ -127,4 +115,4 @@ const NormalLoginForm = props => {
     );
 };
 
-export default withCookies(NormalLoginForm);
+export default NormalLoginForm;

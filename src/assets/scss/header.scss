@@ -7,6 +7,7 @@
         color: $game-color;
         background: $game-color-dark;
         font-family: "PressStart2P-Regular";
+        text-shadow: 2px 2px 0px $game-color-darkest;
         // font-size: 26px;
         .ant-menu {
             text-transform: uppercase;
@@ -14,17 +15,14 @@
             background: $game-color-dark;
             .ant-menu-item {
                 color: $game-color;
-                text-shadow: 2px 2px 0px $game-color-darkest;
                 border-color: $transparent;
                 &.ant-menu-item-selected {
                     background-color: $game-color;
                     span {
                         color: $game-color-darkest;
-                        text-shadow: 2px 2px 0px $game-color-dark;
                     }
                     i {
                         color: $game-color-darkest;
-                        text-shadow: 2px 2px 0px $game-color-dark; 
                     }
                 }
                 i {
@@ -64,18 +62,18 @@
             z-index: 999;
             color: $game-color; 
             font-family: "PressStart2P-Regular";
-            font-size: 26px;
+            font-size: 14px;
         }
         .game-menu-btn {
-            font-size: 50px;
+            font-size: 36px;
             font-family: "PixelIconsCompilation";
             vertical-align: middle;
-            width: 64px;
+            width: 50px;
             z-index: 999;
             color: $game-color;
         }
         .game-menu-text-btn {
-            font-size: 50px;
+            font-size: 24px;
             font-family: "PressStart2P-Regular";
             vertical-align: middle;
             z-index: 999;

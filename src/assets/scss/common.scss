@@ -121,6 +121,12 @@ body {
             color: $game-color;
             border-color: $game-color;
         }
+        &:focus {
+            background-color: $game-color;
+            color: $game-color-darkest;
+            border-color: $game-color-darker;
+            box-shadow: 2px 2px 0 $game-color-darkest;
+        }
     }
     .game-menu-icon {
         font-family: "PixelIconsCompilation";

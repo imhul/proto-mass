@@ -1,6 +1,6 @@
-import React, { useCallback } from 'react';
-import { useSelector } from 'react-redux';
-import { useHistory } from "react-router-dom";
+import React, { useState, useCallback, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { useHistory, useLocation } from "react-router-dom";
 import { Menu } from 'antd';
 
 // Components
@@ -10,23 +10,39 @@ import GameMenu from '../Game/UI/GameMenu';
 const MainMenu = () => {
 
     const history = useHistory();
+    const location = useLocation();
+    const dispatch = useDispatch();
     const { isGameInit } = useSelector(state => state.game);
+    const [selectedKeys, setSelectedKeys] = useState([]);
 
     const onWebMenuClick = useCallback(e => {
-        // console.log('click ', e);
+        if (e.key !== "game") dispatch({ type: 'EXIT_GAME' });
         history.push(e.key)
-    }, [ history ]);
+    }, [dispatch, history]);
+
+    useEffect(() => {
+        if (location.pathname !== '/login') {
+            setSelectedKeys([location.pathname])
+        } else {
+            setSelectedKeys(['/'])
+        }
+    }, [location.pathname]);
 
     return (
         <>
-            { !isGameInit ? 
+            {!isGameInit ?
                 <>
-                    <Menu onClick={onWebMenuClick} mode="horizontal" theme="dark">
+                    <Menu 
+                        selectedKeys={selectedKeys}
+                        onClick={onWebMenuClick} 
+                        mode="horizontal" 
+                        theme="dark"
+                    >
                         <Menu.Item key="/">
                             <i className="anticon">4</i>
                             <span>Home</span>
                         </Menu.Item>
-                        <Menu.Item key="game">
+                        <Menu.Item key="/game">
                             <i className="anticon">7</i>
                             <span>Game</span>
                         </Menu.Item>

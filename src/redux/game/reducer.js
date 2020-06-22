@@ -95,11 +95,7 @@ export default function gameReducer(state = initState, action) {
             }
 
         case types.EXIT_GAME:
-            return {
-                ...state,
-                isGameStarted: false,
-                isGameInit: false,
-            }
+            return initState;
 
         case types.ERROR_GAME:
             return {

@@ -30,6 +30,7 @@ const StartOrLoadModal = memo(() => {
 
     const onExitGame = useCallback(() => {
         dispatch({ type: 'START_OR_LOAD_MODAL_CLOSE' });
+        dispatch({ type: 'EXIT_GAME' });
         history.push('/')
     }, [history, dispatch]);
 
@@ -48,7 +49,7 @@ const StartOrLoadModal = memo(() => {
             <Button
                 block={true}
                 className="game-btn"
-                onClick={() => onLoadSavedGame()}
+                onClick={() => console.info("onLoadSavedGame()")}
             >
                 Load Saved Game
             </Button>
