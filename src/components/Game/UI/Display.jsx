@@ -31,6 +31,9 @@ import {
 // Sounds
 // import introSFX from '../../assets/sound/loading.ogg';
 
+// graphic
+import starship from '../../../assets/img/parallax_starship_1.png';
+
 const Display = memo(() => {
 
     const dispatch = useDispatch();
@@ -169,6 +172,7 @@ const Display = memo(() => {
                         <div id="bg-parallax"></div>
                         <div id="mg-parallax"></div>
                         <div id="fg-parallax"></div>
+                        <div id="starship" style={{backgroundImage: `url(${starship})`}}></div>
                         <Zoom zoom={zoom} 
                             style={{ 'cursor': isDraggable ? 'grab' : 'default' }}
                         >

@@ -114,7 +114,7 @@ const Units = memo(props => {
                     const forwardX = unitPosX + 1;
                     const forwardY = unitPosY + 1;
                     const collisions = objectList.filter(obj => 
-                        obj.blocker && 
+                        obj && obj.blocker && 
                         obj.position.x === forwardX &&
                         obj.position.y === forwardY
                     );
@@ -139,7 +139,7 @@ const Units = memo(props => {
                     const forwardX = unitPosX - 1;
                     const forwardY = unitPosY + 1;
                     const collisions = objectList.filter(obj => 
-                        obj.blocker && 
+                        obj && obj.blocker && 
                         obj.position.x === forwardX &&
                         obj.position.y === forwardY
                     );
@@ -164,7 +164,7 @@ const Units = memo(props => {
                     const forwardX = unitPosX + 1;
                     const forwardY = unitPosY - 1;
                     const collisions = objectList.filter(obj => 
-                        obj.blocker && 
+                        obj && obj.blocker && 
                         obj.position.x === forwardX &&
                         obj.position.y === forwardY
                     );
@@ -189,7 +189,7 @@ const Units = memo(props => {
                     const forwardX = unitPosX - 1;
                     const forwardY = unitPosY - 1;
                     const collisions = objectList.filter(obj => 
-                        obj.blocker && 
+                        obj && obj.blocker && 
                         obj.position.x === forwardX &&
                         obj.position.y === forwardY
                     );
@@ -224,7 +224,7 @@ const Units = memo(props => {
                 let forwardY;
 
                 const collisions = objectList.filter(obj => 
-                    obj.blocker && 
+                    obj && obj.blocker && 
                     obj.position.x === forwardX &&
                     obj.position.y === forwardY
                 );

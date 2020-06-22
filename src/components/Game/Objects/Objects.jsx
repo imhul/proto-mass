@@ -9,10 +9,11 @@ import uuidv5 from 'uuid/v5';
 import { 
     getRandomInt, 
     getObjectByType,
+    mockedMap,
     // playSFX,
 } from '../../../utils';
 
-const Objects = memo(({ type }) => {
+const Objects = memo(() => {
 
     const idLength = new Array(16);
 
@@ -57,41 +58,56 @@ const Objects = memo(({ type }) => {
     ]);
 
     useEffect(() => {
-        const objects = Array.from(
-            { length: objectsLimit }, 
-            (val, k) => {
-                const objectId = uuidv5(`object#${k}`, idLength);
-                
-                const obj = {
-                    id: objectId,
-                    type: type,
-                    typeId: getRandomInt(1, 11),
-                    status: "absent",
-                    stats: {
-                        health: 100,
-                        damage: 0,
-                        healthPoints: 100,
-                    },
-                    blocker: true,
-                    position: {
-                        x: getRandomInt(1, 31),
-                        y: getRandomInt(1, 31),
-                        z: 1
-                    }
-                }; 
-                const copies = objectList.filter(item => 
-                    item.position.x !== obj.position.x && 
-                    item.position.y !== obj.position.y
-                );
-                return copies < 1 ? obj : val // or null
+        const objects = mockedMap.map((tileId, index) => {
+            const objectId = uuidv5(`object#${index}`, idLength);
+            const treeId = getRandomInt(9, 11);
+            const tree = getObjectByType(treeId);
+            const mineral = getObjectByType(tileId)
+            const tileX = (index % 30) + 1;
+            const tileY = Math.floor(index / 30) + 1;
+
+            const treeObject = {
+                ...tree,
+                id: objectId,
+                position: {
+                    x: getRandomInt(1, 31),
+                    y: getRandomInt(1, 31),
+                    z: 1
+                },
             }
-        );
+
+            const mineralObject = {
+                ...mineral,
+                id: objectId,
+                position: {
+                    x: tileX,
+                    y: tileY,
+                    z: 1,
+                },
+            }
+
+            const copies = objectList.filter(item => 
+                item !== null &&
+                item.position.x !== treeObject.position.x && 
+                item.position.y !== treeObject.position.y
+            );
+            
+            if (copies.length < 1) {
+                if (Math.random() < 0.1 && 
+                    treeObject.position.x !== mineralObject.position.x &&
+                    treeObject.position.y !== mineralObject.position.y) {
+                    return treeObject
+                } else if (tileId !== 1) {
+                    return mineralObject
+                } else return null
+            } else return null
+        });
 
         if (objects && 
-            objects.length === objectsLimit && 
             objects.length > objectList.length && 
             isObjectsCreation) 
         {
+            
             dispatch({ type: 'OBJECTS_CREATED', payload: objects });
             indicateDone();
         }
@@ -101,18 +117,17 @@ const Objects = memo(({ type }) => {
         idLength, 
         isObjectsCreation,
         objectList, 
-        type,
         indicateDone
     ]);
 
-    const onObjectClick = useCallback((x, y, id) => {
+    const onObjectClick = useCallback((x, y, type) => {
         // playSFX(MapClick, settings.volume);
         dispatch({ type: 'USER_ACTION', payload: {
             x: x, 
             y: y,
             objectType: "object",
             actionType: "click",
-            data: getObjectByType(id),
+            data: getObjectByType(type),
         }})
     }, [dispatch]);
 
@@ -127,16 +142,14 @@ const Objects = memo(({ type }) => {
     }, [dispatch]);
     
     return objectList.map((obj) => {
-        const height = getObjectByType(obj.typeId).height;
-        const width = getObjectByType(obj.typeId).width;
-        return <IsometricObject
+        return obj !== null && <IsometricObject
             obj={obj}
             key={`object${obj.id}`}
             x={obj.position.x}
             y={obj.position.y}
             z={obj.position.z}
-            width={width}
-            height={height}
+            width={obj.width}
+            height={obj.height}
             frames={[require(`../../../assets/sprites/object_${obj.typeId}.png`)]}
             active={true}
             style={{ zIndex: obj.position.x + 10 }}
