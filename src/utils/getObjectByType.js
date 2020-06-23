@@ -8,13 +8,14 @@ import object_7 from '../assets/sprites/object_7.png';
 import object_8 from '../assets/sprites/object_8.png';
 import object_9 from '../assets/sprites/object_9.png';
 import object_10 from '../assets/sprites/object_10.png';
+import object_11 from '../assets/sprites/object_11.png';
 
 export const getObjectByType = typeId => {
     switch(typeId) {
         case 1: return {
             typeId: typeId,
             type: "ground",
-            name: "rock",
+            name: "ground",
             status: "inactive",
             blocker: true,
             src: object_1,
@@ -34,7 +35,7 @@ export const getObjectByType = typeId => {
             blocker: true,
             src: object_2,
             width: 42,
-            height: 56,
+            height: 42,
             stats: {
                 health: 80,
                 damage: 0,
@@ -58,10 +59,10 @@ export const getObjectByType = typeId => {
         }
         case 4: return {
             typeId: typeId,
-            type: "mineral",
+            type: "ground",
             name: "grass",
-            status: "grow",
-            blocker: true,
+            status: "inactive",
+            blocker: false,
             src: object_4,
             width: 42,
             height: 42,
@@ -77,7 +78,6 @@ export const getObjectByType = typeId => {
             name: "platinum",
             status: "grow",
             blocker: true,
-            
             src: object_5,
             width: 42,
             height: 42,
@@ -160,6 +160,22 @@ export const getObjectByType = typeId => {
                 health: 55,
                 damage: 0,
                 healthPoints: 55,
+            },
+        }
+
+        case 11: return {
+            typeId: typeId,
+            type: "ground",
+            name: "rock",
+            status: "inactive",
+            blocker: true,
+            src: object_11,
+            width: 42,
+            height: 42,
+            stats: {
+                health: 80,
+                damage: 0,
+                healthPoints: 80,
             },
         }
         

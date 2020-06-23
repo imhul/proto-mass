@@ -8,6 +8,9 @@ import { AnimatedTexture, IsometricMapEvent } from ".";
 
 class IsometricObject extends Component {
     static propTypes = {
+        /** Need to show object stats over image */
+        stats: PropTypes.bool,
+        /** Full object props */
         obj: PropTypes.object.isRequired,
         /** The x position of the map (from 0 to map width - 1) */
         x: PropTypes.number.isRequired,
@@ -86,6 +89,7 @@ class IsometricObject extends Component {
 
     render() {
         const {
+            stats,
             obj,
             x,
             y,
@@ -113,18 +117,20 @@ class IsometricObject extends Component {
         }
         return (
             <div className={classes.join(" ")} style={vars}>
-                <Stats>
-                    {
-                        obj.stats.health === obj.stats.healthPoints ?
-                            `x:${JSON.stringify(obj.position.x)},y:${JSON.stringify(obj.position.y)}` :
-                                <Preloader
-                                    percent={obj.stats.healthPoints}
-                                    class="mini"
-                                    strokeWidth={4}
-                                    format={null}
-                                />
-                    }
-                </Stats>
+                {
+                    stats && <Stats>
+                        {
+                            obj.stats.health === obj.stats.healthPoints ?
+                                `x:${JSON.stringify(obj.position.x)},y:${JSON.stringify(obj.position.y)}` :
+                                    <Preloader
+                                        percent={obj.stats.healthPoints}
+                                        class="mini"
+                                        strokeWidth={4}
+                                        format={null}
+                                    />
+                        }
+                    </Stats>
+                }
                 <div className="react-isometric-object" onClick={this.onClick}>
                     {frames ? <AnimatedTexture frames={frames} delay={delay} /> : null}
                 </div>

@@ -60,7 +60,7 @@ const Objects = memo(() => {
     useEffect(() => {
         const objects = mockedMap.map((tileId, index) => {
             const objectId = uuidv5(`object#${index}`, idLength);
-            const treeId = getRandomInt(9, 11);
+            const treeId = getRandomInt(9, 12);
             const tree = getObjectByType(treeId);
             const mineral = getObjectByType(tileId)
             const tileX = (index % 30) + 1;
@@ -93,9 +93,7 @@ const Objects = memo(() => {
             );
             
             if (copies.length < 1) {
-                if (Math.random() < 0.1 && 
-                    treeObject.position.x !== mineralObject.position.x &&
-                    treeObject.position.y !== mineralObject.position.y) {
+                if (Math.random() < 0.05 && tileId === 1) {
                     return treeObject
                 } else if (tileId !== 1) {
                     return mineralObject
@@ -143,6 +141,7 @@ const Objects = memo(() => {
     
     return objectList.map((obj) => {
         return obj !== null && <IsometricObject
+            stats={false}
             obj={obj}
             key={`object${obj.id}`}
             x={obj.position.x}
