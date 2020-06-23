@@ -14,9 +14,9 @@ const AuthContainer = ({ children, ...rest }) => {
         if (!isAuthenticated) Notify({
             type: "warn",
             message: "You are not logged in",
-            description: "To play the game, you must first authenticate! Or you can just return to the home page;)",
+            description: "To play the game, you must first authenticate!",
             icon: "warning",
-            duration: 3
+            duration: 4
         })
     }, [isAuthenticated]);
 
