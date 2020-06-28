@@ -20,7 +20,12 @@ const GameMenuEsc = memo(() => {
 
     // handlers
     const onLoadGame = useCallback(() => {
-        console.warn("onLoadGame is run!");
+        Notify({
+            type: "info",
+            message: "Loading Saved Game in development. Coming soon!",
+            icon: "info",
+            duration: 4
+        })
     }, []);
 
     const onGameContinued = useCallback(() => {

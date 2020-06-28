@@ -1,8 +1,11 @@
 import React, { useCallback } from 'react';
 import { useSelector, useDispatch }  from 'react-redux';
+
+// Components
 import AvatarGenerator from 'react-avatar-generator';
 
 const Avatar = () => {
+
     const dispatch = useDispatch();
     const { isAuthenticated, user } = useSelector(state => state.auth);
 
