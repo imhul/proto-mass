@@ -21,7 +21,7 @@ const GameMenu = memo(() => {
     }
 
     const hideMenu = useCallback(() => {
-        closeMenuTimer.current = setTimeout(() => setVisible(false), 99999);
+        closeMenuTimer.current = setTimeout(() => setVisible(false), 6000);
     }, [closeMenuTimer]);
 
     const showMenu = useCallback(() => {
