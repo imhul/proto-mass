@@ -1,7 +1,11 @@
 .ant-drawer {
     overflow: hidden;
+    .ant-drawer-mask {
+        background-color: $transparent;
+    }
     .ant-drawer-content-wrapper {
         z-index: 1001;
+        height: 64px !important;
         .ant-drawer-content {
             background-color: $game-color-dark;
             box-shadow: -2px 0 0 $game-color-darkest;
@@ -9,44 +13,33 @@
             .ant-drawer-wrapper-body {
                 overflow: hidden;
                 .ant-drawer-header {
-                    color: $game-color;
-                    background: $game-color-dark;
-                    border-bottom: 3px solid $game-color;
-                    border-radius: 0;
-                    text-align: center;
-                    font-size: 60px;
-                    padding: 0;
-                    height: 100px;
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    margin-top: 10px;
-                    .ant-drawer-title {
-                        color: $game-color;
-                        font-family: 'NK221';
-                        font-size: 70px;
-                    }
+                    display: none;
                 }
                 .ant-drawer-body {
-                    flex-direction: column;
-                    align-items: flex-start;
-                    & > div {
-                        margin-bottom: 25px;
-                        height: 25px;
-                        display: flex;
-                        justify-content: space-between;
-                        align-items: center;
-                        & > * {
-                            color: $game-color;
-                            margin-bottom: 0;
-                        }
-                    }
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    overflow: hidden;
+                    color: $game-color;
+                    font-size: 14px;
+                    font-family: "PressStart2P-Regular";
+                    text-shadow: 2px 2px 0px $game-color-darkest;
                     i {
-                        font-size: 30px;
-                        font-family: "PixelIconsCompilation";
+                        font-style: normal;
+                        display: inline-block;
+                        vertical-align: middle;
+                        margin: 0 10px;
+                        z-index: 999;
                     }
-                    .slider {
-                        width: 150px;
+                    .Stats {
+                        font-size: 14px;
+                    }
+                    .game-menu-btn {
+                        font-family: "PixelIconsCompilation";
+                        font-size: 32px;
+                    }
+                    .game-menu-text-btn {
+                        font-size: 20px;
                     }
                 }
             }

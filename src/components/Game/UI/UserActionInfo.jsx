@@ -18,17 +18,17 @@ const UserActionInfo = memo(() => {
                     userAction && <>
                         <div>{ userAction.x && `x: ${JSON.stringify(userAction.x)}` }</div>
                         <div>{ userAction.y && `y: ${JSON.stringify(userAction.y)}` }</div>
-                        <div>{ JSON.stringify(userAction.objectType) }</div>
-                        <div>{ JSON.stringify(userAction.actionType) }</div>
+                        <div>{ userAction.objectType && `type: ${JSON.stringify(userAction.objectType)}` }</div>
+                        <div>{ userAction.actionType && `action: ${JSON.stringify(userAction.actionType)}` }</div>
                         {
                             userAction.data && <>
                                 {
-                                    userAction.data.name && <div>
-                                        { JSON.stringify(userAction.data.name) }
+                                    <div>
+                                        { userAction.data.name && `name: ${JSON.stringify(userAction.data.name)}` }
                                     </div>
                                 }
                                 { 
-                                    userAction.data.src && <div>
+                                    userAction.data.src && <div className="img-wrapper">
                                         <img 
                                             src={userAction.objectType === "unit" ? botSrc : userAction.data.src} 
                                             alt={`game ${userAction.objectType}`} 

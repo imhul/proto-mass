@@ -16,10 +16,11 @@ import {
 const Objects = memo(() => {
 
     const idLength = new Array(16);
+    const limit = 0.2;
 
     // Effects
     const dispatch = useDispatch();
-    const { objectsLimit, objectList, isObjectsCreation } = useSelector(state => state.map);
+    const { objectList, isObjectsCreation } = useSelector(state => state.map);
     const { isMapLoaded } = useSelector(state => state.game);
     const { isFirstResize } = useSelector(state => state.stage);
 
@@ -58,14 +59,15 @@ const Objects = memo(() => {
     ]);
 
     useEffect(() => {
-        const objects = mockedMap.map((tileId, index) => {
+        const objects = mockedMap.map((tileTypeId, index) => {
             const objectId = uuidv5(`object#${index}`, idLength);
             const treeId = getRandomInt(9, 12);
             const tree = getObjectByType(treeId);
-            const mineral = getObjectByType(tileId)
+            const mineral = getObjectByType(tileTypeId)
             const tileX = (index % 30) + 1;
             const tileY = Math.floor(index / 30) + 1;
 
+            // generators
             const treeObject = {
                 ...tree,
                 id: objectId,
@@ -86,18 +88,21 @@ const Objects = memo(() => {
                 },
             }
 
+            // logic
             const copies = objectList.filter(item => 
-                item !== null &&
                 item.position.x !== treeObject.position.x && 
                 item.position.y !== treeObject.position.y
             );
             
-            if (copies.length < 1) {
-                if (Math.random() < 0.05 && tileId === 1) {
-                    return treeObject
-                } else if (tileId !== 1) {
-                    return mineralObject
-                } else return null
+            if (Math.random() < limit && 
+                tileTypeId === 1 && 
+                !copies.length &&
+                treeObject.position.x !== mineralObject.position.x &&
+                treeObject.position.y !== mineralObject.position.y)
+            {
+                return treeObject
+            } else if (tileTypeId !== 1) {
+                return mineralObject
             } else return null
         });
 
@@ -105,12 +110,11 @@ const Objects = memo(() => {
             objects.length > objectList.length && 
             isObjectsCreation) 
         {
-            
-            dispatch({ type: 'OBJECTS_CREATED', payload: objects });
+            const filled = objects.filter(item => item !== null)
+            dispatch({ type: 'OBJECTS_CREATED', payload: filled });
             indicateDone();
         }
     }, [
-        objectsLimit, 
         dispatch, 
         idLength, 
         isObjectsCreation,
@@ -118,24 +122,14 @@ const Objects = memo(() => {
         indicateDone
     ]);
 
-    const onObjectClick = useCallback((x, y, type) => {
+    const onObjectClick = useCallback(obj => {
         // playSFX(MapClick, settings.volume);
         dispatch({ type: 'USER_ACTION', payload: {
-            x: x, 
-            y: y,
+            x: obj.position.x, 
+            y: obj.position.y,
             objectType: "object",
             actionType: "click",
-            data: getObjectByType(type),
-        }})
-    }, [dispatch]);
-
-    const onObjectHover = useCallback((x, y, id) => {
-        dispatch({ type: 'USER_ACTION', payload: {
-            x: x, 
-            y: y,
-            objectType: "object",
-            actionType: "hover",
-            data: getObjectByType(id),
+            data: obj,
         }})
     }, [dispatch]);
     
@@ -152,8 +146,7 @@ const Objects = memo(() => {
             frames={[require(`../../../assets/sprites/object_${obj.typeId}.png`)]}
             active={true}
             style={{ zIndex: obj.position.x + 10 }}
-            onClick={() => onObjectClick(obj.position.x, obj.position.y, obj.typeId)}
-            onPointerEnter={() => onObjectHover(obj.position.x, obj.position.y, obj.typeId)}
+            onClick={() => onObjectClick(obj)}
         />
     })
 });

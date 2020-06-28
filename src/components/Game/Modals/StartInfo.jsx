@@ -115,7 +115,7 @@ const StartInfo = memo(() => {
                     <Checkbox 
                         onChange={event => setFullscreen(event.target.checked)}
                     >
-                        <span> { isFullscreen ? "YES" : "NO" }</span>
+                        <span> { isFullscreen ? "Windowed" : "Fullscreen" }</span>
                     </Checkbox>
                 </FormItem>
                 <FormItem

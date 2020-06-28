@@ -104,6 +104,8 @@ const Units = memo(props => {
             const unitPosX = unit.position.x;
             const unitPosY = unit.position.y;
 
+             // метод, запускающий себя сей: firstStep
+
             const firstStep = isCollision => {
                 // stop prev step
                 clearTimeout(secondStepDelay);
@@ -130,7 +132,7 @@ const Units = memo(props => {
                         }), unit.stats.speed);
                     } else {
                         console.info("::::collision down::::");
-                        secondStep(true);
+                        // вызвать метод, запускающий себя сей: firstStep
                     }
                 }
                 // go left

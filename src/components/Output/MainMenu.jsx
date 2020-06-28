@@ -12,7 +12,7 @@ const MainMenu = () => {
     const history = useHistory();
     const location = useLocation();
     const dispatch = useDispatch();
-    const { isGameInit } = useSelector(state => state.game);
+    const { isGameInit, loadingPercent } = useSelector(state => state.game);
     const [selectedKeys, setSelectedKeys] = useState([]);
 
     const onWebMenuClick = useCallback(e => {
@@ -30,24 +30,29 @@ const MainMenu = () => {
 
     return (
         <>
-            {!isGameInit ?
-                <>
-                    <Menu 
-                        selectedKeys={selectedKeys}
-                        onClick={onWebMenuClick} 
-                        mode="horizontal" 
-                        theme="dark"
-                    >
-                        <Menu.Item key="/">
-                            <i className="anticon">4</i>
-                            <span>Home</span>
-                        </Menu.Item>
-                        <Menu.Item key="/game">
-                            <i className="anticon">7</i>
-                            <span>Game</span>
-                        </Menu.Item>
-                    </Menu>
-                    <UserMenu />
+            {
+                !isGameInit ? <>
+                    {
+                        loadingPercent < 1 && <>
+                            <Menu 
+                                selectedKeys={selectedKeys}
+                                onClick={onWebMenuClick} 
+                                mode="horizontal" 
+                                theme="dark"
+                            >
+                                <Menu.Item key="/">
+                                    <i className="anticon">4</i>
+                                    <span>Home</span>
+                                </Menu.Item>
+                                <Menu.Item key="/game">
+                                    <i className="anticon">7</i>
+                                    <span>Game</span>
+                                </Menu.Item>
+                            </Menu>
+                            <UserMenu />
+                        </>
+                    }
+                    
                 </> : <GameMenu />
             }
         </>

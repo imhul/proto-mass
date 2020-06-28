@@ -1,4 +1,3 @@
-import object_1 from '../assets/sprites/object_1.png';
 import object_2 from '../assets/sprites/object_2.png';
 import object_3 from '../assets/sprites/object_3.png';
 import object_4 from '../assets/sprites/object_4.png';
@@ -17,8 +16,7 @@ export const getObjectByType = typeId => {
             type: "ground",
             name: "ground",
             status: "inactive",
-            blocker: true,
-            src: object_1,
+            blocker: false,
             width: 42,
             height: 42,
             stats: {

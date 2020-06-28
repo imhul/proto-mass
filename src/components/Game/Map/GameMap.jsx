@@ -39,6 +39,8 @@ const GameMap = memo(() => {
         isMapLoaded, 
         isMapVisible,
         loadingPercent,
+        isGameStarted,
+        isGamePaused,
         // isMapLoadingStarted
     } = useSelector(state => state.game);
     const dispatch = useDispatch();
@@ -62,16 +64,6 @@ const GameMap = memo(() => {
         }})
     }, [dispatch]);
 
-    const onTileHover = useCallback((x, y, id) => {
-        dispatch({ type: 'USER_ACTION', payload: {
-            x: x, 
-            y: y,
-            objectType: "tile", // tile, object, unit
-            actionType: "hover", // click, hover, scroll, context
-            data: getTileByType(id),
-        }})
-    }, [dispatch]);
-
     // render
     const MapLoader = () => {
         const loadMap = mockedMap.map((tileId, index) => { // mocked getGround factory util
@@ -84,8 +76,7 @@ const GameMap = memo(() => {
                     y={y}
                     z={1}
                     frames={getFrames(true, tileId)}
-                    onClick={() => onTileClick(x, y, tileId)}
-                    onPointerEnter={() => onTileHover(x, y, tileId)}
+                    onClick={() => (isGameStarted && !isGamePaused) && onTileClick(x, y, tileId)}
                 />
             ];
             return result;

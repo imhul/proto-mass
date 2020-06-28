@@ -17,6 +17,10 @@
         font-family: "PressStart2P-Regular";
         text-shadow: 2px 2px 0px $game-color-darkest;
         // font-size: 26px;
+        .game-menu-hover-box {
+            width: 100%;
+            height: 64px;
+        }
         .ant-menu {
             text-transform: uppercase;
             color: $game-color;; 
@@ -69,27 +73,6 @@
                     border-radius: 50%;
                 }
             }
-        }
-        .Stats {
-            z-index: 999;
-            color: $game-color; 
-            font-family: "PressStart2P-Regular";
-            font-size: 14px;
-        }
-        .game-menu-btn {
-            font-size: 36px;
-            font-family: "PixelIconsCompilation";
-            vertical-align: middle;
-            width: 50px;
-            z-index: 999;
-            color: $game-color;
-        }
-        .game-menu-text-btn {
-            font-size: 24px;
-            font-family: "PressStart2P-Regular";
-            vertical-align: middle;
-            z-index: 999;
-            color: $game-color;
         }
     }
 }

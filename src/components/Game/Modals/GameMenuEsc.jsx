@@ -84,7 +84,7 @@ const GameMenuEsc = memo(() => {
                     <Checkbox 
                         onChange={event => onFullscreen(event.target.checked)}
                     >
-                        <span> { isFullscreen ? "YES" : "NO" }</span>
+                        <span> { isFullscreen ? "Windowed" : "Fullscreen" }</span>
                     </Checkbox>
                 </FormItem>
                 <FormItem

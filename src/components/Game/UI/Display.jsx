@@ -18,6 +18,7 @@ import StartInfo from '../Modals/StartInfo';
 import LeftGameInfoPanel from './LeftGameInfoPanel';
 import RightGameInfoPanel from './RightGameInfoPanel';
 import UserActionInfo from './UserActionInfo';
+import Notify from '../../Output/Notify';
 
 // Hooks
 import { useDOMState } from '../../../hooks';
@@ -27,6 +28,7 @@ import {
     getRandomInt, 
     // playSFX,
 } from '../../../utils';
+import _ from 'lodash';
 // TODO: UNCOMMENT !!! INTRO SOUND !!!
 // Sounds
 // import introSFX from '../../assets/sound/loading.ogg';
@@ -50,8 +52,19 @@ const Display = memo(() => {
         isMapLoaded, 
         isGameLoaded, 
         isGameStarted,
+        error,
         // isLoadSavedGame,
     } = useSelector(state => state.game);
+
+    // error
+    useEffect(() => {
+        if (!_.isEmpty(error)) Notify({
+            type: "error",
+            message: "Game Error!",
+            icon: "warning",
+            duration: 4
+        })
+    }, [error]);
 
     // game loading
     useEffect(() => {
@@ -110,11 +123,11 @@ const Display = memo(() => {
 
     const onKeyup = useCallback(e => {
         console.info("onKeydown event: ", e);
-        if (e.key === 'Escape' || e.code === 'Escape') {
+        if ((e.key === 'Escape' || e.code === 'Escape') && isGameStarted) {
             dispatch({ type: 'TOGGLE_GAME_MENU_ESC' });
             dispatch({ type: 'TOGGLE_PAUSE_GAME' });
         }
-    }, [dispatch]);
+    }, [isGameStarted, dispatch]);
 
     const onResize = useCallback(output => {
         if (!isFirstResize) {

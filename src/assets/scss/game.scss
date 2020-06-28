@@ -354,6 +354,13 @@
 		}
 		.hover-box {
 			word-break: break-word;
+			.img-wrapper {
+				max-width: 144px;
+				img {
+					width: 100%;
+					height: auto;
+				}
+			}
 		}
 	}
 }

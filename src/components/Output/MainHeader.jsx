@@ -1,15 +1,19 @@
 import React from 'react';
-import { Layout } from 'antd';
+import { useSelector } from 'react-redux';
 
 // Components
+import { Layout } from 'antd';
 import MainMenu from './MainMenu';
 
 const { Header } = Layout;
 
 const MainHeader = () => {
+
+    const { loadingPercent } = useSelector(state => state.game);
+
     return (
         <>
-            <Header>
+            <Header style={{ backgroundColor: loadingPercent === 0 ? "#4E495F" : "rgba(0,0,0,0)" }}>
                 <MainMenu />
             </Header>
             <div className="header-decoration" />
