@@ -1,25 +1,36 @@
 import React, { memo, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { IsometricMap, IsometricTile } from '.';
 
 // hooks
 import { 
-    // useGetUnit,
+    useGetTask,
 } from '../../../hooks';
 
+// Selectors
+import { currentUnitSelector } from '../../../selectors/units';
+import { 
+    isGameStartedSelector,
+    isGamePausedSelector,
+    isMapLoadedSelector,
+    getLoadingPercentSelector,
+    isMapVisibleSelector,
+    isGameInitSelector,
+} from '../../../selectors/game';
+
 // Components
+import { IsometricMap, IsometricTile } from '.';
 import Objects from '../Objects';
 import Units from '../Units';
 
 // Utils
 import VisibilitySensor from 'react-visibility-sensor';
+import _ from 'lodash';
 import { 
     getFrames, 
     getRandomInt, 
     mockedMap, 
     // playSFX, 
     getTileByType,
-    getNewTask,
 } from '../../../utils';
 
 // Sounds
@@ -33,28 +44,30 @@ const GameMap = memo(() => {
     const tileSize = 42;
 
     // effects
-    const { 
-        // settings, 
-        isGameInit, 
-        isMapLoaded, 
-        isMapVisible,
-        loadingPercent,
-        isGameStarted,
-        isGamePaused,
-        // isMapLoadingStarted
-    } = useSelector(state => state.game);
     const dispatch = useDispatch();
+    const loadingPercent = useSelector(getLoadingPercentSelector);
+    const currentUnit = useSelector(currentUnitSelector);
+    const isGameStarted = useSelector(isGameStartedSelector);
+    const isGamePaused = useSelector(isGamePausedSelector);
+    const isMapLoaded = useSelector(isMapLoadedSelector);
+    const isMapVisible = useSelector(isMapVisibleSelector);
+    const isGameInit = useSelector(isGameInitSelector);
 
     const onTileClick = useCallback((x, y, id) => {
         // playSFX(MapClick, settings.volume);
+
         const props = {
-            positions: [{
+            limit: 1,
+            tileId: id,
+            currentUnit: !_.isEmpty(currentUnit) && currentUnit,
+            position: {
                 x: x,
                 y: y,
-            },],
+            },
         };
-        const task = getNewTask(props);
-        dispatch({ type: 'TASK_ADD', payload: task });
+
+        if (!_.isEmpty(props) && !_.isEmpty(currentUnit) && !currentUnit.freeMode) useGetTask(props);
+
         dispatch({ type: 'USER_ACTION', payload: {
             x: x, 
             y: y,
@@ -62,7 +75,7 @@ const GameMap = memo(() => {
             actionType: "click", // click, hover, scroll, context
             data: getTileByType(id),
         }})
-    }, [dispatch]);
+    }, [dispatch, currentUnit]);
 
     // render
     const MapLoader = () => {

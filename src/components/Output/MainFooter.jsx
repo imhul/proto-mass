@@ -8,9 +8,11 @@ const MainFooter = () => {
     return (
         <Footer>
             <span>Developed by <a 
-                    href="http://weblogic.com.ua/" 
-                    title="Tkachuk Zakhar portfolio"
-                >
+                href="http://weblogic.com.ua/" 
+                target="_blank" 
+                title="Tkachuk Zakhar portfolio" 
+                rel="noopener noreferrer"
+            >
                     Tkachuk Zakhar
                 </a>
             </span>

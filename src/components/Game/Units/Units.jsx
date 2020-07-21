@@ -6,32 +6,33 @@ import Stats from '../UI/Stats';
 import Preloader from '../UI/Preloader';
 import { AnimatedTexture } from '../Map';
 
-// hooks
+// Selectors
+import { objectsSelector, fakePathSelector } from '../../../selectors/objects';
+import { tasksSelector, pendingsSelector } from '../../../selectors/task';
+import { isGameStartedSelector, isGamePausedSelector } from '../../../selectors/game';
+import { unitsSelector, getUnitByIdSelector } from '../../../selectors/units';
+
+// Custom Hooks
 import { useGetUnit, useGetTask } from '../../../hooks';
 
 const Units = memo(props => {
     
-    // Effects
+    // selectors
     const dispatch = useDispatch();
-    // const { user } = useSelector(state => state.auth);
-    const { 
-        isGameStarted,
-        isGamePaused,
-    } = useSelector(state => state.game);
+    const isGameStarted = useSelector(isGameStartedSelector);
+    const isGamePaused = useSelector(isGamePausedSelector);
+    const taskBoard = useSelector(tasksSelector);
+    const pendingList = useSelector(pendingsSelector);
+    const unitList = useSelector(unitsSelector);
+    const getUnitById = useSelector(getUnitByIdSelector);
+    
+    const objectList = useSelector(objectsSelector);
+    const fakePath = useSelector(fakePathSelector);
 
-    const {
-        taskList, 
-        pendingList,  
-    } = useSelector(state => state.task);
+    // local state
+    const [ direction, setDirection ] = useState("");
 
-    const { 
-        unitList,
-    } = useSelector(state => state.unit);
-
-    const { 
-        objectList,
-    } = useSelector(state => state.map);
-
+    // generators
     const newUnit = { 
         name: `bot01101-${unitList.length + 1}`, 
         isEnemy: false,
@@ -41,22 +42,43 @@ const Units = memo(props => {
         name: `enemy01101-${unitList.length + 1}`, 
         isEnemy: true,
     };
-    
+
+    const fakeTask = {
+        limit: 10,
+        profession: "collector",
+        type: "collect",
+        position: fakePath,
+    };
+
+    // effects
+
     // synthesizing
-    useGetUnit(newUnit || newEnemy);
-    useGetTask();
+    const getUnit = useGetUnit(newUnit || newEnemy);
+    const getTask = useGetTask(fakeTask);
+
+    useEffect(() => {
+        if (!unitList.length) {
+            return getUnit;
+        } else {
+            return getTask;
+        }
+    }, [unitList.length, getUnit, getTask]);
+
+    console.info("fakeTask: ", fakeTask);
 
     // unit actions
     const taskSearch = useCallback(unit => {
 
+        getUnitById(unit.id);
+
         const isUnitProfessionMatchTask = (unit, task) => {
             const unitProfessionsList = unit.professions;
             const taskProfession = task.profession;
-            const whoIsPro = unitProfessionsList.filter(prof => prof.name === taskProfession);
+            const whoIsPro = unitProfessionsList.filter(profession => profession.name === taskProfession);
             return whoIsPro.length > 0
         };
         
-        if (unitList.length > 0 && unit.task === null) {
+        if (unitList.length > 0 && unit.taskList === null) {
             if (pendingList.length > 0) {
                 const currentTask = pendingList.filter(task => 
                     task.workerId === unit.id
@@ -71,42 +93,62 @@ const Units = memo(props => {
                 }});
             } else if (
                 pendingList.length === 0 && 
-                taskList.length > 0 && 
-                !unit.task) 
+                taskBoard.length && 
+                !unit.taskList.length) 
             {
-                const relevantTask = taskList.filter(task => 
+                const relevantTask = taskBoard.filter(task => 
                     isUnitProfessionMatchTask(unit, task)
-                ); 
-                dispatch({ type: 'UNIT_GET_TASK', payload: { 
-                    task: relevantTask, 
-                    unitId: unit.id
-                }});
-                dispatch({ type: 'TASK_ACCEPTED', payload: {
-                    taskId: relevantTask[0].id,
-                    unitId: unit.id
-                }});
+                );
+                if (relevantTask && relevantTask.length > 0) {
+                    dispatch({ type: 'UNIT_GET_TASK', payload: { 
+                        task: relevantTask, 
+                        unitId: unit.id
+                    }});
+                    dispatch({ type: 'TASK_ACCEPTED', payload: {
+                        taskId: relevantTask[0].id,
+                        unitId: unit.id
+                    }});
+                } else {
+                    // TODO: TimeMachine connect needed & stop after minute!
+                    dispatch({ 
+                        type: 'UNIT_START_REST', payload: {
+                            unitId: unit.id,
+                            // bonus to health restoration
+                        }
+                    });
+                }
             }
         }
     }, [  
         unitList, 
-        taskList, 
+        taskBoard, 
         pendingList,
-        dispatch
+        dispatch,
+        getUnitById
     ]);
-
-    const [ direction, setDirection ] = useState("");
 
     const walking = useCallback((pathways, unit) => {
 
-        !isGamePaused && pathways.map(destination => {
+        (
+            !isGamePaused && 
+            unit.taskList.status !== "done" &&
+            unit.taskList.status !== "paused" &&
+            unit.status === "walk"
+        ) && pathways.map(destination => {
             let firstStepDelay;
             let secondStepDelay;
             const unitPosX = unit.position.x;
             const unitPosY = unit.position.y;
 
-             // метод, запускающий себя сей: firstStep
+            const collisionAvoidance = (firstLine, secondLine) => {
+                if (firstLine.length && !secondLine) {
+                    console.info("collision on first step!");
+                } else {
+                    console.info("collision on second step!");
+                }
+            };
 
-            const firstStep = isCollision => {
+            const firstStep = () => {
                 // stop prev step
                 clearTimeout(secondStepDelay);
 
@@ -132,7 +174,7 @@ const Units = memo(props => {
                         }), unit.stats.speed);
                     } else {
                         console.info("::::collision down::::");
-                        // вызвать метод, запускающий себя сей: firstStep
+                        collisionAvoidance("down");
                     }
                 }
                 // go left
@@ -157,7 +199,7 @@ const Units = memo(props => {
                         }), unit.stats.speed);
                     } else {
                         console.info("::::collision left::::");
-                        secondStep(true);
+                        collisionAvoidance("left");
                     }
                 }
                 // go right
@@ -182,7 +224,7 @@ const Units = memo(props => {
                         }), unit.stats.speed);
                     } else {
                         console.info("::::collision right::::");
-                        secondStep(true);
+                        collisionAvoidance("right");
                     }
                 }
                 // go up
@@ -207,7 +249,7 @@ const Units = memo(props => {
                         }), unit.stats.speed);
                     } else {
                         console.info("::::collision up::::");
-                        secondStep(true);
+                        collisionAvoidance("up");
                     }
                 } 
                 // first line segment is done / start next line segment
@@ -217,9 +259,8 @@ const Units = memo(props => {
                 }
             };
 
-            const secondStep = isCollision => {
-                console.info("::::secondStep isCollision::::", isCollision);
-                // stop prev step
+            const secondStep = () => {
+                // stop prev step anyway!
                 clearTimeout(firstStepDelay);
 
                 let forwardX;
@@ -250,7 +291,7 @@ const Units = memo(props => {
                                 }), unit.stats.speed)
                             } else {
                                 console.info("::::collision secondStep down Y+::::");
-                                firstStep(true);
+                                collisionAvoidance("down", "Y+");
                             }
                         } else if (destination.y === unitPosY && !isGamePaused) {
                             if (collisions.length < 1) {
@@ -265,7 +306,7 @@ const Units = memo(props => {
                                 }), unit.stats.speed)
                             } else {
                                 console.info("::::collision secondStep down X+::::");
-                                firstStep(true);
+                                collisionAvoidance("down", "X+");
                             }
                         }
                         break;
@@ -285,7 +326,7 @@ const Units = memo(props => {
                                 }), unit.stats.speed)
                             } else {
                                 console.info("::::collision secondStep left Y+::::");
-                                firstStep(true);
+                                collisionAvoidance("left", "Y+");
                             }
                         } else if (destination.x !== unitPosX && !isGamePaused) {
                             if (collisions.length < 1) {
@@ -300,7 +341,7 @@ const Units = memo(props => {
                                 }), unit.stats.speed)
                             } else {
                                 console.info("::::collision secondStep left X-::::");
-                                firstStep(true);
+                                collisionAvoidance("left", "X-");
                             }
                         }
                         break;
@@ -320,7 +361,7 @@ const Units = memo(props => {
                                 }), unit.stats.speed)
                             } else {
                                 console.info("::::collision secondStep right Y-::::");
-                                firstStep(true);
+                                collisionAvoidance("right", "Y-");
                             }
                         } else if (destination.y === unitPosY && !isGamePaused) {
                             if (collisions.length < 1) {
@@ -335,7 +376,7 @@ const Units = memo(props => {
                                 }), unit.stats.speed)
                             } else {
                                 console.info("::::collision secondStep right X+::::");
-                                firstStep(true);
+                                collisionAvoidance("right", "X+");
                             }
                         }
                         break;
@@ -355,7 +396,7 @@ const Units = memo(props => {
                                 }), unit.stats.speed)
                             } else {
                                 console.info("::::collision secondStep up Y-::::");
-                                firstStep(true);
+                                collisionAvoidance("up", "Y-");
                             }
                         } else if (destination.y === unitPosY && !isGamePaused) {
                             if (collisions.length < 1) {
@@ -370,7 +411,7 @@ const Units = memo(props => {
                                 }), unit.stats.speed)
                             } else {
                                 console.info("::::collision secondStep up X-::::");
-                                firstStep(true);
+                                collisionAvoidance("up", "X-");
                             }
                         }
                         break;
@@ -388,48 +429,60 @@ const Units = memo(props => {
                 // unit reached destination
                 if (destination.x === unitPosX && destination.y === unitPosY) {
                     clearTimeout(secondStepDelay);
-                    dispatch({ type: 'UNIT_STOP_WALKING', });
+
                     if (unit.status === "walk") {
-                        dispatch({ 
-                            type: 'UNIT_START_WORKING',
-                            payload: {
-                                unitId: unit.id,
-                                task: {
-                                    status: "progress",
-                                    progress: unit.task.progress < unit.task.progressPoints ? 
-                                        unit.task.progress + 1 : 
-                                        unit.task.progress,
-                                }
-                            }
-                        });
+                        dispatch({ type: 'UNIT_TASK_ACCEPT', payload: { 
+                            userId: unit.id
+                        }});
                     }
                 // ready to go
-                } else if (!isGamePaused) firstStep(false);
+                } else if (!isGamePaused) firstStep();
             }
-            return null
+            return destination
         })
     }, [isGamePaused, dispatch, direction, objectList]);
 
-    const working = useCallback(task => {
-        console.info("working with task: ", task)
+    const working = useCallback((task, unit) => {
+        let workingDelay;
+        if (unit.taskList.progress < unit.taskList.progressPoints) {
+            workingDelay = setTimeout(() => dispatch({ 
+                type: 'UNIT_TASK_PERFORMS',
+                payload: {
+                    unitId: unit.id,
+                    progress: unit.taskList.progress + 1,
+                }
+            }), 1000);
+        } else if (unit.taskList.progress === unit.taskList.progressPoints) {
+            dispatch({ type: 'UNIT_TASK_COMPLETE' });
+            clearTimeout(workingDelay);
+        } else {
+            clearTimeout(workingDelay);
+        }
+    }, [dispatch]);
+
+    const rest = useCallback(unitId => {
+        console.info("rest with unitId: ", unitId)
     }, []);
     
+    // Unit status
     useEffect(() => {
         if (isGameStarted && !isGamePaused) { 
             unitList.map(unit => {
                 switch(unit.status) {
                     case "search": taskSearch(unit);
                         break;
-                    case "walk": walking(unit.task.positions, unit);
+                    case "walk": walking(unit.taskList, unit);
                         break;
-                    case "work": working(unit.task);
+                    case "work": working(unit.taskList, unit);
+                        break;
+                    case "rest": rest(unit.id);
                         break;
                     default: break;
                 }
                 return unit
             })
         }
-    }, [ isGameStarted, isGamePaused, unitList, taskSearch, walking, working ]);
+    }, [ isGameStarted, isGamePaused, unitList, taskSearch, walking, working, rest ]);
 
     const OnAnimatedTextureClick = useCallback((x, y, data) => {
         // playSFX(MapClick, settings.volume);
@@ -457,6 +510,7 @@ const Units = memo(props => {
         })
     }, [dispatch]);
 
+    // render
     const unitsRender = unitList.map(unit => (
         <div 
             key={`animated-unit-wrapper-${unit.name}`}

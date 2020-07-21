@@ -9,7 +9,7 @@ import _ from 'lodash';
 // props:
 // @name: string
 // @isEnemy: boolean
-// @limit: number
+//
 
 export const useGetUnit =  ({ name, isEnemy }) => {
 
@@ -33,6 +33,7 @@ export const useGetUnit =  ({ name, isEnemy }) => {
         const unit = {
             id: userId,
             name: name,
+            freeMode: true,
             status: "search", // walk, work, attak, rest, search, dead
             isEnemy: isEnemy ? isEnemy : false,
             stats: {
@@ -87,7 +88,7 @@ export const useGetUnit =  ({ name, isEnemy }) => {
             professions: [
                 {
                     id: "",
-                    name: "constructor", // constructor, collector, protector, numerator
+                    name: "collector", // constructor, collector, protector, numerator
                     status: "",
                     progress: "", // x-points
                     level: 0, // max 20

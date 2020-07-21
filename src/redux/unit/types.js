@@ -1,6 +1,6 @@
 export const types = {
     UNIT_CREATED:           'UNIT_CREATED',
-    UNITS_LOAD:           'UNITS_LOAD',
+    UNITS_LOAD:             'UNITS_LOAD',
     UNIT_KILLED:            'UNIT_KILLED',
     UNIT_DIED:              'UNIT_DIED',
 
@@ -17,6 +17,7 @@ export const types = {
     UNIT_TASK_SEARCH:       'UNIT_TASK_SEARCH',
     UNIT_TASK_PERFORMS:     'UNIT_TASK_PERFORMS',
     UNIT_TASK_COMPLETE:     'UNIT_TASK_COMPLETE',
+    UNIT_TASK_ACCEPT:       'UNIT_TASK_ACCEPT',
 
     UNIT_LEVEL_UP:          'UNIT_LEVEL_UP',
     UNIT_LEVEL_UP_SKILL:    'UNIT_LEVEL_UP_SKILL',
