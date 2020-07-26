@@ -2,35 +2,24 @@ import { useState, useEffect, useCallback } from "react";
 import { useSelector, useDispatch } from 'react-redux';
 
 // Selectors
-import { isGameInitSelector } from '../selectors/game';
+import { isGameInitSelector, isGameStartedSelector } from '../selectors/game';
 import { unitsSelector } from '../selectors/units';
+import { tasksSelector } from '../selectors/task';
 
 // Utils
 import { getRandomInt } from '../utils';
+import PropTypes from 'prop-types';
 import uuidv5 from 'uuid/v5';
 import _ from 'lodash';
-
-/**
- * @param  id: string
- * @param  status: string // await, progress, paused, done
- * @param  level: number
- * @param  type: string // construct, collect, fight
- * @param  workerId: string
- * @param  priority: number
- * @param  progress: number // from 0 to progressPoints
- * @param  progressPoints: number
- * @param  profession: string
- * @param  professionLevel: string
- * @param  position: object { x: number, y: number }
- * @param  limit: number // limit of current task
- */
 
 export const useGetTask = props => {
 
     const [ count, setCount ] = useState(0);
     const dispatch = useDispatch();
     const unitList = useSelector(unitsSelector);
+    const taskBoard = useSelector(tasksSelector);
     const isGameInit = useSelector(isGameInitSelector);
+    const isGameStarted = useSelector(isGameStartedSelector);
     const idLength = new Array(16);
     const taskId = uuidv5(`task#${getRandomInt(100, 1001)}`, idLength);
     const task = {
@@ -44,6 +33,7 @@ export const useGetTask = props => {
         progressPoints: props && props.progressPoints ? props.progressPoints : 8,
         profession: props && props.proffession ? props.proffession : "collector",
         professionLevel: props && props.professionLevel ? props.professionLevel : "trainee",
+        limit: props && props.limit ? props.limit : 1,
         position: props && props.position ? props.position : {
             x: getRandomInt(1, 31),
             y: getRandomInt(1, 31)
@@ -60,24 +50,32 @@ export const useGetTask = props => {
     }, [ setCount, count, dispatch, task ]);
 
     useEffect(() => {
-        if (unitList.length && isGameInit && !_.isEmpty(task) && count < props.limit) getTask()
-    }, [ unitList, props.limit, count, isGameInit, task, getTask ])
+        // TODO: const summ = props.limit + taskBoard.length;
+        if (props && 
+            props.limit && 
+            unitList.length && 
+            isGameInit &&
+            isGameStarted &&
+            !_.isEmpty(task) && 
+            count < props.limit
+        ) getTask()
+    }, [ props, isGameStarted, isGameInit, unitList, count, task, getTask ])
 };
 
 useGetTask.propTypes = {
     id: PropTypes.string,
     status: PropTypes.string,
     level: PropTypes.number,
-    type: PropTypes.string,
+    type: PropTypes.oneOf(['construct', 'collect', 'protect', 'numerate']),
     workerId: PropTypes.string,
     priority: PropTypes.number,
-    progress: PropTypes.number,
+    progress: PropTypes.number, // from 0 to progressPoints
     progressPoints: PropTypes.number,
     profession: PropTypes.oneOf(['constructor', 'collector', 'protector', 'numerator']),
     professionLevel: PropTypes.oneOf(['trainee', 'medium', 'prime']),
+    limit: PropTypes.number, // limit of current task
     position: PropTypes.shape({
         x: PropTypes.number,
         y: PropTypes.number
-    }),
-    limit: PropTypes.number
+    })
 };

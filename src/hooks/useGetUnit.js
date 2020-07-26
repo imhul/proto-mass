@@ -1,8 +1,14 @@
 import { useEffect, useCallback } from "react";
 import { useSelector, useDispatch } from 'react-redux';
 
+// Selectors
+import { isLoadSavedGameSelector, isGameStartedSelector } from '../selectors/game';
+import { unitsSelector, unitsLimitSelector } from '../selectors/units';
+import { isObjectsCreatedSelector } from '../selectors/map';
+
 // Utils
 import { getRandomInt } from '../utils';
+import PropTypes from 'prop-types';
 import uuidv5 from 'uuid/v5';
 import _ from 'lodash';
 
@@ -14,9 +20,11 @@ import _ from 'lodash';
 export const useGetUnit =  ({ name, isEnemy }) => {
 
     const dispatch = useDispatch();
-    const { unitList, unitsLimit } = useSelector(state => state.unit);
-    const { isObjectsCreated } = useSelector(state => state.map);
-    const { isLoadSavedGame } = useSelector(state => state.game);
+    const isGameStarted = useSelector(isGameStartedSelector);
+    const unitList = useSelector(unitsSelector);
+    const unitsLimit = useSelector(unitsLimitSelector);
+    const isObjectsCreated = useSelector(isObjectsCreatedSelector);
+    const isLoadSavedGame = useSelector(isLoadSavedGameSelector);
     
     const onUnitCreated = useCallback(() => {
         dispatch({ 
@@ -136,6 +144,11 @@ export const useGetUnit =  ({ name, isEnemy }) => {
     }, [ unitList.length, unitsLimit, isEnemy, name, onUnitCreated, dispatch ]);
 
     useEffect(() => {
-        if (!isLoadSavedGame && isObjectsCreated) getUnit();
-    }, [getUnit, isLoadSavedGame, isObjectsCreated]);
+        if (!isGameStarted && !unitList.length && !isLoadSavedGame && isObjectsCreated) getUnit();
+    }, [ isGameStarted, isLoadSavedGame, isObjectsCreated, unitList.length, getUnit ]);
+};
+
+useGetUnit.propTypes = {
+    name: PropTypes.string,
+    isEnemy: PropTypes.bool
 };

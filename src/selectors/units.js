@@ -22,3 +22,8 @@ export const getUnitByIdSelector = createSelector(
         unitsSelector,
         units => memoize(unitId => units.filter(unit => unit.id === unitId)[0])
 );
+
+export const unitsLimitSelector = createSelector(
+    state => state.unit,
+    items => items.unitsLimit
+);

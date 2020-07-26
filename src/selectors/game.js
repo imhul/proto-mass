@@ -34,3 +34,9 @@ export const getLoadingPercentSelector = createSelector(
     gameSelector,
     items => items.loadingPercent
 );
+
+export const isLoadSavedGameSelector = createSelector(
+    gameSelector,
+    items => items.isLoadSavedGame
+);
+

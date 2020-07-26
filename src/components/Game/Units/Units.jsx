@@ -25,7 +25,6 @@ const Units = memo(props => {
     const pendingList = useSelector(pendingsSelector);
     const unitList = useSelector(unitsSelector);
     const getUnitById = useSelector(getUnitByIdSelector);
-    
     const objectList = useSelector(objectsSelector);
     const fakePath = useSelector(fakePathSelector);
 
@@ -51,18 +50,10 @@ const Units = memo(props => {
     };
 
     // effects
-
-    // synthesizing
     const getUnit = useGetUnit(newUnit || newEnemy);
     const getTask = useGetTask(fakeTask);
 
-    useEffect(() => {
-        if (!unitList.length) {
-            return getUnit;
-        } else {
-            return getTask;
-        }
-    }, [unitList.length, getUnit, getTask]);
+    // synthesizing
 
     console.info("fakeTask: ", fakeTask);
 
