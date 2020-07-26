@@ -12,11 +12,6 @@ import PropTypes from 'prop-types';
 import uuidv5 from 'uuid/v5';
 import _ from 'lodash';
 
-// props:
-// @name: string
-// @isEnemy: boolean
-//
-
 export const useGetUnit =  ({ name, isEnemy }) => {
 
     const dispatch = useDispatch();

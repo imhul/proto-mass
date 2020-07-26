@@ -1,8 +1,5 @@
 import { createSelector } from 'reselect';
 
-// Selectors
-// import { currentUnitPositionSelector } from './units';
-
 export const objectsSelector = createSelector(
     state => state.map,
     items => items.objectList
@@ -20,11 +17,13 @@ export const mineralsSelector = createSelector(
 
 export const fakePathSelector = createSelector(
     treesSelector,
-    trees => trees.map(tree => {
-        return {
-            x: tree.position.x,
-            y: tree.position.y,
-            done: false,
-        }
-    }).filter((trees, index) => index < 10)
+    trees => {
+        const treesPositions = trees.map(tree => {
+            return {
+                x: tree.position.x,
+                y: tree.position.y,
+            }
+        });
+        return treesPositions
+    }
 );

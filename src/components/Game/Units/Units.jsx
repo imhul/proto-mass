@@ -15,6 +15,9 @@ import { unitsSelector, getUnitByIdSelector } from '../../../selectors/units';
 // Custom Hooks
 import { useGetUnit, useGetTask } from '../../../hooks';
 
+// Utils
+import { getRandomInt } from '../../../utils';
+
 const Units = memo(props => {
     
     // selectors
@@ -43,17 +46,17 @@ const Units = memo(props => {
     };
 
     const fakeTask = {
-        limit: 10,
+        limit: 5,
         profession: "collector",
         type: "collect",
-        position: fakePath,
+        position: fakePath[getRandomInt(0, 50)],
     };
 
     // effects
-    const getUnit = useGetUnit(newUnit || newEnemy);
-    const getTask = useGetTask(fakeTask);
 
     // synthesizing
+    const getUnit = useGetUnit(newUnit || newEnemy);
+    const getTask = useGetTask(fakeTask);
 
     console.info("fakeTask: ", fakeTask);
 
@@ -104,7 +107,7 @@ const Units = memo(props => {
                     dispatch({ 
                         type: 'UNIT_START_REST', payload: {
                             unitId: unit.id,
-                            // bonus to health restoration
+                            // TODO: bonus to health restoration
                         }
                     });
                 }
@@ -475,7 +478,7 @@ const Units = memo(props => {
         }
     }, [ isGameStarted, isGamePaused, unitList, taskSearch, walking, working, rest ]);
 
-    const OnAnimatedTextureClick = useCallback((x, y, data) => {
+    const onAnimatedTextureClick = useCallback((x, y, data) => {
         // playSFX(MapClick, settings.volume);
         dispatch({ type: 'USER_ACTION', 
             payload: {
@@ -488,7 +491,7 @@ const Units = memo(props => {
         })
     }, [dispatch]);
 
-    const OnAnimatedTextureHover = useCallback((x, y, data) => {
+    const onAnimatedTextureHover = useCallback((x, y, data) => {
         dispatch({ 
             type: 'USER_ACTION', 
             payload: {
@@ -532,8 +535,8 @@ const Units = memo(props => {
                 id={unit.id}
                 width={props.width}
                 height={props.height}
-                onClick={() => OnAnimatedTextureClick(unit.position.x, unit.position.y, unit)}
-                onPointerEnter={() => OnAnimatedTextureHover(unit.position.x, unit.position.y, unit)}
+                onClick={() => onAnimatedTextureClick(unit.position.x, unit.position.y, unit)}
+                onPointerEnter={() => onAnimatedTextureHover(unit.position.x, unit.position.y, unit)}
                 delay={200}
                 frames={[
                     require("../../../assets/sprites/animations/bot/bot_0_0.2s.png"),
