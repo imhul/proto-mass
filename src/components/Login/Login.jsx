@@ -1,7 +1,7 @@
 import React, { useEffect, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from "react-router-dom";
-import { firestore } from '../../redux/store';
+import { firestore } from '../../redux/api';
 
 // Components
 import { Card, Form, Input, Button, Checkbox } from 'antd';

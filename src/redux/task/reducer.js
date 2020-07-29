@@ -15,19 +15,19 @@ export default function taskReducer(state = initState, action) {
             }
 
         case types.TASK_ACCEPTED:
-            const currentTask = action.payload && 
-                state.taskList.filter(task => 
-                    task.id === action.payload.taskId)[0];
-
-            const updatedTask = update(currentTask, {
-                status: { $set: "accepted" },
-                workerId: { $set: action.payload.unitId },
-            });
+            const relevantTaskList = (action.payload && action.payload.taskList && action.payload.taskList.length) &&
+                action.payload.taskList.map(currentTask => {
+                    return {
+                        ...currentTask,
+                        status: "accepted",
+                        workerId: action.payload.unitId,
+                    }
+                });
 
             return {
                 ...state,
                 taskList: update(state.taskList, 
-                    { $merge: [updatedTask] }
+                    { $merge: [relevantTaskList] }
                 ),
             }
 

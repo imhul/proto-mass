@@ -57,7 +57,7 @@ export const useGetUnit =  ({ name, isEnemy }) => {
                     // y: ...
                 // },
             ],
-            task: null,
+            taskList: [],
             skills: [],
             //     {
             //         id: "",

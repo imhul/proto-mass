@@ -55,10 +55,8 @@ const Units = memo(props => {
     // effects
 
     // synthesizing
-    const getUnit = useGetUnit(newUnit || newEnemy);
-    const getTask = useGetTask(fakeTask);
-
-    console.info("fakeTask: ", fakeTask);
+    useGetUnit(newUnit || newEnemy);
+    useGetTask(fakeTask);
 
     // unit actions
     const taskSearch = useCallback(unit => {
@@ -67,22 +65,22 @@ const Units = memo(props => {
 
         const isUnitProfessionMatchTask = (unit, task) => {
             const unitProfessionsList = unit.professions;
-            const taskProfession = task.profession;
+            const taskProfession = task && task.profession;
             const whoIsPro = unitProfessionsList.filter(profession => profession.name === taskProfession);
             return whoIsPro.length > 0
         };
         
-        if (unitList.length > 0 && unit.taskList === null) {
-            if (pendingList.length > 0) {
-                const currentTask = pendingList.filter(task => 
+        if (unitList.length && !unit.taskList.length) {
+            if (pendingList.length) {
+                const currentTaskList = pendingList.filter(task => 
                     task.workerId === unit.id
                 );
-                dispatch({ type: 'UNIT_GET_TASK', payload: { 
-                    task: currentTask, 
+                dispatch({ type: 'UNIT_GET_TASK_LIST', payload: { 
+                    taskList: currentTaskList,
                     userId: unit.id
                 }});
                 dispatch({ type: 'TASK_CONTINUED', payload: {
-                    taskId: currentTask.id,
+                    taskList: currentTaskList,
                     unitId: unit.id
                 }});
             } else if (
@@ -90,16 +88,16 @@ const Units = memo(props => {
                 taskBoard.length && 
                 !unit.taskList.length) 
             {
-                const relevantTask = taskBoard.filter(task => 
+                const relevantTaskList = taskBoard.filter(task => 
                     isUnitProfessionMatchTask(unit, task)
                 );
-                if (relevantTask && relevantTask.length > 0) {
-                    dispatch({ type: 'UNIT_GET_TASK', payload: { 
-                        task: relevantTask, 
+                if (relevantTaskList && relevantTaskList.length) {
+                    dispatch({ type: 'UNIT_GET_TASK_LIST', payload: { 
+                        taskList: relevantTaskList, 
                         unitId: unit.id
                     }});
                     dispatch({ type: 'TASK_ACCEPTED', payload: {
-                        taskId: relevantTask[0].id,
+                        taskList: relevantTaskList,
                         unitId: unit.id
                     }});
                 } else {
@@ -423,10 +421,10 @@ const Units = memo(props => {
                 // unit reached destination
                 if (destination.x === unitPosX && destination.y === unitPosY) {
                     clearTimeout(secondStepDelay);
-
+                    // TODO: It is necessary to add a condition under which, if the unit is ready for work but does not have a list of tasks!
                     if (unit.status === "walk") {
-                        dispatch({ type: 'UNIT_TASK_ACCEPT', payload: { 
-                            userId: unit.id
+                        dispatch({ type: 'UNIT_READY_TO_WORK', payload: { 
+                            unitId: unit.id
                         }});
                     }
                 // ready to go
@@ -436,22 +434,27 @@ const Units = memo(props => {
         })
     }, [isGamePaused, dispatch, direction, objectList]);
 
-    const working = useCallback((task, unit) => {
+    const working = useCallback((taskList, unit) => {
         let workingDelay;
-        if (unit.taskList.progress < unit.taskList.progressPoints) {
-            workingDelay = setTimeout(() => dispatch({ 
-                type: 'UNIT_TASK_PERFORMS',
-                payload: {
-                    unitId: unit.id,
-                    progress: unit.taskList.progress + 1,
-                }
-            }), 1000);
-        } else if (unit.taskList.progress === unit.taskList.progressPoints) {
-            dispatch({ type: 'UNIT_TASK_COMPLETE' });
-            clearTimeout(workingDelay);
-        } else {
-            clearTimeout(workingDelay);
-        }
+
+        taskList.map(task => {
+            if (task.progress < task.progressPoints) {
+                workingDelay = setTimeout(() => dispatch({ 
+                    type: 'UNIT_TASK_PERFORMS',
+                    payload: {
+                        unitId: unit.id,
+                        progress: task.progress + 1,
+                    }
+                }), 1000);
+            } else if (unit.taskList.progress === unit.taskList.progressPoints) {
+                dispatch({ type: 'UNIT_TASK_COMPLETE' });
+                clearTimeout(workingDelay);
+            } else {
+                // TODO: consider this decision!
+                clearTimeout(workingDelay);
+            }
+            return task
+        });
     }, [dispatch]);
 
     const rest = useCallback(unitId => {

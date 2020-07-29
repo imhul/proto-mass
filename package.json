@@ -27,6 +27,7 @@
   },
   "dependencies": {
     "@ant-design/icons": "latest",
+    "@welldone-software/why-did-you-render": "^4.2.7",
     "antd": "4.3.4",
     "connected-react-router": "^6.6.0",
     "firebase": "^7.14.3",
@@ -79,6 +80,7 @@
     ]
   },
   "devDependencies": {
+    "typescript": "3.9.2",
     "styled-components": "^5.1.0"
   }
 }

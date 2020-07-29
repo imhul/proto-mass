@@ -55,7 +55,7 @@ export const useGetTask = props => {
             props.limit && 
             unitList.length && 
             isGameInit &&
-            isGameStarted &&
+            !isGameStarted &&
             !_.isEmpty(task) && 
             count < props.limit
         ) getTask()
