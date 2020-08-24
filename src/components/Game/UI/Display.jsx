@@ -118,14 +118,14 @@ const Display = memo(() => {
     }, [dispatch]);
 
     const onKeydown = useCallback(e => {
-        console.info("onKeydown event: ", e);
-    }, []);
+        if (isGameStarted) console.info("onKeydown event: ", e);
+    }, [isGameStarted]);
 
     const onKeyup = useCallback(e => {
-        console.info("onKeydown event: ", e);
         if ((e.key === 'Escape' || e.code === 'Escape') && isGameStarted) {
             dispatch({ type: 'TOGGLE_GAME_MENU_ESC' });
             dispatch({ type: 'TOGGLE_PAUSE_GAME' });
+            // console.info("onKeydown event: ", e);
         }
     }, [isGameStarted, dispatch]);
 

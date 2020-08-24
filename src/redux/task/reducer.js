@@ -27,7 +27,7 @@ export default function taskReducer(state = initState, action) {
             return {
                 ...state,
                 taskList: update(state.taskList, 
-                    { $merge: [relevantTaskList] }
+                    { $merge: relevantTaskList }
                 ),
             }
 

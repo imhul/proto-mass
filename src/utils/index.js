@@ -5,3 +5,5 @@ export { mockedMap } from './mockedMap';
 export { getTileByType } from './getTileByType';
 export { getObjectByType } from './getObjectByType';
 export { getGround } from './getGround';
+export { getMin } from './getMin';
+export { getPath } from './getPath';
