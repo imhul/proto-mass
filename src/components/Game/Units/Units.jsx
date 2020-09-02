@@ -1,4 +1,4 @@
-import React, { memo, useState, useEffect, useCallback } from 'react';
+import React, { memo, useEffect, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 // Components
@@ -7,7 +7,7 @@ import Preloader from '../UI/Preloader';
 import { AnimatedTexture } from '../Map';
 
 // Selectors
-import { objectsSelector, fakePathSelector } from '../../../selectors/objects';
+import { fakePathSelector } from '../../../selectors/objects';
 import { tasksSelector, pendingsSelector } from '../../../selectors/task';
 import { isGameStartedSelector, isGamePausedSelector } from '../../../selectors/game';
 import { unitsSelector, getUnitByIdSelector } from '../../../selectors/units';
@@ -16,7 +16,7 @@ import { unitsSelector, getUnitByIdSelector } from '../../../selectors/units';
 import { useGetUnit, useGetTask } from '../../../hooks';
 
 // Utils
-import { getRandomInt, getMin } from '../../../utils';
+import { getRandomInt, getPath } from '../../../utils';
 
 const Units = memo(props => {
     
@@ -28,12 +28,7 @@ const Units = memo(props => {
     const pendingList = useSelector(pendingsSelector);
     const unitList = useSelector(unitsSelector);
     const getUnitById = useSelector(getUnitByIdSelector);
-    const objectList = useSelector(objectsSelector);
     const fakePath = useSelector(fakePathSelector);
-
-    // local state
-    const [ direction, setDirection ] = useState("");
-    // const [ firstStepCount, setFirstStepCount ] = useState(0);
 
     // generators
     const newUnit = { 
@@ -72,9 +67,11 @@ const Units = memo(props => {
         };
         
         if (unitList.length && !unit.taskList.length) {
+            // Continue to work
             if (pendingList.length) {
                 const currentTaskList = pendingList.filter(task => 
-                    task.workerId === unit.id
+                    task.workerId === unit.id &&
+                    task.status === "paused"
                 );
                 dispatch({ type: 'UNIT_GET_TASK_LIST', payload: { 
                     taskList: currentTaskList,
@@ -84,13 +81,15 @@ const Units = memo(props => {
                     taskList: currentTaskList,
                     unitId: unit.id
                 }});
+            // New task accepting
             } else if (
                 pendingList.length === 0 && 
                 taskBoard.length && 
                 !unit.taskList.length) 
             {
                 const relevantTaskList = taskBoard.filter(task => 
-                    isUnitProfessionMatchTask(unit, task)
+                    isUnitProfessionMatchTask(unit, task) &&
+                    task.status === "await"
                 );
                 if (relevantTaskList && relevantTaskList.length) {
                     dispatch({ type: 'UNIT_GET_TASK_LIST', payload: { 
@@ -101,6 +100,7 @@ const Units = memo(props => {
                         taskList: relevantTaskList,
                         unitId: unit.id
                     }});
+                // Go rest
                 } else {
                     // TODO: TimeMachine connect needed & stop after minute!
                     dispatch({ 
@@ -120,486 +120,58 @@ const Units = memo(props => {
         getUnitById
     ]);
 
+    // var ar = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+    // var curId = 0;
+    // const useMyFunc = () => curId++;
+    // ar.forEach(function(element, i){
+    //     setTimeout(function(){
+    //         useMyFunc();
+    //     }, 5000 * ++i)
+    // });
+
     const walking = useCallback((taskList, unit) => {
 
-        (!isGamePaused && unit.status === "walk" ) &&
-        taskList.map(task => {
+        console.info("init walking()");
+        let stepDelay;
+        const currentTask = taskList.filter(task => task.status = "accepted")[0];
+        const unitPosX = unit.position.x;
+        const unitPosY = unit.position.y;
+        const destination = currentTask && currentTask.position;
+        const path = destination && getPath(unitPosY, unitPosX, destination.y, destination.x);
+        // const pathLength = path.length;
+        console.info("path: ", path);
 
-            let firstStepDelay;
-            let secondStepDelay;
-            const unitPosX = unit.position.x;
-            const unitPosY = unit.position.y;
-            const destination = task.position;
-
-            const collisionAvoidance = (n, forwardX, forwardY, firstLine, secondLine) => {
-
-                if (n > 0) {
-                    if (firstLine && firstLine.length && !secondLine) {
-                        console.info("collision on first step: ", firstLine);
-                        clearTimeout(firstStepDelay);
-                        const stepsToDestinationX = destination.x - unitPosX;
-                        const stepsToDestinationY = destination.y - unitPosY;
-                        const shortestWay = stepsToDestinationX > stepsToDestinationY ? "wayA" : "wayB";
-                        const collisions = objectList.filter(obj => 
-                            obj && obj.blocker && 
-                            forwardX && 
-                            forwardY &&
-                            obj.position.x === forwardX &&
-                            obj.position.y === forwardY
-                        );
-                        
-                        switch(firstLine) {
-    
-                            case "down":
-                                // try to go wayA
-                                if (shortestWay === "wayA") {
-                                    if (collisions.length < 1) {
-                                        firstStepDelay = setTimeout(() => dispatch({ 
-                                            type: 'UNIT_WALKING', 
-                                            payload: {
-                                                x: unitPosX,
-                                                y: unitPosY + 1,
-                                                unitId: unit.id,
-                                            },
-                                            meta: "down left Y+",
-                                        }), unit.stats.speed);
-                                    } else {
-                                        collisionAvoidance(stepsToDestinationY - 1, forwardX, forwardY, "down")
-                                    }
-                                // try to go wayB
-                                } else if (shortestWay === "wayB") {
-                                    if (collisions.length < 1) {
-                                        firstStepDelay = setTimeout(() => dispatch({ 
-                                            type: 'UNIT_WALKING', 
-                                            payload: {
-                                                x: unitPosX + 1,
-                                                y: unitPosY,
-                                                unitId: unit.id,
-                                            },
-                                            meta: "down right X+",
-                                        }), unit.stats.speed);
-                                    } else {
-                                        collisionAvoidance(stepsToDestinationX - 1, forwardX, forwardY, "down")
-                                    }
-                                }
-                                break;
-    
-                            case "left":
-                                // try to go wayA
-                                if (shortestWay === "wayA") {
-                                    if (collisions.length < 1) {
-                                        firstStepDelay = setTimeout(() => dispatch({ 
-                                            type: 'UNIT_WALKING', 
-                                            payload: {
-                                                x: unitPosX,
-                                                y: unitPosY + 1,
-                                                unitId: unit.id,
-                                            },
-                                            meta: "left left Y+",
-                                        }), unit.stats.speed);
-                                    } else {
-                                        collisionAvoidance(stepsToDestinationY - 1, forwardX, forwardY, "left")
-                                    }
-                                // try to go wayB
-                                } else if (shortestWay === "wayB") {
-                                    if (collisions.length < 1) {
-                                        firstStepDelay = setTimeout(() => dispatch({ 
-                                            type: 'UNIT_WALKING', 
-                                            payload: {
-                                                x: unitPosX - 1,
-                                                y: unitPosY,
-                                                unitId: unit.id,
-                                            },
-                                            meta: "left right X-",
-                                        }), unit.stats.speed);
-                                    } else {
-                                        collisionAvoidance(stepsToDestinationX - 1, forwardX, forwardY, "left")
-                                    }
-                                }
-                                break;
-    
-                            case "right":
-                                // try to go wayA
-                                if (shortestWay === "wayA") {
-                                    if (collisions.length < 1) {
-                                        firstStepDelay = setTimeout(() => dispatch({ 
-                                            type: 'UNIT_WALKING', 
-                                            payload: {
-                                                x: unitPosX,
-                                                y: unitPosY - 1,
-                                                unitId: unit.id,
-                                            },
-                                            meta: "right left Y-",
-                                        }), unit.stats.speed);
-                                    } else {
-                                        collisionAvoidance(stepsToDestinationY - 1, forwardX, forwardY, "right")
-                                    }
-                                // try to go wayB
-                                } else if (shortestWay === "wayB") {
-                                    if (collisions.length < 1) {
-                                        firstStepDelay = setTimeout(() => dispatch({ 
-                                            type: 'UNIT_WALKING', 
-                                            payload: {
-                                                x: unitPosX + 1,
-                                                y: unitPosY,
-                                                unitId: unit.id,
-                                            },
-                                            meta: "right right X+",
-                                        }), unit.stats.speed);
-                                    } else {
-                                        collisionAvoidance(stepsToDestinationX - 1, forwardX, forwardY, "right")
-                                    }
-                                }
-                                break;
-    
-                        case "up":
-                            // try to go wayA
-                            if (shortestWay === "wayA") {
-                                if (collisions.length < 1) {
-                                    firstStepDelay = setTimeout(() => dispatch({ 
-                                        type: 'UNIT_WALKING', 
-                                        payload: {
-                                            x: unitPosX,
-                                            y: unitPosY - 1,
-                                            unitId: unit.id,
-                                        },
-                                        meta: "up left Y-",
-                                    }), unit.stats.speed);
-                                } else {
-                                    collisionAvoidance(stepsToDestinationY - 1, forwardX, forwardY, "up")
-                                }
-                            // try to go wayB
-                            } else if (shortestWay === "wayB") {
-                                if (collisions.length < 1) {
-                                    firstStepDelay = setTimeout(() => dispatch({ 
-                                        type: 'UNIT_WALKING', 
-                                        payload: {
-                                            x: unitPosX - 1,
-                                            y: unitPosY,
-                                            unitId: unit.id,
-                                        },
-                                        meta: "up right X-",
-                                    }), unit.stats.speed);
-                                } else {
-                                    collisionAvoidance(stepsToDestinationX - 1, forwardX, forwardY, "up")
-                                }
-                            }
-                            break;
-                            default: break;
-                        }
-                    } else if (firstLine && secondLine && firstLine.length && secondLine.length) {
-                        console.info("collision on second step: ", `${firstLine} ${secondLine}`);
-                    }
-                }
-            };
-
-            const firstStep = () => {
-                // stop prev step
-                clearTimeout(secondStepDelay);
-
-                // go down
-                if (destination.y > unitPosY && destination.x > unitPosX && !isGamePaused) {
-                    setDirection("down");
-                    const forwardX = unitPosX + 1;
-                    const forwardY = unitPosY + 1;
-                    const stepsToSecondLineY = destination.y - unitPosY;
-                    const stepsToSecondLineX = destination.x - unitPosX;
-                    const stepsToSecondLine = getMin(stepsToSecondLineY, stepsToSecondLineX);
-                    const collisions = objectList.filter(obj => 
-                        obj && obj.blocker && 
-                        obj.position.x === forwardX &&
-                        obj.position.y === forwardY
-                    );
-                    if (collisions.length < 1) {
-                        firstStepDelay = setTimeout(() => dispatch({ 
-                            type: 'UNIT_WALKING', 
-                            payload: {
-                                x: unitPosX + 1,
-                                y: unitPosY + 1,
-                                unitId: unit.id,
-                            },
-                            meta: "down X+ Y+",
-                        }), unit.stats.speed);
-                    } else {
-                        // COLLISION!
-                        collisionAvoidance(stepsToSecondLine, forwardX, forwardY, "down")
-                    }
-                }
-                // go left
-                else if (destination.y > unitPosY && destination.x < unitPosX && !isGamePaused) {
-                    setDirection("left");
-                    const forwardX = unitPosX - 1;
-                    const forwardY = unitPosY + 1;
-                    const stepsToSecondLineY = destination.y - unitPosY;
-                    const stepsToSecondLineX = unitPosX - destination.x;
-                    const stepsToSecondLine = getMin(stepsToSecondLineY, stepsToSecondLineX);
-                    const collisions = objectList.filter(obj => 
-                        obj && obj.blocker && 
-                        obj.position.x === forwardX &&
-                        obj.position.y === forwardY
-                    );
-                    if (collisions.length < 1) {
-                        firstStepDelay = setTimeout(() => dispatch({ 
-                            type: 'UNIT_WALKING', 
-                            payload: {
-                                x: unitPosX - 1,
-                                y: unitPosY + 1,
-                                unitId: unit.id,
-                            },
-                            meta: "left X- Y+",
-                        }), unit.stats.speed);
-                    } else {
-                        // COLLISION!
-                        collisionAvoidance(stepsToSecondLine, forwardX, forwardY, "left")
-                    }
-                }
-                // go right
-                else if (destination.y < unitPosY && destination.x > unitPosX && !isGamePaused) {
-                    setDirection("right");
-                    const forwardX = unitPosX + 1;
-                    const forwardY = unitPosY - 1;
-                    const stepsToSecondLineY = unitPosY - destination.y;
-                    const stepsToSecondLineX = destination.x - unitPosX;
-                    const stepsToSecondLine = getMin(stepsToSecondLineY, stepsToSecondLineX);
-                    const collisions = objectList.filter(obj => 
-                        obj && obj.blocker && 
-                        obj.position.x === forwardX &&
-                        obj.position.y === forwardY
-                    );
-                    if (collisions.length < 1) {
-                        firstStepDelay = setTimeout(() => dispatch({ 
-                            type: 'UNIT_WALKING', 
-                            payload: {
-                                x: unitPosX + 1,
-                                y: unitPosY - 1,
-                                unitId: unit.id,
-                            },
-                            meta: "right X+ Y-",
-                        }), unit.stats.speed);
-                    } else {
-                        // COLLISION!
-                        collisionAvoidance(stepsToSecondLine, forwardX, forwardY, "right")
-                    }
-                }
-                // go up
-                else if (destination.y < unitPosY && destination.x < unitPosX && !isGamePaused) {
-                    setDirection("up");
-                    const forwardX = unitPosX - 1;
-                    const forwardY = unitPosY - 1;
-                    const stepsToSecondLineY = unitPosY - destination.y;
-                    const stepsToSecondLineX = unitPosX - destination.x;
-                    const stepsToSecondLine = getMin(stepsToSecondLineY, stepsToSecondLineX);
-                    const collisions = objectList.filter(obj => 
-                        obj && obj.blocker && 
-                        obj.position.x === forwardX &&
-                        obj.position.y === forwardY
-                    );
-                    if (collisions.length < 1) {
-                        firstStepDelay = setTimeout(() => dispatch({ 
-                            type: 'UNIT_WALKING', 
-                            payload: {
-                                x: unitPosX - 1,
-                                y: unitPosY - 1,
-                                unitId: unit.id,
-                            },
-                            meta: "up X- Y-",
-                        }), unit.stats.speed);
-                    } else {
-                        // COLLISION!
-                        collisionAvoidance(stepsToSecondLine, forwardX, forwardY, "up")
-                    }
-                } 
-                // first line segment is done / start next line segment
-                else {
-                    clearTimeout(firstStepDelay);                   
-                    secondStep(false);
-                }
-            };
-
-            const secondStep = () => {
-                // stop prev step anyway!
-                clearTimeout(firstStepDelay);
-
-                let forwardX;
-                let forwardY;
-
-                const collisions = objectList.filter(obj => 
-                    obj && obj.blocker && 
-                    obj.position.x === forwardX &&
-                    obj.position.y === forwardY
-                );
-                
-                // next step
-                switch(direction) {
-                    case "down": 
-                        forwardX = unitPosX + 1;
-                        forwardY = unitPosY + 1;
-                        
-                        if (destination.x === unitPosX && !isGamePaused) {
-                            if (collisions.length < 1) {
-                                secondStepDelay = setTimeout(() => dispatch({
-                                    type: 'UNIT_WALKING',  
-                                    payload: {
-                                        x: unitPosX,
-                                        y: unitPosY + 1,
-                                        unitId: unit.id,
-                                    },
-                                    meta: "down Y+",
-                                }), unit.stats.speed)
-                            } else {
-                                console.info("::::collision secondStep down Y+::::");
-                                collisionAvoidance("down", "Y+");
-                            }
-                        } else if (destination.y === unitPosY && !isGamePaused) {
-                            if (collisions.length < 1) {
-                                secondStepDelay = setTimeout(() => dispatch({
-                                    type: 'UNIT_WALKING', 
-                                    payload: {
-                                        x: unitPosX + 1,
-                                        y: unitPosY,
-                                        unitId: unit.id,
-                                    },
-                                    meta: "down X+",
-                                }), unit.stats.speed)
-                            } else {
-                                console.info("::::collision secondStep down X+::::");
-                                collisionAvoidance("down", "X+");
-                            }
-                        }
-                        break;
-                    case "left": 
-                        forwardX = unitPosX - 1;
-                        forwardY = unitPosY + 1;
-                        if (destination.x === unitPosX && !isGamePaused) {
-                            if (collisions.length < 1) {
-                                secondStepDelay = setTimeout(() => dispatch({
-                                    type: 'UNIT_WALKING', 
-                                    payload: {
-                                        x: unitPosX,
-                                        y: unitPosY + 1,
-                                        unitId: unit.id,
-                                    },
-                                    meta: "left Y+",
-                                }), unit.stats.speed)
-                            } else {
-                                console.info("::::collision secondStep left Y+::::");
-                                collisionAvoidance("left", "Y+");
-                            }
-                        } else if (destination.x !== unitPosX && !isGamePaused) {
-                            if (collisions.length < 1) {
-                                secondStepDelay = setTimeout(() => dispatch({
-                                    type: 'UNIT_WALKING', 
-                                    payload: {
-                                        x: unitPosX - 1,
-                                        y: unitPosY,
-                                        unitId: unit.id,
-                                    },
-                                    meta: "left X-",
-                                }), unit.stats.speed)
-                            } else {
-                                console.info("::::collision secondStep left X-::::");
-                                collisionAvoidance("left", "X-");
-                            }
-                        }
-                        break;
-                    case "right": 
-                        forwardX = unitPosX + 1;
-                        forwardY = unitPosY - 1;
-                        if (destination.x === unitPosX && !isGamePaused) {
-                            if (collisions.length < 1) {
-                                secondStepDelay = setTimeout(() => dispatch({
-                                    type: 'UNIT_WALKING', 
-                                    payload: {
-                                        x: unitPosX,
-                                        y: unitPosY - 1,
-                                        unitId: unit.id,
-                                    },
-                                    meta: "right Y-",
-                                }), unit.stats.speed)
-                            } else {
-                                console.info("::::collision secondStep right Y-::::");
-                                collisionAvoidance("right", "Y-");
-                            }
-                        } else if (destination.y === unitPosY && !isGamePaused) {
-                            if (collisions.length < 1) {
-                                secondStepDelay = setTimeout(() => dispatch({
-                                    type: 'UNIT_WALKING',  
-                                    payload: {
-                                        x: unitPosX + 1,
-                                        y: unitPosY,
-                                        unitId: unit.id,
-                                    },
-                                    meta: "right X+",
-                                }), unit.stats.speed)
-                            } else {
-                                console.info("::::collision secondStep right X+::::");
-                                collisionAvoidance("right", "X+");
-                            }
-                        }
-                        break;
-                    case "up": 
-                        forwardX = unitPosX - 1;
-                        forwardY = unitPosY - 1;
-                        if (destination.x === unitPosX && !isGamePaused) {
-                            if (collisions.length < 1) {
-                                secondStepDelay = setTimeout(() => dispatch({ 
-                                    type: 'UNIT_WALKING', 
-                                    payload: {
-                                        x: unitPosX,
-                                        y: unitPosY - 1,
-                                        unitId: unit.id,
-                                    },
-                                    meta: "up Y-",
-                                }), unit.stats.speed)
-                            } else {
-                                console.info("::::collision secondStep up Y-::::");
-                                collisionAvoidance("up", "Y-");
-                            }
-                        } else if (destination.y === unitPosY && !isGamePaused) {
-                            if (collisions.length < 1) {
-                                secondStepDelay = setTimeout(() => dispatch({
-                                    type: 'UNIT_WALKING', 
-                                    payload: {
-                                        x: unitPosX - 1,
-                                        y: unitPosY,
-                                        unitId: unit.id,
-                                    },
-                                    meta: "up X-",
-                                }), unit.stats.speed)
-                            } else {
-                                console.info("::::collision secondStep up X-::::");
-                                collisionAvoidance("up", "X-");
-                            }
-                        }
-                        break;
-                    default: 
-                        clearTimeout(secondStepDelay);
-                        break;
-                }
-            };
-
-            if (destination.x && 
+        path.forEach(({x,y}, i) => {
+            if (destination &&
+                destination.x && 
                 unitPosX && 
                 destination.y && 
                 unitPosY) 
             {       
-                // unit reached destination
-
-                if (destination.x === unitPosX && destination.y === unitPosY) {
-                    clearTimeout(secondStepDelay);
-                    // TODO: It is necessary to add a condition under which, if the unit is ready for work but does not have a list of tasks!
-                    if (unit.status === "walk") {
+                
+                stepDelay = setTimeout(() => {
+                    // unit reached destination
+                    if (destination.x === unitPosX && destination.y === unitPosY) {
+                        clearTimeout(stepDelay);
                         dispatch({ type: 'UNIT_READY_TO_WORK', payload: { 
-                            taskList: taskList,
+                            currentTask: currentTask,
                             unitId: unit.id
                         }});
+                    // ready to go
+                    } else {
+                        dispatch({
+                            type: 'UNIT_WALKING',  
+                            payload: {
+                                x: x,
+                                y: y,
+                                unitId: unit.id,
+                            }
+                        })
                     }
-                // ready to go
-                } else if (!isGamePaused) firstStep();
+                }, unit.stats.speed)
             }
-            return destination
-        })
-    }, [isGamePaused, dispatch, direction, objectList]);
+        });
+    }, []);
 
     const working = useCallback((taskList, unit) => {
         let workingDelay;
@@ -611,6 +183,7 @@ const Units = memo(props => {
                     payload: {
                         unitId: unit.id,
                         progress: task.progress + 1,
+                        currentTask: task,
                     }
                 }), 1000);
             } else if (unit.taskList.progress === unit.taskList.progressPoints) {
@@ -646,7 +219,7 @@ const Units = memo(props => {
                 return unit
             })
         }
-    }, [ isGameStarted, isGamePaused, unitList.length, taskSearch, walking, working, rest ]);
+    }, [ isGameStarted, isGamePaused, unitList, taskSearch, walking, working, rest ]);
 
     const onAnimatedTextureClick = useCallback((x, y, data) => {
         // playSFX(MapClick, settings.volume);
@@ -685,7 +258,7 @@ const Units = memo(props => {
                 '--z':20, 
                 '--object-width':props.width, 
                 '--object-height':props.height,
-                zIndex: unit.position.x + 10
+                zIndex: (unit.position && unit.position.x) ? unit.position.x + 10 : 50
             }}
         >
             <Stats>

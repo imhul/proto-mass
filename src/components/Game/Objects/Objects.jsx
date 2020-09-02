@@ -62,7 +62,7 @@ const Objects = memo(() => {
     ]);
 
     useEffect(() => {
-        const objects = mockedMap.map((tileTypeId, index) => {
+        const objects = mockedMap.flat().map((tileTypeId, index) => {
             const objectId = uuidv5(`object#${index}`, idLength);
             const treeId = getRandomInt(9, 12);
             const tree = getObjectByType(treeId);
@@ -98,7 +98,7 @@ const Objects = memo(() => {
             );
             
             if (Math.random() < limit && 
-                tileTypeId === 1 && 
+                tileTypeId === 0 && 
                 !copies.length &&
                 treeObject.position.x !== mineralObject.position.x &&
                 treeObject.position.y !== mineralObject.position.y)
@@ -113,7 +113,7 @@ const Objects = memo(() => {
             objects.length > objectList.length && 
             isObjectsCreation) 
         {
-            const filled = objects.filter(item => item !== null)
+            const filled = objects.filter(item => item !== null && item.typeId !== "");
             dispatch({ type: 'OBJECTS_CREATED', payload: filled });
             indicateDone();
         }

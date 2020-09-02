@@ -81,8 +81,9 @@ export default function unitReducer(state = initState, action) {
 
         // WORK
         case types.UNIT_READY_TO_WORK:
+            
             const updateUnitStatus = update(currentUnit, {
-                status: { $set: "work" } // walk, work, attak, rest, search, dead
+                status: { $set: "work" }, // walk, work, attak, rest, search, dead
             });
 
             return {
@@ -119,10 +120,13 @@ export default function unitReducer(state = initState, action) {
             }
 
         case types.UNIT_TASK_PERFORMS: 
+            const currentTask = action.payload.currentTask;
+            const updateRelevantTask = update(currentTask, {
+                status: { $set: "progress" }, // await, accepted, done, paused, progress
+                progress: { $set: action.payload.progress },
+            });
             const updateUnitWorkingPoints = update(currentUnit, {
-                task: { 
-                    progress: { $set: action.payload.progress },
-                },
+                taskList: { $merge: updateRelevantTask },
                 status: { $set: "work" } // walk, work, attak, rest, search, dead
             });
 

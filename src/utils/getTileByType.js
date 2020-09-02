@@ -1,4 +1,4 @@
-import isometric_pixel_1 from '../assets/sprites/isometric_pixel_1.png';
+import isometric_pixel_0 from '../assets/sprites/isometric_pixel_1.png';
 import isometric_pixel_2 from '../assets/sprites/isometric_pixel_2.png';
 import isometric_pixel_3 from '../assets/sprites/isometric_pixel_3.png';
 import isometric_pixel_4 from '../assets/sprites/isometric_pixel_4.png';
@@ -17,7 +17,7 @@ export const getTileByType = type => {
             health: 100,
             damage: 0,
             healthPoints: 100,
-            src: isometric_pixel_1,
+            src: isometric_pixel_0,
         }
         case 2: return {
             id: type,

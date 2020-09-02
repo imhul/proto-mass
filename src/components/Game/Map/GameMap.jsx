@@ -79,7 +79,7 @@ const GameMap = memo(() => {
 
     // render
     const MapLoader = () => {
-        const loadMap = mockedMap.map((tileId, index) => { // mocked getGround factory util
+        const loadMap = mockedMap.flat().map((tileId, index) => { // mocked getGround factory util
             const x = (index % mapWidth) + 1;
             const y = Math.floor(index / mapWidth) + 1;
             const result = [
