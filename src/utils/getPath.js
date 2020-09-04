@@ -34,7 +34,7 @@ const lee = (() => {
                         matrixReloaded[i] && (matrixReloaded[i][j] === previousValue -1) && // If array x array defined and the matrixReloaded value is 0
                         !(i === x && j === y) ) {
                         previousValue = matrixReloaded[i][j];
-                        successfulRoute.push({x: i, y: j});
+                        successfulRoute.push({y: i, x: j});
                         x = i;
                         y = j;
                     } else if (successfulRoute.length === matrixReloaded[x2][y2] - 1) { // If we got to the end of the route
@@ -44,8 +44,8 @@ const lee = (() => {
                 }
             }
         }
-        successfulRoute.unshift({x: x2, y: y2}); // Add end point
-        successfulRoute.push({x: x1, y: y1}); // Add start point
+        successfulRoute.unshift({y: x2, x: y2}); // Add end point
+        successfulRoute.push({y: x1, x: y1}); // Add start point
         return successfulRoute.reverse(); // Reverse the array so it's at the start
     };
     const checkPath = (matrixReloaded, i, j, x1, y1, value) => {

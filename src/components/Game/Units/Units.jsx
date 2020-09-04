@@ -5,6 +5,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import Stats from '../UI/Stats';
 import Preloader from '../UI/Preloader';
 import { AnimatedTexture } from '../Map';
+import Notify from '../../Output/Notify';
 
 // Selectors
 import { fakePathSelector } from '../../../selectors/objects';
@@ -149,7 +150,7 @@ const Units = memo(props => {
 
         console.info("currentTask: ", currentTask);
 
-        currentTask && currentTask.path.forEach((step, i) => {
+        currentTask && currentTask.path.forEach(({x,y}, i) => {
             if (destination &&
                 destination.x &&
                 unitPosX &&
@@ -166,13 +167,20 @@ const Units = memo(props => {
                         }
                     });
                     setCurrentTask(null);
+                    Notify({
+                        type: "success",
+                        message: "TADAAAA!",
+                        description: `Destination [x: ${destination.x},y: ${destination.y}], Step [x: ${x},y: ${y}]`,
+                        icon: "success",
+                        duration: 20
+                    })
                 // ready to go
-                } else if (step.x === unitPosX && step.y === unitPosY) {
+                } else if (x === unitPosX && y === unitPosY) {
                     stepDelay = setTimeout(() => dispatch({
                         type: 'UNIT_WALKING',
                         payload: {
-                            x: currentTask.path[i+1].x,
-                            y: currentTask.path[i+1].y,
+                            x: currentTask && currentTask.path[i+1] ? currentTask.path[i+1].x : currentTask.path[i].x,
+                            y: currentTask && currentTask.path[i+1] ? currentTask.path[i+1].y : currentTask.path[i].y,
                             unitId: unit.id,
                         }
                     }), unit.stats.speed);
@@ -183,6 +191,8 @@ const Units = memo(props => {
 
     const working = useCallback((taskList, unit) => {
         let workingDelay;
+
+        return;
 
         taskList.map(task => {
             if (task.progress < task.progressPoints && task.status !== "done" && task.status !== "paused") {
