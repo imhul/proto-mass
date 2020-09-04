@@ -20,6 +20,14 @@ export default function mapReducer(state = initState, action) {
             }
         }
 
+        case types.OBSTACLE_MATRIX_LOADED: {
+            return {
+                ...state,
+                map: action.payload.map,
+                matrix: action.payload.matrix,
+            }
+        }
+
         case types.USER_ACTION: {
             return {
                 ...state,

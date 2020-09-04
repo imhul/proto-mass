@@ -5,7 +5,14 @@ import { useSelector, useDispatch  } from 'react-redux';
 import IsometricObject from '../Map/IsometricObject';
 
 // Selectors
-// import {  } from '../selectors';
+import { 
+    matrixSelector, 
+    mapArraySelector, 
+    objectListSelector, 
+    isObjectsCreationSelector
+} from '../../../selectors/map';
+import { isMapLoadedSelector } from '../../../selectors/game';
+import { isFirstResizeSelector } from '../../../selectors/stage';
 
 // Utils
 import uuidv5 from 'uuid/v5';
@@ -23,9 +30,12 @@ const Objects = memo(() => {
 
     // Effects
     const dispatch = useDispatch();
-    const { objectList, isObjectsCreation } = useSelector(state => state.map);
-    const { isMapLoaded } = useSelector(state => state.game);
-    const { isFirstResize } = useSelector(state => state.stage);
+    const mapArray = useSelector(mapArraySelector);
+    const matrix = useSelector(matrixSelector);
+    const objectList = useSelector(objectListSelector);
+    const isObjectsCreation = useSelector(isObjectsCreationSelector);
+    const isMapLoaded = useSelector(isMapLoadedSelector);
+    const isFirstResize = useSelector(isFirstResizeSelector);
 
     const indicateStart = useCallback(() => {
         dispatch({ 
@@ -44,7 +54,7 @@ const Objects = memo(() => {
     }, [dispatch]);
 
     useEffect(() => {
-        if (objectList.length === 0 && 
+        if (!objectList.length && 
             !isObjectsCreation && 
             isMapLoaded && 
             isFirstResize)
@@ -60,6 +70,19 @@ const Objects = memo(() => {
         indicateStart,
         isFirstResize
     ]);
+
+    useEffect(() => {
+        if (!mapArray.length && !matrix.length) {
+            const newMatrix = mockedMap.map(row => row.map(cell => cell !== 0 ? -1 : 0));
+            dispatch({ 
+                type: 'OBSTACLE_MATRIX_LOADED',
+                payload: {
+                    map: mockedMap,
+                    matrix: newMatrix
+                }
+            });
+        }
+    }, [ mapArray, matrix, dispatch ]);
 
     useEffect(() => {
         const objects = mockedMap.flat().map((tileTypeId, index) => {

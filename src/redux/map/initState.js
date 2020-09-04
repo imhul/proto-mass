@@ -1,6 +1,8 @@
 export const initState = {
     objectsLimit: 100,
     objectList: [],
+    matrix: [],
+    map: [],
     isObjectsCreation: false,
     isObjectsCreated: false,
     userAction: {

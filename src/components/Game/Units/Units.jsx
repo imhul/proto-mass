@@ -12,6 +12,7 @@ import { fakePathSelector } from '../../../selectors/objects';
 import { tasksSelector, pendingsSelector } from '../../../selectors/task';
 import { isGameStartedSelector, isGamePausedSelector } from '../../../selectors/game';
 import { unitsSelector, getUnitByIdSelector } from '../../../selectors/units';
+import { matrixSelector } from '../../../selectors/map';
 
 // Custom Hooks
 import { useGetUnit, useGetTask } from '../../../hooks';
@@ -30,6 +31,7 @@ const Units = memo(props => {
     const unitList = useSelector(unitsSelector);
     const getUnitById = useSelector(getUnitByIdSelector);
     const fakePath = useSelector(fakePathSelector);
+    const matrix = useSelector(matrixSelector);
 
     // generators
     const newUnit = { 
@@ -140,7 +142,7 @@ const Units = memo(props => {
         const unitPosX = unit.position.x;
         const unitPosY = unit.position.y;
         const destination = (newTask && newTask.position && (currentTask === null || newTask.id !== currentTask.id)) ? newTask.position : currentTask.position;
-        const newPath = destination && getPath(unitPosY, unitPosX, destination.y, destination.x);
+        const newPath = destination && getPath(matrix, unitPosY, unitPosX, destination.y, destination.x);
 
         if (newTask && newPath && currentTask === null) {
             setCurrentTask({...newTask, path: newPath});
@@ -158,7 +160,13 @@ const Units = memo(props => {
                 unitPosY) 
             {
                 // unit reached destination
-                if (destination.x === unitPosX && destination.y === unitPosY) {
+                if (
+                    (currentTask.path.length === (i + 1)) &&
+                    ((unitPosX + 1) === destination.x || (unitPosX - 1) === destination.x) && 
+                    ((unitPosY + 1) === destination.y || (unitPosY - 1) === destination.y) && 
+                    unit.status === "walk" && 
+                    currentTask !== null
+                ) {
                     clearTimeout(stepDelay);
                     dispatch({
                         type: 'UNIT_READY_TO_WORK', payload: {
@@ -170,10 +178,11 @@ const Units = memo(props => {
                     Notify({
                         type: "success",
                         message: "TADAAAA!",
-                        description: `Destination [x: ${destination.x},y: ${destination.y}], Step [x: ${x},y: ${y}]`,
+                        description: `Destination [x: ${destination.x},y: ${destination.y}], Unit Position [x: ${x},y: ${y}]`,
                         icon: "success",
                         duration: 20
-                    })
+                    });
+                    return;
                 // ready to go
                 } else if (x === unitPosX && y === unitPosY) {
                     stepDelay = setTimeout(() => dispatch({
@@ -187,7 +196,7 @@ const Units = memo(props => {
                 }
             }
         });
-    }, [ currentTask, dispatch ]); // dispatch
+    }, [ currentTask, matrix, dispatch ]);
 
     const working = useCallback((taskList, unit) => {
         let workingDelay;

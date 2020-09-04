@@ -17,4 +17,6 @@ export const types = {
     OBJECT_CLICK:               'OBJECT_CLICK',
     OBJECT_HOVER:               'OBJECT_HOVER',
 
+    OBSTACLE_MATRIX_LOADED:     'OBSTACLE_MATRIX_LOADED',
+
 };
