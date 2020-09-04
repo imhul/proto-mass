@@ -1,9 +1,10 @@
 import { matrix } from './mockedMap';
 
+// TODO: ES6 refactor
 const lee = (() => {
     let x, y;
     const pathfinder = (matrixReloaded, x1, y1, x2, y2) => {
-        console.info("pathfinder run!");
+        // console.info("pathfinder run!");
         const toVisit = [[x1, y1]]; // Initialise at the start square
         while(toVisit.length) { // While there are still squares to visit
             x = toVisit[0][0];

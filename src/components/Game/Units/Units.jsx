@@ -1,4 +1,4 @@
-import React, { memo, useEffect, useCallback } from 'react';
+import React, { memo, useState, useEffect, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 // Components
@@ -129,49 +129,57 @@ const Units = memo(props => {
     //     }, 5000 * ++i)
     // });
 
+    const [currentTask, setCurrentTask] = useState(null);
+
     const walking = useCallback((taskList, unit) => {
 
         console.info("init walking()");
         let stepDelay;
-        const currentTask = taskList.filter(task => task.status = "accepted")[0];
+        const newTask = taskList.filter(task => task.status = "accepted")[0];
         const unitPosX = unit.position.x;
         const unitPosY = unit.position.y;
-        const destination = currentTask && currentTask.position;
-        const path = destination && getPath(unitPosY, unitPosX, destination.y, destination.x);
-        // const pathLength = path.length;
-        console.info("path: ", path);
+        const destination = (newTask && newTask.position && (currentTask === null || newTask.id !== currentTask.id)) ? newTask.position : currentTask.position;
+        const newPath = destination && getPath(unitPosY, unitPosX, destination.y, destination.x);
 
-        path.forEach(({x,y}, i) => {
+        if (newTask && newPath && currentTask === null) {
+            setCurrentTask({...newTask, path: newPath});
+        } else {
+            clearTimeout(stepDelay);
+        }
+
+        console.info("currentTask: ", currentTask);
+
+        currentTask && currentTask.path.forEach((step, i) => {
             if (destination &&
-                destination.x && 
-                unitPosX && 
-                destination.y && 
+                destination.x &&
+                unitPosX &&
+                destination.y &&
                 unitPosY) 
-            {       
-                
-                stepDelay = setTimeout(() => {
-                    // unit reached destination
-                    if (destination.x === unitPosX && destination.y === unitPosY) {
-                        clearTimeout(stepDelay);
-                        dispatch({ type: 'UNIT_READY_TO_WORK', payload: { 
+            {
+                // unit reached destination
+                if (destination.x === unitPosX && destination.y === unitPosY) {
+                    clearTimeout(stepDelay);
+                    dispatch({
+                        type: 'UNIT_READY_TO_WORK', payload: {
                             currentTask: currentTask,
                             unitId: unit.id
-                        }});
-                    // ready to go
-                    } else {
-                        dispatch({
-                            type: 'UNIT_WALKING',  
-                            payload: {
-                                x: x,
-                                y: y,
-                                unitId: unit.id,
-                            }
-                        })
-                    }
-                }, unit.stats.speed)
+                        }
+                    });
+                    setCurrentTask(null);
+                // ready to go
+                } else if (step.x === unitPosX && step.y === unitPosY) {
+                    stepDelay = setTimeout(() => dispatch({
+                        type: 'UNIT_WALKING',
+                        payload: {
+                            x: currentTask.path[i+1].x,
+                            y: currentTask.path[i+1].y,
+                            unitId: unit.id,
+                        }
+                    }), unit.stats.speed);
+                }
             }
         });
-    }, []);
+    }, [ currentTask, dispatch ]); // dispatch
 
     const working = useCallback((taskList, unit) => {
         let workingDelay;
