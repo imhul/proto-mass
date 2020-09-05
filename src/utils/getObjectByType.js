@@ -190,4 +190,4 @@ export const getObjectByType = typeId => {
             height: 0,
         }
     }
-};
+}

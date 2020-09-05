@@ -19,7 +19,7 @@ import uuidv5 from 'uuid/v5';
 import { 
     getRandomInt, 
     getObjectByType,
-    mockedMap,
+    getMap,
     // playSFX,
 } from '../../../utils';
 
@@ -73,11 +73,11 @@ const Objects = memo(() => {
 
     useEffect(() => {
         if (!mapArray.length && !matrix.length) {
-            const newMatrix = mockedMap.map(row => row.map(cell => cell !== 0 ? -1 : 0));
+            const newMatrix = getMap.map(row => row.map(cell => cell !== 0 ? -1 : 0));
             dispatch({ 
                 type: 'OBSTACLE_MATRIX_LOADED',
                 payload: {
-                    map: mockedMap,
+                    map: getMap,
                     matrix: newMatrix
                 }
             });
@@ -85,7 +85,7 @@ const Objects = memo(() => {
     }, [ mapArray, matrix, dispatch ]);
 
     useEffect(() => {
-        const objects = mockedMap.flat().map((tileTypeId, index) => {
+        const objects = getMap.flat().map((tileTypeId, index) => {
             const objectId = uuidv5(`object#${index}`, idLength);
             const treeId = getRandomInt(9, 12);
             const tree = getObjectByType(treeId);

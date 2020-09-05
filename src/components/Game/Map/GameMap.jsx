@@ -28,7 +28,7 @@ import _ from 'lodash';
 import { 
     getFrames, 
     getRandomInt, 
-    mockedMap, 
+    getMap, 
     // playSFX, 
     getTileByType,
 } from '../../../utils';
@@ -79,7 +79,7 @@ const GameMap = memo(() => {
 
     // render
     const MapLoader = () => {
-        const loadMap = mockedMap.flat().map((tileId, index) => { // mocked getGround factory util
+        const loadMap = getMap.flat().map((tileId, index) => { // mocked getGround factory util
             const x = (index % mapWidth) + 1;
             const y = Math.floor(index / mapWidth) + 1;
             const result = [

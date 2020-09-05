@@ -1,8 +1,19 @@
 import { createSelector } from 'reselect';
 
+// utils
+import memoize from "lodash.memoize";
+
 export const objectsSelector = createSelector(
     state => state.map,
     items => items.objectList
+);
+
+export const getObjectByPositionSelector = createSelector(
+    objectsSelector,
+    objects => memoize(position => 
+        objects.filter(object => 
+            object.position.x === position.x && 
+            object.position.y === position.y)[0])
 );
 
 export const treesSelector = createSelector(

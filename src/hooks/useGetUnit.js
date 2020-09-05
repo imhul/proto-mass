@@ -42,7 +42,7 @@ export const useGetUnit =  ({ name, isEnemy }) => {
             stats: {
                 level: getRandomInt(0, 4),
                 health: 100,
-                damage: 0,
+                damage: 1,
                 speed: 900,
                 healthPoints: 100,
                 pointsToNewLevel: 0,
@@ -57,6 +57,7 @@ export const useGetUnit =  ({ name, isEnemy }) => {
                     // y: ...
                 // },
             ],
+            currentTask: null,
             taskList: [],
             skills: [],
             //     {
@@ -65,7 +66,7 @@ export const useGetUnit =  ({ name, isEnemy }) => {
             //         status: "",
             //         progress: 0, // x-points
             //         level: 0, // max 20
-            //         levelName: "trainee", // medium, prime
+            //         levelName: "trainee", // 0-5 trainee, 6-10 medium, 11-15 master, 16-20 prime
             //         pointsToNextLevel: 0, // x-points
             //         bonus: {
             //             id: "",
@@ -80,7 +81,7 @@ export const useGetUnit =  ({ name, isEnemy }) => {
             //     status: "",
             //     progress: "", // x-points
             //     level: 0, // max 20
-            //     levelName: "trainee", // medium, prime
+            //     levelName: "trainee", // 0-5 trainee, 6-10 medium, 11-15 master, 16-20 prime
             //     pointsToNextLevel: 0, // x-points
             //     bonus: {
             //         id: "",
@@ -90,12 +91,13 @@ export const useGetUnit =  ({ name, isEnemy }) => {
             // },
             professions: [
                 {
-                    id: "",
+                    id: "prof_1",
+                    target: null, // {}
                     name: "collector", // constructor, collector, protector, numerator
-                    status: "",
-                    progress: "", // x-points
-                    level: 0, // max 20
-                    levelName: "trainee", // medium, prime
+                    status: "await", // await, update
+                    progress: 0, // x-points
+                    level: 0, // max lvl 20
+                    levelName: "trainee", // 0-5 trainee, 6-10 medium, 11-15 master, 16-20 prime
                     pointsToNextLevel: 0, // x-points
                     bonus: {
                         id: "",
@@ -104,13 +106,13 @@ export const useGetUnit =  ({ name, isEnemy }) => {
                     },
                 },
             ],
-            // {
+                // {
                 //     id: profId,
                 //     name: "constructor", 
                 //     status: "",
                 //     progress: "", // x-points
-                //     level: 1, // max 20
-                //     levelName: "trainee", // medium, prime
+                //     level: 1, // max lvl 20
+                //     levelName: "trainee", // 0-5 trainee, 6-10 medium, 11-15 master, 16-20 prime
                 //     pointsToNextLevel: 0, // x-points
                 //     bonus: {
                 //         id: "",

@@ -8,7 +8,7 @@ import { AnimatedTexture } from '../Map';
 import Notify from '../../Output/Notify';
 
 // Selectors
-import { fakePathSelector } from '../../../selectors/objects';
+import { fakePathSelector, getObjectByPositionSelector } from '../../../selectors/objects';
 import { tasksSelector, pendingsSelector } from '../../../selectors/task';
 import { isGameStartedSelector, isGamePausedSelector } from '../../../selectors/game';
 import { unitsSelector, getUnitByIdSelector } from '../../../selectors/units';
@@ -18,7 +18,7 @@ import { matrixSelector } from '../../../selectors/map';
 import { useGetUnit, useGetTask } from '../../../hooks';
 
 // Utils
-import { getRandomInt, getPath } from '../../../utils';
+import { getRandomInt, getPath, getLevel } from '../../../utils';
 
 const Units = memo(props => {
     
@@ -31,7 +31,9 @@ const Units = memo(props => {
     const unitList = useSelector(unitsSelector);
     const getUnitById = useSelector(getUnitByIdSelector);
     const fakePath = useSelector(fakePathSelector);
+    const getObject = useSelector(getObjectByPositionSelector);
     const matrix = useSelector(matrixSelector);
+    const [currentTask, setCurrentTask] = useState(null);
 
     // generators
     const newUnit = { 
@@ -123,20 +125,8 @@ const Units = memo(props => {
         getUnitById
     ]);
 
-    // var ar = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-    // var curId = 0;
-    // const useMyFunc = () => curId++;
-    // ar.forEach(function(element, i){
-    //     setTimeout(function(){
-    //         useMyFunc();
-    //     }, 5000 * ++i)
-    // });
-
-    const [currentTask, setCurrentTask] = useState(null);
-
     const walking = useCallback((taskList, unit) => {
 
-        console.info("init walking()");
         let stepDelay;
         const newTask = taskList.filter(task => task.status = "accepted")[0];
         const unitPosX = unit.position.x;
@@ -149,8 +139,6 @@ const Units = memo(props => {
         } else {
             clearTimeout(stepDelay);
         }
-
-        console.info("currentTask: ", currentTask);
 
         currentTask && currentTask.path.forEach(({x,y}, i) => {
             if (destination &&
@@ -168,12 +156,15 @@ const Units = memo(props => {
                     currentTask !== null
                 ) {
                     clearTimeout(stepDelay);
+
+                    const target = getObject(currentTask.position);
                     dispatch({
                         type: 'UNIT_READY_TO_WORK', payload: {
-                            currentTask: currentTask,
-                            unitId: unit.id
+                            currentTask: {...currentTask, target: target},
+                            unitId: unit.id,
                         }
                     });
+                    console.info("target: ", target);
                     setCurrentTask(null);
                     Notify({
                         type: "success",
@@ -196,32 +187,48 @@ const Units = memo(props => {
                 }
             }
         });
-    }, [ currentTask, matrix, dispatch ]);
+    }, [ currentTask, matrix, dispatch, getObject ]);
 
     const working = useCallback((taskList, unit) => {
         let workingDelay;
+        const task = unit.currentTask;
+        const currentProfession = unit.professions.filter(prof => 
+            prof.name === task.profession)[0];
 
-        return;
-
-        taskList.map(task => {
-            if (task.progress < task.progressPoints && task.status !== "done" && task.status !== "paused") {
-                workingDelay = setTimeout(() => dispatch({ 
+        if (
+            task.progress < task.progressPoints && 
+            task.status !== "done" && 
+            task.status !== "paused"
+        ) {
+            workingDelay = setTimeout(() => {
+                const currentLevel = getLevel(currentProfession.level, currentProfession.progress);
+                return dispatch({ 
                     type: 'UNIT_TASK_PERFORMS',
                     payload: {
                         unitId: unit.id,
+                        profession: {
+                            ...currentProfession,
+                            status: "update",
+                            progress: currentProfession.progress + 10,
+                            level: currentLevel.level,
+                            pointsToNextLevel: currentLevel.pointsToNextLevel,
+                        },
+
+                        // TODO:
+                        // targetHP - (skillCoof *or+ (kickPower + toolPower - DebuffEffect) / 100 * (AllHP/100 * currentHP))
                         progress: task.progress + 1,
                         currentTask: task,
                     }
-                }), 1000);
-            } else if (unit.taskList.progress === unit.taskList.progressPoints) {
-                dispatch({ type: 'UNIT_TASK_COMPLETE' });
-                clearTimeout(workingDelay);
-            } else {
-                // TODO: consider this decision!
-                clearTimeout(workingDelay);
-            }
-            return task
-        });
+                })}, 1000);
+        } else if (task.progress === task.progressPoints) {
+            dispatch({ type: 'UNIT_TASK_COMPLETE' });
+            clearTimeout(workingDelay);
+        } else {
+            // TODO: consider this decision!
+            clearTimeout(workingDelay);
+        }
+
+        console.info("currentTask: ", task);
     }, [dispatch]);
 
     const rest = useCallback(unitId => {

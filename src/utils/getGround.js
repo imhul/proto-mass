@@ -13,4 +13,4 @@ export const getGround = (mapHeight, mapWidth) => {
             k > area - mapWidth 
         ) ? val = 1 : val = getRandomInt(2, 9)
     )
-};
+}

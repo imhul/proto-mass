@@ -1,5 +1,7 @@
 import { types } from './types';
 import { initState } from './initState';
+
+// utils
 import update from 'immutability-helper';
 
 export default function unitReducer(state = initState, action) {
@@ -80,19 +82,6 @@ export default function unitReducer(state = initState, action) {
             }
 
         // WORK
-        case types.UNIT_READY_TO_WORK:
-            
-            const updateUnitStatus = update(currentUnit, {
-                status: { $set: "work" }, // walk, work, attak, rest, search, dead
-            });
-
-            return {
-                ...state,
-                unitList: update(state.unitList, 
-                    { $merge: [updateUnitStatus] }
-                ),
-            }
-
         case types.UNIT_GET_TASK_LIST: 
             const relevantTaskList = (
                 action.payload && 
@@ -119,15 +108,40 @@ export default function unitReducer(state = initState, action) {
                 ),
             }
 
-        case types.UNIT_TASK_PERFORMS: 
-            const currentTask = action.payload.currentTask;
-            const updateRelevantTask = update(currentTask, {
-                status: { $set: "progress" }, // await, accepted, done, paused, progress
-                progress: { $set: action.payload.progress },
+        case types.UNIT_READY_TO_WORK:
+        
+            const updateUnitStatus = update(currentUnit, {
+                currentTask: { $set: action.payload.currentTask },
+                status: { $set: "work" }, // walk, work, attak, rest, search, dead
             });
+
+            return {
+                ...state,
+                unitList: update(state.unitList, 
+                    { $merge: [updateUnitStatus] }
+                ),
+            }
+
+        case types.UNIT_TASK_PERFORMS:
+            const { payload } = action;
+            const { currentTask, progress, profession } = payload;
+            
+            const updateCurrentTask = update(currentTask, {
+                status: { $set: "progress" }, // await, accepted, done, paused, progress
+                progress: { $set: progress },
+            });
+
+            // const { level, progress } = profession;
+            // const updateCurrentProf = update(profession, {
+            //     progress: { $set: progress },
+            //     level: { $set: level }, // walk, work, attak, rest, search, dead
+            //     professions: { $merge: updateCurrentProf },
+            // });
+
             const updateUnitWorkingPoints = update(currentUnit, {
-                taskList: { $merge: updateRelevantTask },
-                status: { $set: "work" } // walk, work, attak, rest, search, dead
+                taskList: { $merge: updateCurrentTask },
+                status: { $set: "work" }, // walk, work, attak, rest, search, dead
+                professions: { $merge: profession },
             });
 
             return {
