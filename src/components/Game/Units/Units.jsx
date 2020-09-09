@@ -34,6 +34,7 @@ const Units = memo(props => {
     const getObject = useSelector(getObjectByPositionSelector);
     const matrix = useSelector(matrixSelector);
     const [currentTask, setCurrentTask] = useState(null);
+    const [isReadyToWork, setIsReadyToWork] = useState(false);
 
     // generators
     const newUnit = { 
@@ -128,54 +129,61 @@ const Units = memo(props => {
     const walking = useCallback((taskList, unit) => {
 
         let stepDelay;
-        const newTask = taskList.filter(task => task.status = "accepted")[0];
+        const newTask = taskList.find(task => task.status = "accepted");
         const unitPosX = unit.position.x;
         const unitPosY = unit.position.y;
-        const destination = (newTask && newTask.position && (currentTask === null || newTask.id !== currentTask.id)) ? newTask.position : currentTask.position;
+        const destination = (newTask && 
+            newTask.position && 
+            (!currentTask || newTask.id !== currentTask.id)
+        ) ? newTask.position : currentTask.position;
         const newPath = destination && getPath(matrix, unitPosY, unitPosX, destination.y, destination.x);
+        
+        if (newTask && newPath && (!currentTask || currentTask.id !== newTask.id)) {
+            const target = getObject(newTask.position);
+            setCurrentTask({
+                ...newTask, 
+                path: newPath,
+                target: target,
+            });
+        } else clearTimeout(stepDelay);
 
-        if (newTask && newPath && currentTask === null) {
-            setCurrentTask({...newTask, path: newPath});
-        } else {
-            clearTimeout(stepDelay);
-        }
+        const path = currentTask && currentTask.path;
 
-        currentTask && currentTask.path.forEach(({x,y}, i) => {
-            if (destination &&
-                destination.x &&
-                unitPosX &&
-                destination.y &&
-                unitPosY) 
-            {
-                // unit reached destination
-                if (
-                    (currentTask.path.length === (i + 1)) &&
-                    ((unitPosX + 1) === destination.x || (unitPosX - 1) === destination.x) && 
-                    ((unitPosY + 1) === destination.y || (unitPosY - 1) === destination.y) && 
-                    unit.status === "walk" && 
-                    currentTask !== null
-                ) {
-                    clearTimeout(stepDelay);
+        function readyToWork(received) {
+            if (path && path.length && !isReadyToWork) {
+                 dispatch({
+                    type: 'UNIT_READY_TO_WORK', 
+                    payload: {
+                        currentTask: received,
+                        unitId: unit.id,
+                    }
+                });
+                setIsReadyToWork(true);
+                clearTimeout(stepDelay);
+                Notify({
+                    type: "success",
+                    message: "TADAAAA!",
+                    description: `Destination [x: ${destination.x},y: ${destination.y}]`,
+                    icon: "success",
+                    duration: 20
+                });
+            }
+        } 
 
-                    const target = getObject(currentTask.position);
-                    dispatch({
-                        type: 'UNIT_READY_TO_WORK', payload: {
-                            currentTask: {...currentTask, target: target},
-                            unitId: unit.id,
-                        }
-                    });
-                    console.info("target: ", target);
-                    setCurrentTask(null);
-                    Notify({
-                        type: "success",
-                        message: "TADAAAA!",
-                        description: `Destination [x: ${destination.x},y: ${destination.y}], Unit Position [x: ${x},y: ${y}]`,
-                        icon: "success",
-                        duration: 20
-                    });
-                    return;
-                // ready to go
-                } else if (x === unitPosX && y === unitPosY) {
+        console.info("isReadyToWork: ", isReadyToWork);
+
+        if (currentTask &&
+        destination &&
+        destination.x &&
+        unitPosX &&
+        destination.y &&
+        unitPosY &&
+        !unit.currentTask &&
+        unit.status === "walk"
+        ) { 
+        // unit ready to go!
+            path.forEach(({x,y}, i) => {
+                if (x === unitPosX && y === unitPosY) {
                     stepDelay = setTimeout(() => dispatch({
                         type: 'UNIT_WALKING',
                         payload: {
@@ -184,51 +192,71 @@ const Units = memo(props => {
                             unitId: unit.id,
                         }
                     }), unit.stats.speed);
+                } else {
+                    if ( ((unitPosX + 1) === destination.x || 
+                        (unitPosX - 1) === destination.x) && 
+                    ((unitPosY + 1) === destination.y || 
+                        (unitPosY - 1) === destination.y) 
+                    ) {
+                        // unit reached destination!
+                        readyToWork(currentTask);
+                        setCurrentTask(null);
+                        
+                    }
                 }
-            }
-        });
-    }, [ currentTask, matrix, dispatch, getObject ]);
+            });
+        }
+    }, [ isReadyToWork, currentTask, matrix, dispatch, getObject ]);
 
-    const working = useCallback((taskList, unit) => {
+    const working = useCallback((unit) => {
         let workingDelay;
+        const workSpeed = 1000;
         const task = unit.currentTask;
-        const currentProfession = unit.professions.filter(prof => 
-            prof.name === task.profession)[0];
+        const currentProfession = unit.professions.find(prof => 
+            prof.name === task.profession);
+        const currentLevel = getLevel(
+            currentProfession.level, 
+            currentProfession.progress
+        );
+        const { id, stats } = task.target;
 
-        if (
-            task.progress < task.progressPoints && 
+        const workStep = () => {
+            dispatch({ 
+                type: 'UNIT_TASK_PERFORMS',
+                payload: {
+                    unitId: unit.id,
+                    profession: {
+                        ...currentProfession,
+                        status: "update",
+                        progress: currentProfession.progress + 10,
+                        level: currentLevel.level,
+                        pointsToNextLevel: currentLevel.pointsToNextLevel,
+                    },
+                    currentTask: task,
+                    status: "progress",
+                }
+            });
+            dispatch({ 
+                type: 'OBJECT_DAMAGE',
+                payload: {
+                    targetId: id,
+                    damage: stats.damage + 10,
+                },
+            });
+        }
+
+        if (stats.lealth > 0 && 
             task.status !== "done" && 
             task.status !== "paused"
         ) {
-            workingDelay = setTimeout(() => {
-                const currentLevel = getLevel(currentProfession.level, currentProfession.progress);
-                return dispatch({ 
-                    type: 'UNIT_TASK_PERFORMS',
-                    payload: {
-                        unitId: unit.id,
-                        profession: {
-                            ...currentProfession,
-                            status: "update",
-                            progress: currentProfession.progress + 10,
-                            level: currentLevel.level,
-                            pointsToNextLevel: currentLevel.pointsToNextLevel,
-                        },
-
-                        // TODO:
-                        // targetHP - (skillCoof *or+ (kickPower + toolPower - DebuffEffect) / 100 * (AllHP/100 * currentHP))
-                        progress: task.progress + 1,
-                        currentTask: task,
-                    }
-                })}, 1000);
-        } else if (task.progress === task.progressPoints) {
-            dispatch({ type: 'UNIT_TASK_COMPLETE' });
-            clearTimeout(workingDelay);
+            workingDelay = setTimeout(() => workStep(), workSpeed);
         } else {
-            // TODO: consider this decision!
             clearTimeout(workingDelay);
+            dispatch({ 
+                type: 'UNIT_TASK_COMPLETE',
+                task: task,
+            });
         }
-
-        console.info("currentTask: ", task);
     }, [dispatch]);
 
     const rest = useCallback(unitId => {
@@ -244,7 +272,7 @@ const Units = memo(props => {
                         break;
                     case "walk": walking(unit.taskList, unit);
                         break;
-                    case "work": working(unit.taskList, unit);
+                    case "work": working(unit);
                         break;
                     case "rest": rest(unit.id);
                         break;

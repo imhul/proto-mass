@@ -54,7 +54,7 @@ const StartInfo = memo(() => {
             dispatch({ type: 'TIME_MACHINE_INIT' });
             dispatch({ type: 'START_INFO_MODAL_CLOSE' });
             if (startFormFields.length > 0) {
-                const colonyNamed = startFormFields.filter(input => input.name[0] === 'colonyName')[0];
+                const colonyNamed = startFormFields.find(input => input.name[0] === 'colonyName');
                 dispatch({
                     type: 'START_GAME_FORM_UPDATE',
                     payload: {

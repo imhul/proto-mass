@@ -56,6 +56,15 @@ const Display = memo(() => {
         // isLoadSavedGame,
     } = useSelector(state => state.game);
 
+    useEffect(() => {
+        if (!document.body.classList.contains('game') && isGameInit) {
+            document.body.classList.add('game');
+        }
+        return () => {
+            document.body.classList.remove('game');
+        }
+    }, [isGameInit]);
+
     // error
     useEffect(() => {
         if (!_.isEmpty(error)) Notify({
@@ -157,13 +166,13 @@ const Display = memo(() => {
         window.addEventListener('wheel', onWheel);
         window.addEventListener('keydown', onKeydown);
         window.addEventListener('keyup', onKeyup);
-    
+
         return () => {
             window.removeEventListener('contextmenu', prevent);
             window.removeEventListener('wheel', onWheel);
             window.removeEventListener('keydown', onKeydown);
             window.removeEventListener('keyup', onKeyup);
-        };
+        }
     }, [prevent, onWheel, onKeydown, onKeyup]);
     
     return <>

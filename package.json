@@ -34,7 +34,7 @@
     "immutability-helper": "^3.0.2",
     "lodash": "^4.17.15",
     "mini-signals": "^1.2.0",
-    "node-sass": "^4.13.0",
+    "node-sass": "^4.13.1",
     "prop-types": "^15.7.2",
     "react": "^16.13.1",
     "react-avatar-generator": "^1.0.3",

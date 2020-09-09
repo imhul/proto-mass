@@ -8,22 +8,28 @@ export const unitsSelector = createSelector(
     items => items.unitList
 );
 
-export const currentUnitSelector = createSelector(
-    state => state.unit,
-    items => items.current
-);
-
-export const currentUnitPositionSelector = createSelector(
-    currentUnitSelector,
-    currentUnit => currentUnit.position
-);
-
-export const getUnitByIdSelector = createSelector(
-        unitsSelector,
-        units => memoize(unitId => units.filter(unit => unit.id === unitId)[0])
-);
-
 export const unitsLimitSelector = createSelector(
     state => state.unit,
     items => items.unitsLimit
+);
+
+export const selectedUnitSelector = createSelector(
+    unitsSelector,
+    units => units.find(unit => unit.isSelected)
+);
+
+// selected by id
+export const getUnitByIdSelector = createSelector(
+    unitsSelector,
+    units => memoize(unitId => units.find(unit => unit.id === unitId))
+);
+
+export const getUnitStatsSelector = createSelector(
+    getUnitByIdSelector,
+    unit => unit.stats
+);
+
+export const gettUnitDamageSelector = createSelector(
+    getUnitStatsSelector,
+    stats => stats.damage
 );

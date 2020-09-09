@@ -29,8 +29,6 @@ export const useGetTask = props => {
         type: props && props.type ? props.type : "collect",
         workerId: props && props.workerId ? props.workerId : "",
         priority: props && props.priority ? props.priority : 1,
-        progress: 0,
-        progressPoints: props && props.progressPoints ? props.progressPoints : 8,
         profession: props && props.proffession ? props.proffession : "collector",
         professionLevel: props && props.professionLevel ? props.professionLevel : "trainee",
         limit: props && props.limit ? props.limit : 1,
@@ -69,8 +67,6 @@ useGetTask.propTypes = {
     type: PropTypes.oneOf(['construct', 'collect', 'protect', 'numerate']),
     workerId: PropTypes.string,
     priority: PropTypes.number,
-    progress: PropTypes.number, // from 0 to progressPoints
-    progressPoints: PropTypes.number,
     profession: PropTypes.oneOf(['constructor', 'collector', 'protector', 'numerator']),
     professionLevel: PropTypes.oneOf(['trainee', 'medium', 'prime']),
     limit: PropTypes.number, // limit of current task

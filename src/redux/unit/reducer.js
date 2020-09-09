@@ -7,8 +7,8 @@ import update from 'immutability-helper';
 export default function unitReducer(state = initState, action) {
 
     const currentUnit = action.payload && 
-        state.unitList.filter(unit => 
-            unit.id === action.payload.unitId)[0];
+        state.unitList.find(unit => 
+            unit.id === action.payload.unitId);
 
     switch (action.type) {
 
@@ -124,11 +124,10 @@ export default function unitReducer(state = initState, action) {
 
         case types.UNIT_TASK_PERFORMS:
             const { payload } = action;
-            const { currentTask, progress, profession } = payload;
+            const { currentTask, profession, status } = payload;
             
             const updateCurrentTask = update(currentTask, {
-                status: { $set: "progress" }, // await, accepted, done, paused, progress
-                progress: { $set: progress },
+                status: { $set: status }, // await, accepted, done, paused, progress
             });
 
             // const { level, progress } = profession;
@@ -138,16 +137,16 @@ export default function unitReducer(state = initState, action) {
             //     professions: { $merge: updateCurrentProf },
             // });
 
-            const updateUnitWorkingPoints = update(currentUnit, {
-                taskList: { $merge: updateCurrentTask },
+            const updateUnitWorking = update(currentUnit, {
+                taskList: { $merge: [updateCurrentTask] },
                 status: { $set: "work" }, // walk, work, attak, rest, search, dead
-                professions: { $merge: profession },
+                professions: { $merge: [profession] },
             });
 
             return {
                 ...state,
                 unitList: update(state.unitList, 
-                    { $merge: [updateUnitWorkingPoints] }
+                    { $merge: [updateUnitWorking] }
                 ),
             }
 

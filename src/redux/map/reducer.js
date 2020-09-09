@@ -1,9 +1,13 @@
 import { types } from './types';
 import { initState } from './initState';
 
+// utils
+import update from 'immutability-helper';
+
 export default function mapReducer(state = initState, action) {
     switch (action.type) {
 
+        // objects actions
         case types.OBJECTS_CREATION_START: {
             return {
                 ...state,
@@ -28,6 +32,25 @@ export default function mapReducer(state = initState, action) {
             }
         }
 
+        case types.OBJECT_DAMAGE: {
+            const { targetId, damage } = action.payload;
+            const targetObject = state.objectList.find(obj => obj.id === targetId);
+            const updateObjectDamage = update(targetObject, {
+                stats: { 
+                    damage: { $set: damage },
+                 },
+            });
+            console.info("targetObject: ", targetObject);
+            return {
+                ...state,
+                objectList: update(state.objectList, 
+                    { $merge: [updateObjectDamage] }
+                ),
+            }
+            // return state;
+        }
+
+        // user actions
         case types.USER_ACTION: {
             return {
                 ...state,

@@ -13,6 +13,7 @@ const MainMenu = () => {
     const location = useLocation();
     const dispatch = useDispatch();
     const { isGameInit, loadingPercent } = useSelector(state => state.game);
+    const { isAuthenticated } = useSelector(state => state.auth);
     const [selectedKeys, setSelectedKeys] = useState([]);
 
     const onWebMenuClick = useCallback(e => {
@@ -44,7 +45,7 @@ const MainMenu = () => {
                                     <i className="anticon">4</i>
                                     <span>Home</span>
                                 </Menu.Item>
-                                <Menu.Item key="/game">
+                                <Menu.Item key="/game" disabled={!isAuthenticated}>
                                     <i className="anticon">7</i>
                                     <span>Game</span>
                                 </Menu.Item>

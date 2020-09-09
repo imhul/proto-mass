@@ -49,10 +49,17 @@ const NormalLoginForm = props => {
             });
     }, [profile, auth, dispatch, isAuthenticated]);
 
+    // mocked effect
+    useEffect(() => {
+        isAuthenticated && history.replace('./game');
+    }, [isAuthenticated, history]);
+    // mocked effect end
+
     const onFinish = useCallback(values => {
+        // TODO: validation!
         if (isAuthenticated) history.replace('./game');
         console.log('Received values of form: ', values);
-    }, [isAuthenticated, history]); // dispatch
+    }, [isAuthenticated, history]); // dispatch (mocked)
 
     return (
         <Card className="game-modal">
@@ -69,7 +76,7 @@ const NormalLoginForm = props => {
                     name="username"
                     rules={[
                         {
-                            required: false, // true
+                            required: false, // true (mocked)
                             message: 'Please input your Username!',
                         },
                     ]}
@@ -80,7 +87,7 @@ const NormalLoginForm = props => {
                     name="password"
                     rules={[
                         {
-                            required: false, // true
+                            required: false, // true (mocked)
                             message: 'Please input your Password!',
                         },
                     ]}
@@ -96,7 +103,7 @@ const NormalLoginForm = props => {
                         <Checkbox>Remember me</Checkbox>
                     </FormItem>
 
-                    <Button type="primary" htmlType="submit" className="game-btn">
+                    <Button type="primary" htmlType="submit" loading={!isAuthenticated} className="game-btn">
                         Login
                     </Button>
                 </FormItem>

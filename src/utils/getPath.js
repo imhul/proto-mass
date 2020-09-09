@@ -25,7 +25,7 @@ const lee = (() => {
 
     const getShortestPath = (matrixReloaded, x1, y1, x2, y2) => {
 
-        let previousValue = matrixReloaded[x2][y2];
+        let previousValue = (matrixReloaded && matrixReloaded[x2]) && matrixReloaded[x2][y2];
         let x = x2;
         let y = y2;
         const successfulRoute = [];

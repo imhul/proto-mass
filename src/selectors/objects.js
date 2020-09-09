@@ -11,9 +11,9 @@ export const objectsSelector = createSelector(
 export const getObjectByPositionSelector = createSelector(
     objectsSelector,
     objects => memoize(position => 
-        objects.filter(object => 
+        objects.find(object => 
             object.position.x === position.x && 
-            object.position.y === position.y)[0])
+            object.position.y === position.y))
 );
 
 export const treesSelector = createSelector(

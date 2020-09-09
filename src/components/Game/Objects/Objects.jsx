@@ -161,7 +161,7 @@ const Objects = memo(() => {
     
     return objectList.map((obj) => {
         return obj !== null && <IsometricObject
-            stats={false}
+            stats={obj.stats.health < obj.stats.healthPointstrue}
             obj={obj}
             key={`object${obj.id}`}
             x={obj.position.x}

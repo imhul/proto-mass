@@ -146,6 +146,10 @@ body {
     }
 }
 
+body.game {
+    background: radial-gradient(circle, #000 70%, #111719 100%);
+}
+
 * {
     ::selection {
         color: $transparent;

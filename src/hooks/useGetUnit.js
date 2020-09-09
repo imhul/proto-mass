@@ -39,13 +39,14 @@ export const useGetUnit =  ({ name, isEnemy }) => {
             freeMode: true,
             status: "search", // walk, work, attak, rest, search, dead
             isEnemy: isEnemy ? isEnemy : false,
+            isSelected: false,
             stats: {
-                level: getRandomInt(0, 4),
+                level: 0,
                 health: 100,
-                damage: 1,
+                damage: 10,
                 speed: 900,
                 healthPoints: 100,
-                pointsToNewLevel: 0,
+                pointsToNewLevel: 1000,
             },
             position: {
                 x: 15,
@@ -92,7 +93,6 @@ export const useGetUnit =  ({ name, isEnemy }) => {
             professions: [
                 {
                     id: "prof_1",
-                    target: null, // {}
                     name: "collector", // constructor, collector, protector, numerator
                     status: "await", // await, update
                     progress: 0, // x-points

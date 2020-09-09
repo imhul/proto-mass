@@ -119,16 +119,12 @@ class IsometricObject extends Component {
             <div className={classes.join(" ")} style={vars}>
                 {
                     stats && <Stats>
-                        {
-                            obj.stats.health === obj.stats.healthPoints ?
-                                `x:${JSON.stringify(obj.position.x)},y:${JSON.stringify(obj.position.y)}` :
-                                    <Preloader
-                                        percent={obj.stats.healthPoints}
-                                        class="mini"
-                                        strokeWidth={4}
-                                        format={null}
-                                    />
-                        }
+                        <Preloader
+                            percent={obj.stats.healthPoints}
+                            class="mini"
+                            strokeWidth={4}
+                            format={null}
+                        />
                     </Stats>
                 }
                 <div className="react-isometric-object" onClick={this.onClick}>

@@ -7,7 +7,7 @@ import {
 } from '../../../hooks';
 
 // Selectors
-import { currentUnitSelector } from '../../../selectors/units';
+import { selectedUnitSelector } from '../../../selectors/units';
 import { 
     isGameStartedSelector,
     isGamePausedSelector,
@@ -46,7 +46,7 @@ const GameMap = memo(() => {
     // effects
     const dispatch = useDispatch();
     const loadingPercent = useSelector(getLoadingPercentSelector);
-    const currentUnit = useSelector(currentUnitSelector);
+    const currentUnit = useSelector(selectedUnitSelector);
     const isGameStarted = useSelector(isGameStartedSelector);
     const isGamePaused = useSelector(isGamePausedSelector);
     const isMapLoaded = useSelector(isMapLoadedSelector);
@@ -59,14 +59,17 @@ const GameMap = memo(() => {
         const props = {
             limit: 1,
             tileId: id,
-            currentUnit: !_.isEmpty(currentUnit) && currentUnit,
+            currentUnit: !_.isEmpty(currentUnit) && currentUnit, // if unit is selected
             position: {
                 x: x,
                 y: y,
             },
         };
 
-        if (!_.isEmpty(props) && !_.isEmpty(currentUnit) && !currentUnit.freeMode) useGetTask(props);
+        if (!_.isEmpty(props) && 
+            !_.isEmpty(currentUnit) && 
+            !currentUnit.freeMode) 
+                useGetTask(props);
 
         dispatch({ type: 'USER_ACTION', payload: {
             x: x, 
@@ -130,51 +133,3 @@ const GameMap = memo(() => {
 });
 
 export default GameMap;
-
-
-//     const onKeyDown = useCallback(event => {
-//         console.info("event.code: ", event.code);
-//         const step = 10;
-//         let keysPressed = {};
-//         //     event.preventDefault();
-//         //     event.stopPropagation();
-//         if (current.status !== ('walk' || 'absent')) {
-//             switch (event.code) {
-//                 case 'ArrowUp': 
-//                 case 'KeyW': 
-//                     console.info("up");
-//                     dispatch(dragMapMove({ 
-//                         x: mapPosition.x, 
-//                         y: mapPosition.y + step,
-//                     }));
-//                     break;
-//                 case 'ArrowDown': 
-//                 case 'KeyS':
-//                     console.info("down");
-//                     dispatch(dragMapMove({ 
-//                         x: mapPosition.x, 
-//                         y: mapPosition.y - step,
-//                     }));
-//                     break;
-//                 case 'ArrowLeft': 
-//                 case 'KeyA':
-//                     console.info("left");
-//                     dispatch(dragMapMove({ 
-//                         x: mapPosition.x + step, 
-//                         y: mapPosition.y,
-//                     }));
-//                     break;
-//                 case 'ArrowRight': 
-//                 case 'KeyD':
-//                     console.info("right");
-//                     dispatch(dragMapMove({ 
-//                         x: mapPosition.x - step, 
-//                         y: mapPosition.y,
-//                     }));
-//                     break;
-//                 default:
-//                     if (isDragg) dispatch(dragMapStop(event));
-//                     break;
-//             }
-//         }
-
