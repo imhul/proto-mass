@@ -11,8 +11,8 @@ const rrfConfig = {
 };
 
 const credentials = {
-    email: process.env.REACT_APP_USER_EMAIL!,
-    pass: process.env.REACT_APP_USER_PASS!
+    email: process.env.REACT_APP_USER_EMAIL,
+    pass: process.env.REACT_APP_USER_PASS
 };
 
 const firebaseConfig = {

@@ -3,10 +3,10 @@ import { useSelector, useDispatch } from 'react-redux';
 
 // Helpers
 import WindowSizeListener from 'react-window-size-listener';
-import Fullscreen from 'react-full-screen';
+import Fullscreen from "react-full-screen";
 import { Zoom } from 'react-scaling';
 import { DndProvider } from 'react-dnd';
-import Backend from 'react-dnd-html5-backend';
+import { HTML5Backend } from 'react-dnd-html5-backend';
 
 // Components
 import DnD from './DnD';
@@ -188,7 +188,8 @@ const Display = memo(() => {
                     <Fullscreen 
                         enabled={isFullscreen} 
                         onChange={isFull => 
-                            dispatch({ type: 'FULLSCREEN', payload: isFull })}
+                            dispatch({ type: 'FULLSCREEN', payload: isFull })
+                        }
                     >
                         <div id="bg-game"></div>
                         <div id="bg-parallax"></div>
@@ -198,7 +199,7 @@ const Display = memo(() => {
                         <Zoom zoom={zoom} 
                             style={{ 'cursor': isDraggable ? 'grab' : 'default' }}
                         >
-                            <DndProvider backend={Backend}>
+                            <DndProvider backend={HTML5Backend}>
                                 <DnD />
                                 {
                                     isGameLoaded && isGameInit && !isGameStarted ? <StartInfo /> : null

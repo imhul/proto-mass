@@ -62,12 +62,9 @@ const GameMenuEsc = memo(() => {
     }, [dispatch, history]);
 
     const onFullscreen = useCallback(checked => {
-        if (!isFullscreen && checked) {
-            dispatch({ type: 'FULLSCREEN', payload: true })
-        } else {
-            dispatch({ type: 'FULLSCREEN', payload: false })
-        }
-    }, [isFullscreen, dispatch]);
+        return checked ? dispatch({ type: 'FULLSCREEN', payload: true }) :
+            dispatch({ type: 'FULLSCREEN', payload: false });
+    }, [dispatch]);
 
     return isGameMenuOpen ? (
         <Card className="game-modal start-game">

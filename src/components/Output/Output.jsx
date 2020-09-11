@@ -27,7 +27,7 @@ const Output = ({ history }) => {
     }, [ isAppInit, dispatch ]);
 
     return (
-        <ConnectedRouter history={history}>
+        <ConnectedRouter history={history} noInitialPop>
             <Layout className="Output">
                 <MainHeader />
                     
