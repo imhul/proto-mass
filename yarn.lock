@@ -1673,6 +1673,11 @@
     "@types/istanbul-reports" "^1.1.1"
     "@types/yargs" "^13.0.0"
 
+"@metarhia/common@^2.1.0":
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/@metarhia/common/-/common-2.2.0.tgz#48142af9a0fd9caf719cbf2612641abae9bfaedc"
+  integrity sha512-yAq1FPk2ayLAlj3QGOCSjpN5yWYLD3zLtJWkBRjQUlastAlrLzEMzTmbjLCGzz+lwZSwvSNsGHBsO0C42IO8CQ==
+
 "@mrmlnc/readdir-enhanced@^2.2.1":
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/@mrmlnc/readdir-enhanced/-/readdir-enhanced-2.2.1.tgz#524af240d1a360527b730475ecfa1344aa540dde"
@@ -3439,6 +3444,11 @@ chardet@^0.7.0:
   version "0.7.0"
   resolved "https://registry.yarnpkg.com/chardet/-/chardet-0.7.0.tgz#90094849f0937f2eedc2425d0d28a9e5f0cbad9e"
   integrity sha512-mT8iDcrh03qDGRRmoA2hmBJnxpllMR+0/0qlzjqZES6NdiWDcZkCNAk4rPFZ9Q85r27unkiNNg8ZOiwZXBHwcA==
+
+chillout@^5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/chillout/-/chillout-5.0.0.tgz#ce7def0671c207d649c9b1f35f5f2245b94b0065"
+  integrity sha512-xCyFUOrkOVBSaZ1pKXUZcrKhMsPkWh4jWPa9rp4zE+wHE5h4NTO7z8K5rLhV989dtQatDOoMhTe9Vi2S96QEhQ==
 
 chokidar@^2.0.0, chokidar@^2.0.4, chokidar@^2.1.8:
   version "2.1.8"
@@ -7773,6 +7783,13 @@ merge2@^1.2.3:
   version "1.4.1"
   resolved "https://registry.yarnpkg.com/merge2/-/merge2-1.4.1.tgz#4368892f885e907455a6fd7dc55c0c9d404990ae"
   integrity sha512-8q7VEgMJW4J8tcfVPy8g09NcQwZdbwFEqhe/WZkoIzjn/3TGDwtOCYtXGxA3O8tPzpczCCDgv+P2P5y00ZJOOg==
+
+metasync@^0.3.32:
+  version "0.3.32"
+  resolved "https://registry.yarnpkg.com/metasync/-/metasync-0.3.32.tgz#0d101e1dcde3ad001587b11290046c945e3df86e"
+  integrity sha512-E+NeMCXhp7oUtTipm2KM4Eq+Fp5ZK5AiezIt0FZX5Vu4mxcaexcmQZ6Z48j/w2SzVoLqX94vcwGXPqeV9r8APA==
+  dependencies:
+    "@metarhia/common" "^2.1.0"
 
 methods@~1.1.2:
   version "1.1.2"

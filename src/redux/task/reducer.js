@@ -55,7 +55,7 @@ export default function taskReducer(state = initState, action) {
                 ),
             }
 
-        case types.TASK_DONE:
+        case types.TASK_COMPLETE:
             return {
                 ...state,
                 taskList: update(state.taskList, 

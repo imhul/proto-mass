@@ -180,7 +180,7 @@ export const getObjectByType = typeId => {
         default: return {
             typeId: '', 
             name: '', // to show title
-            status: '', // inactive, grow, damage, attack, repair
+            status: '', // inactive, grow, damage, attack, repair, dead
             blocker: true, // for collisions
             health: 0, // real health points now
             damage: 0,

@@ -10,7 +10,7 @@ export const initState = {
     //         level: 0, // max 20
     //         health: 0, // h-points
     //         damage: 0, // h-points
-    //         speed: 900,
+    //         speed: 0.666,
     //         healthPoints: 0, // h-points
     //         pointsToNextLevel: 0, // max 20
     //     },

@@ -13,7 +13,8 @@ export const getObjectByPositionSelector = createSelector(
     objects => memoize(position => 
         objects.find(object => 
             object.position.x === position.x && 
-            object.position.y === position.y))
+            object.position.y === position.y)
+    )
 );
 
 export const treesSelector = createSelector(
@@ -28,13 +29,10 @@ export const mineralsSelector = createSelector(
 
 export const fakePathSelector = createSelector(
     treesSelector,
-    trees => {
-        const treesPositions = trees.map(tree => {
-            return {
-                x: tree.position.x,
-                y: tree.position.y,
-            }
-        });
-        return treesPositions
-    }
+    trees => trees.map(tree => {
+        return {
+            x: tree.position.x,
+            y: tree.position.y,
+        }
+    })
 );

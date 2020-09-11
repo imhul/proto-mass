@@ -1,6 +1,6 @@
 export const types = {
     TASK_ADD:           'TASK_ADD',
-    TASK_DONE:          'TASK_DONE',
+    TASK_COMPLETE:          'TASK_COMPLETE',
     TASK_ACCEPTED:      'TASK_ACCEPTED',
     TASK_IN_PROGRESS:   'TASK_IN_PROGRESS',
     TASK_PAUSED:        'TASK_PAUSED',

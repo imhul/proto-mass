@@ -109,7 +109,6 @@ export default function unitReducer(state = initState, action) {
             }
 
         case types.UNIT_READY_TO_WORK:
-        
             const updateUnitStatus = update(currentUnit, {
                 currentTask: { $set: action.payload.currentTask },
                 status: { $set: "work" }, // walk, work, attak, rest, search, dead
@@ -123,22 +122,9 @@ export default function unitReducer(state = initState, action) {
             }
 
         case types.UNIT_TASK_PERFORMS:
-            const { payload } = action;
-            const { currentTask, profession, status } = payload;
-            
-            const updateCurrentTask = update(currentTask, {
-                status: { $set: status }, // await, accepted, done, paused, progress
-            });
-
-            // const { level, progress } = profession;
-            // const updateCurrentProf = update(profession, {
-            //     progress: { $set: progress },
-            //     level: { $set: level }, // walk, work, attak, rest, search, dead
-            //     professions: { $merge: updateCurrentProf },
-            // });
-
+            const { currentTask, profession } = action.payload;
             const updateUnitWorking = update(currentUnit, {
-                taskList: { $merge: [updateCurrentTask] },
+                currentTask: { $set: currentTask },
                 status: { $set: "work" }, // walk, work, attak, rest, search, dead
                 professions: { $merge: [profession] },
             });
@@ -147,6 +133,24 @@ export default function unitReducer(state = initState, action) {
                 ...state,
                 unitList: update(state.unitList, 
                     { $merge: [updateUnitWorking] }
+                ),
+            }
+
+        case types.UNIT_TASK_COMPLETE:
+            const { task } = action.payload;
+            console.info("task: ", task);
+            const filteredTaskList = currentUnit.taskList.filter(job => 
+                job.id !== task.id || job.status === "complete");
+            const updateTaskComplete = update(currentUnit, {
+                currentTask: { $set: null },
+                status: { $set: filteredTaskList.length ? "walk" : "search" }, // walk, work, attak, rest, search, dead
+                taskList: { $set: filteredTaskList },
+            });
+
+            return {
+                ...state,
+                unitList: update(state.unitList, 
+                    { $merge: [updateTaskComplete] }
                 ),
             }
 

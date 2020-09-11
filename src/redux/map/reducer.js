@@ -33,19 +33,41 @@ export default function mapReducer(state = initState, action) {
         }
 
         case types.OBJECT_DAMAGE: {
-            const { targetId, damage } = action.payload;
-            const targetObject = state.objectList.find(obj => obj.id === targetId);
-            const updateObjectDamage = update(targetObject, {
-                stats: { 
-                    damage: { $set: damage },
-                 },
-            });
-            console.info("targetObject: ", targetObject);
-            return {
+            const { target, damage } = action.payload;
+            const targetObject = state.objectList.find(obj => obj.id === target.id);
+            const { stats: { health, healthPoints } } = target;
+            
+            if (damage && health && (health === 0 || health < 0 || damage > health)) {
+                const updateObjectDamage = update(targetObject, {
+                    stats: { 
+                        damage: { $set: healthPoints },
+                        health: { $set: 0 }
+                    },
+                    status: { $set: "dead" }, // inactive, grow, damage, attack, repair, dead
+                    blocker: { $set: false },
+                    width: { $set: 0 },
+                    height: { $set: 0 },
+                });
+                return {
                 ...state,
-                objectList: update(state.objectList, 
-                    { $merge: [updateObjectDamage] }
-                ),
+                    objectList: update(state.objectList,
+                        { $merge: [updateObjectDamage] }
+                    ),
+                }
+            } else {
+                const updateObjectDamage = update(targetObject, {
+                    stats: { 
+                        damage: { $set: damage },
+                        health: { $set: (health - damage) }
+                     },
+                     status: { $set: "damage" }, // inactive, grow, damage, attack, repair, dead
+                });
+                return {
+                    ...state,
+                    objectList: update(state.objectList, 
+                        { $merge: [updateObjectDamage] }
+                    ),
+                }
             }
             // return state;
         }

@@ -40,7 +40,7 @@ const lee = (() => {
                         successfulRoute.push({y: i, x: j});
                         x = i;
                         y = j;
-                    } else if (successfulRoute.length === matrixReloaded[x2][y2] - 1) {
+                    } else if (matrixReloaded[x2] && (successfulRoute.length === matrixReloaded[x2][y2] - 1)) {
                         x = x1;
                         y = y1;
                     }
@@ -60,8 +60,8 @@ const lee = (() => {
 
     return {
         pathfinder : pathfinder,
-        getShortestPath : getShortestPath,
-        checkPath : checkPath
+        // getShortestPath : getShortestPath,
+        // checkPath : checkPath
     }
 })();
 

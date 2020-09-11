@@ -117,18 +117,19 @@ const Objects = memo(() => {
             // logic
             const copies = objectList.filter(item => 
                 item.position.x !== treeObject.position.x && 
-                item.position.y !== treeObject.position.y
+                item.position.y !== treeObject.position.y &&
+                item.id !== treeObject.id &&
+                item.id !== mineralObject.id
             );
-            
-            if (Math.random() < limit && 
-                tileTypeId === 0 && 
-                !copies.length &&
+            if (!copies.length &&
                 treeObject.position.x !== mineralObject.position.x &&
-                treeObject.position.y !== mineralObject.position.y)
-            {
-                return treeObject
-            } else if (tileTypeId !== 1) {
-                return mineralObject
+                treeObject.position.y !== mineralObject.position.y
+            ) {
+                if (Math.random() < limit && tileTypeId === 0) {
+                    return treeObject
+                } else if (tileTypeId !== 1) {
+                    return mineralObject
+                } else return null
             } else return null
         });
 
@@ -163,7 +164,7 @@ const Objects = memo(() => {
         return obj !== null && <IsometricObject
             stats={obj.stats.health < obj.stats.healthPointstrue}
             obj={obj}
-            key={`object${obj.id}`}
+            key={obj.id}
             x={obj.position.x}
             y={obj.position.y}
             z={obj.position.z}
