@@ -9,7 +9,7 @@ import botSrc from '../../../assets/sprites/animations/bot/bot_0_0.2s.png';
 
 const UserActionInfo = memo(() => {
 
-    const { userAction } = useSelector(state => state.map)
+    const { userAction } = useSelector(state => state.map);
 
     return (
         <GameInfoBlock>
@@ -20,6 +20,8 @@ const UserActionInfo = memo(() => {
                         <div>{ userAction.y && `y: ${JSON.stringify(userAction.y)}` }</div>
                         <div>{ userAction.objectType && `type: ${JSON.stringify(userAction.objectType)}` }</div>
                         <div>{ userAction.actionType && `action: ${JSON.stringify(userAction.actionType)}` }</div>
+                        <div>{ userAction.data && `damage: ${JSON.stringify(userAction.data.stats.damage)}` }</div>
+                        <div>{ userAction.data && `health: ${JSON.stringify(userAction.data.stats.health)}` }</div>
                         {
                             userAction.data && <>
                                 {

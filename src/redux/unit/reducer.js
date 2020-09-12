@@ -109,9 +109,14 @@ export default function unitReducer(state = initState, action) {
             }
 
         case types.UNIT_READY_TO_WORK:
+            const { unitPosition, unitPath } = action.payload;
             const updateUnitStatus = update(currentUnit, {
                 currentTask: { $set: action.payload.currentTask },
                 status: { $set: "work" }, // walk, work, attak, rest, search, dead
+                position: {
+                    x: { $set: unitPosition.x !== unitPath[unitPath.length - 1].x ? unitPath[unitPath.length - 1].x : unitPosition.x },
+                    y: { $set: unitPosition.y !== unitPath[unitPath.length - 1].y ? unitPath[unitPath.length - 1].y : unitPosition.y },
+                },
             });
 
             return {
@@ -125,7 +130,6 @@ export default function unitReducer(state = initState, action) {
             const { currentTask, profession } = action.payload;
             const updateUnitWorking = update(currentUnit, {
                 currentTask: { $set: currentTask },
-                status: { $set: "work" }, // walk, work, attak, rest, search, dead
                 professions: { $merge: [profession] },
             });
 
@@ -138,19 +142,18 @@ export default function unitReducer(state = initState, action) {
 
         case types.UNIT_TASK_COMPLETE:
             const { task } = action.payload;
-            console.info("task: ", task);
             const filteredTaskList = currentUnit.taskList.filter(job => 
-                job.id !== task.id || job.status === "complete");
-            const updateTaskComplete = update(currentUnit, {
-                currentTask: { $set: null },
+                job.id !== task.id && job.status !== "complete");
+            const updateUnitTaskComplete = update(currentUnit, {
                 status: { $set: filteredTaskList.length ? "walk" : "search" }, // walk, work, attak, rest, search, dead
                 taskList: { $set: filteredTaskList },
+                currentTask: { $set: null },
             });
 
             return {
                 ...state,
                 unitList: update(state.unitList, 
-                    { $merge: [updateTaskComplete] }
+                    { $merge: [updateUnitTaskComplete] }
                 ),
             }
 

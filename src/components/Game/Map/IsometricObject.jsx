@@ -112,17 +112,18 @@ class IsometricObject extends Component {
         };
         const classes = ["react-isometric-object-wrapper"];
         if (className) classes.push(className);
-        if (active) {
-            classes.push("active");
-        }
+        if (active) classes.push("active");
+        if (obj.stats.health === 0 || obj.stats.health < 0) classes.push("dead");
+        
         return (
             <div className={classes.join(" ")} style={vars}>
                 {
-                    stats && <Stats>
+                    (stats && obj.stats.health < obj.stats.healthPoints) && <Stats>
                         <Preloader
-                            percent={obj.stats.healthPoints}
+                            percent={obj.stats.health}
                             class="mini"
                             strokeWidth={4}
+                            strokeColor={{ from: '#811350', to: '#F6D6BD' }}
                             format={null}
                         />
                     </Stats>

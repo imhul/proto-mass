@@ -20,6 +20,5 @@ export const initState = {
         //     healthPoints: 0, // total health points
         // },
     },
-    zoom: 100,
     error: {},
 };

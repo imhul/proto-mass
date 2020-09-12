@@ -8,7 +8,6 @@ import Notify from '../../Output/Notify';
 const GameMenu = memo(() => {
 
     const dispatch = useDispatch();
-    const { zoom } = useSelector(state => state.map);
     const { isGameStarted, isGamePaused } = useSelector(state => state.game);
     const { unitList } = useSelector(state => state.unit);
     const [visible, setVisible] = useState(false);

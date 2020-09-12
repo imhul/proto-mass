@@ -43,7 +43,8 @@ export const useGetUnit =  ({ name, isEnemy }) => {
             stats: {
                 level: 0,
                 health: 100,
-                damage: 10,
+                damage: 0,
+                attak: 10,
                 speed: 0.666,
                 healthPoints: 100,
                 pointsToNewLevel: 1000,

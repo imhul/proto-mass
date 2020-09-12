@@ -157,6 +157,8 @@ const Units = memo(props => {
                     payload: {
                         currentTask: receivedTask,
                         unitId: unit.id,
+                        unitPosition: unit.position,
+                        unitPath: path,
                     }
                 });
                 clearTimeout(stepDelay);
@@ -218,41 +220,18 @@ const Units = memo(props => {
         );
         const { stats } = task.target;
 
+        console.info("stats.damage: ", stats.damage);
+        console.info("stats.health: ", stats.health);
+
         const workStep = () => {
-            const XP = 10; // TODO: XP must to become a selector
-            if (task && stats && stats.damage < stats.health) {
-                dispatch({ 
-                    type: 'UNIT_TASK_PERFORMS',
-                    payload: {
-                        unitId: unit.id,
-                        profession: {
-                            ...currentProfession,
-                            status: "update",
-                            progress: currentProfession.progress + XP,
-                            level: currentLevel.level,
-                            pointsToNextLevel: currentLevel.pointsToNextLevel,
-                        },
-                        currentTask: {
-                            ...task, 
-                            status: "progress",
-                            target: {
-                                ...task.target,
-                                stats: {
-                                    ...task.target.stats,
-                                    damage: stats.damage + unitDamage
-                                }
-                            }
-                        },
-                    }
-                });
-                dispatch({ 
-                    type: 'OBJECT_DAMAGE',
-                    payload: {
-                        target: task.target,
-                        damage: stats.damage + unitDamage, 
-                    },
-                });
-            } else if (task.status !== "complete") {
+            const unitXP = 10; // TODO: XP must to become a selector 
+            if (task && 
+                stats && 
+                task.status === "progress" &&
+                unit.status === "work" &&
+                (stats.health === 0 || stats.health < 0 ||
+                stats.damage === stats.healthPoints || stats.damage > stats.healthPoints)
+            ) {
                 clearTimeout(workingDelay);
                 dispatch({ 
                     type: 'UNIT_TASK_COMPLETE',
@@ -263,6 +242,49 @@ const Units = memo(props => {
                         },
                         unitId: unit.id,
                     }
+                });
+            } else if (task.status === "progress" || task.status === "accepted") {
+                dispatch({ 
+                    type: 'UNIT_TASK_PERFORMS',
+                    payload: {
+                        unitId: unit.id,
+                        profession: {
+                            ...currentProfession,
+                            status: "update",
+                            progress: currentProfession.progress + unitXP,
+                            level: currentLevel.level,
+                            pointsToNextLevel: currentLevel.pointsToNextLevel,
+                        },
+                        currentTask: {
+                            ...task, 
+                            status: "progress",
+                            target: {
+                                ...task.target,
+                                stats: {
+                                    ...task.target.stats,
+                                    damage: stats.damage < (stats.health - unitDamage) ? stats.damage + unitDamage : stats.healthPoints,
+                                    health: stats.health > unitDamage ? stats.health - unitDamage : 0,
+                                }
+                            }
+                        },
+                    }
+                });
+                dispatch({ 
+                    type: 'OBJECT_DAMAGE',
+                    payload: {
+                        target: {
+                            ...task.target,
+                            stats: {
+                                ...task.target.stats,
+                                damage: stats.damage < stats.health ? stats.damage + unitDamage : stats.healthPoints,
+                                health: stats.health > unitDamage ? stats.health - unitDamage : 0,
+                            },
+                            status: (stats.health > 0 && stats.damage < stats.health) ? "damage" : "dead",
+                            blocker: (stats.health > 0 && stats.damage < stats.health) ? true : false,
+                            width: (stats.health > 0 && stats.damage < stats.health) ? task.target.width : 0,
+                            height: (stats.health > 0 && stats.damage < stats.health) ? task.target.height : 0,
+                        } 
+                    },
                 });
             }
         }
@@ -294,8 +316,8 @@ const Units = memo(props => {
                 switch(unit.status) {
                     case "search": taskSearch(unit);
                         break;
-                    // case "walk": walking(unit.taskList, unit);
-                    //     break;
+                    case "walk": walking(unit.taskList, unit);
+                        break;
                     case "work": working(unit);
                         break;
                     case "rest": rest(unit.id);

@@ -88,7 +88,7 @@
 		text-align: center;
 		transform: rotateY(60deg);
 		color: #fff;
-		background-color: #222;
+		background-color: $transparent;
 		z-index: 999;
 	}
 
@@ -138,13 +138,7 @@
 					transform: rotateY(60deg);
 				}
 				.unit-stats {
-					position: absolute;
-					bottom: 25px;
-					left: -20px;
-					transform: rotateY(60deg);
-					color: #fff;
 					background-color: #3D435D;
-					z-index: 999;
 				}
 			}
 			.react-isometric-object-wrapper {
@@ -167,6 +161,9 @@
 				&.active {
 					pointer-events: auto;
 					opacity: 1;
+				}
+				&.dead {
+					display: none;
 				}
 				.react-isometric-object {
 					position: absolute;
