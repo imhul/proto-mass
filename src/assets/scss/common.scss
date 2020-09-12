@@ -148,6 +148,10 @@ body {
 
 body.game {
     background: radial-gradient(circle, #000 70%, #111719 100%);
+    .react-transform-component {
+        z-index: 5;
+        overflow: visible;
+    }
 }
 
 * {

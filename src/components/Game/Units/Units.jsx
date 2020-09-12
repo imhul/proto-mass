@@ -152,7 +152,7 @@ const Units = memo(props => {
 
         function readyToWork(receivedTask) {
             if (path && path.length) {
-                 dispatch({
+                dispatch({
                     type: 'UNIT_READY_TO_WORK', 
                     payload: {
                         currentTask: receivedTask,
@@ -294,8 +294,8 @@ const Units = memo(props => {
                 switch(unit.status) {
                     case "search": taskSearch(unit);
                         break;
-                    case "walk": walking(unit.taskList, unit);
-                        break;
+                    // case "walk": walking(unit.taskList, unit);
+                    //     break;
                     case "work": working(unit);
                         break;
                     case "rest": rest(unit.id);

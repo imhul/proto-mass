@@ -71,13 +71,6 @@ const GameMenu = memo(() => {
                     <i 
                         className="game-menu-btn touchable"
                         onClick={() => onDirectControl() }>&#x1F591;</i>
-                    <i 
-                        className="game-menu-text-btn touchable" 
-                        onClick={() => dispatch({ type: 'MAP_DECREASE'}) }>-</i>
-                    <i>{ `${zoom}%` }</i>
-                    <i 
-                        className="game-menu-text-btn touchable" 
-                        onClick={() => dispatch({ type: 'MAP_INCREASE'}) }>+</i>
                     
                     <i 
                         className="game-menu-btn touchable" 

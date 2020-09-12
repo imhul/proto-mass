@@ -1,15 +1,10 @@
 import React, { memo, useEffect, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
-// Helpers
-import WindowSizeListener from 'react-window-size-listener';
-import Fullscreen from "react-full-screen";
-import { Zoom } from 'react-scaling';
-import { DndProvider } from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
-
 // Components
-import DnD from './DnD';
+import Fullscreen from "react-full-screen";
+import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
+import GameMap from '../Map/GameMap';
 import Preloader from './Preloader';
 import TimeMachine from './TimeMachine';
 import StartOrLoadModal from '../Modals/StartOrLoad';
@@ -18,6 +13,7 @@ import StartInfo from '../Modals/StartInfo';
 import LeftGameInfoPanel from './LeftGameInfoPanel';
 import RightGameInfoPanel from './RightGameInfoPanel';
 import UserActionInfo from './UserActionInfo';
+import WindowSizeListener from 'react-window-size-listener';
 import Notify from '../../Output/Notify';
 
 // Hooks
@@ -40,7 +36,7 @@ const Display = memo(() => {
 
     const dispatch = useDispatch();
     const dom = useDOMState();
-    const { zoom, isDraggable } = useSelector(state => state.map);
+    // const { zoom, isDraggable } = useSelector(state => state.map);
     const { isFullscreen, isFirstResize } = useSelector(state => state.stage);
     // const { user } = useSelector(state => state.auth);
     // const { auth, profile } = useSelector(state => state.firebase);
@@ -163,13 +159,13 @@ const Display = memo(() => {
 
     useEffect(() => {
         window.addEventListener('contextmenu', prevent);
-        window.addEventListener('wheel', onWheel);
+        // window.addEventListener('wheel', onWheel);
         window.addEventListener('keydown', onKeydown);
         window.addEventListener('keyup', onKeyup);
 
         return () => {
             window.removeEventListener('contextmenu', prevent);
-            window.removeEventListener('wheel', onWheel);
+            // window.removeEventListener('wheel', onWheel);
             window.removeEventListener('keydown', onKeydown);
             window.removeEventListener('keyup', onKeyup);
         }
@@ -196,18 +192,30 @@ const Display = memo(() => {
                         <div id="mg-parallax"></div>
                         <div id="fg-parallax"></div>
                         <div id="starship" style={{backgroundImage: `url(${starship})`}}></div>
-                        <Zoom zoom={zoom} 
-                            style={{ 'cursor': isDraggable ? 'grab' : 'default' }}
-                        >
-                            <DndProvider backend={HTML5Backend}>
-                                <DnD />
-                                {
-                                    isGameLoaded && isGameInit && !isGameStarted ? <StartInfo /> : null
-                                }
-                                <GameMenuEsc />
-                            </DndProvider>
-                        </Zoom>
 
+                        <TransformWrapper
+                            options={{
+                                limitToWrapper: true,
+                            }}
+                            pan={{
+                                velocityEqualToMove: true,
+                                velocity: true,
+                                velocitySensitivity: 4,
+                            }}
+                            pinch={{ disabled: false }}
+                            doubleClick={{ disabled: false }}
+                            wheel={{
+                                step: 20,
+                            }}
+                        >
+                            <TransformComponent>
+                                <GameMap />
+                            </TransformComponent>
+                        </TransformWrapper>
+                        {
+                            isGameLoaded && isGameInit && !isGameStarted ? <StartInfo /> : null
+                        }
+                        <GameMenuEsc />
                         {
                             isGameInit && isGameStarted ? <>
                                 <LeftGameInfoPanel />
