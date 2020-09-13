@@ -2,6 +2,15 @@ import React, { memo, useCallback, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from "react-router-dom";
 
+// Selectors
+import { isFullscreenSelector } from '../../../selectors/stage';
+import { isTimeMachineInitSelector } from '../../../selectors/time';
+import { 
+    isGameInitSelector,
+    gameSettingsSelector,
+    isLoadSavedGameSelector,
+} from '../../../selectors/game';
+
 // Components
 import { Card, Row, Col, Form, Input, Checkbox, Button, } from 'antd';
 import SoundSlider from '../../Output/SoundSlider';
@@ -13,9 +22,11 @@ const StartInfo = memo(() => {
     // effects
     const history = useHistory();
     const dispatch = useDispatch();
-    const { isFullscreen } = useSelector(state => state.stage);
-    const { isTimeMachineInit } = useSelector(state => state.time);
-    const { isGameInit, isLoadSavedGame, settings } = useSelector(state => state.game);
+    const isFullscreen = useSelector(isFullscreenSelector);
+    const isTimeMachineInit = useSelector(isTimeMachineInitSelector);
+    const isGameInit = useSelector(isGameInitSelector);
+    const isLoadSavedGame = useSelector(isLoadSavedGameSelector);
+    const gameSettings = useSelector(gameSettingsSelector);
     const [colonyName, setColonyName] = useState("Autopia");
     const [isFirstClick, setIsFirstClick] = useState(true);
     const [startFormFields, setStartFormFields] = useState([
@@ -120,7 +131,7 @@ const StartInfo = memo(() => {
                 </FormItem>
                 <FormItem
                     name="volume" 
-                    label={`Sound Volume Level is ${settings.volume} out of 1`}
+                    label={`Sound Volume Level is ${gameSettings.volume} out of 1`}
                 >
                     <SoundSlider showResult={false} />
                 </FormItem>

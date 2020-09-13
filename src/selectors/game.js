@@ -5,6 +5,21 @@ export const gameSelector = createSelector(
     items => items
 );
 
+export const gameSettingsSelector = createSelector(
+    gameSelector,
+    items => items.settings
+);
+
+export const isGameInitSelector = createSelector(
+    gameSelector,
+    items => items.isGameInit
+);
+
+export const isGameLoadedSelector = createSelector(
+    gameSelector,
+    items => items.isGameLoaded
+);
+
 export const isGameStartedSelector = createSelector(
     gameSelector,
     items => items.isGameStarted
@@ -13,11 +28,6 @@ export const isGameStartedSelector = createSelector(
 export const isGamePausedSelector = createSelector(
     gameSelector,
     items => items.isGamePaused
-);
-
-export const isGameInitSelector = createSelector(
-    gameSelector,
-    items => items.isGameInit
 );
 
 export const isMapLoadedSelector = createSelector(
@@ -40,3 +50,27 @@ export const isLoadSavedGameSelector = createSelector(
     items => items.isLoadSavedGame
 );
 
+export const preloaderTitleSelector = createSelector(
+    gameSelector,
+    items => items.preloaderTitle
+);
+
+export const isStartOrLoadModalOpenSelector = createSelector(
+    gameSelector,
+    items => items.isStartOrLoadModalOpen
+);
+
+export const isGameMenuOpenSelector = createSelector(
+    gameSelector,
+    items => items.isGameMenuOpen
+);
+
+export const startGameFormSelector = createSelector(
+    gameSelector,
+    items => items.startGameForm
+);
+
+export const isGameErrorSelector = createSelector(
+    gameSelector,
+    items => items.error
+);

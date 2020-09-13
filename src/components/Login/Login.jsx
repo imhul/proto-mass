@@ -3,6 +3,13 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from "react-router-dom";
 import { firestore } from '../../redux/api';
 
+// Selectors
+import { isAuthenticatedSelector } from '../../selectors/auth';
+import { 
+    profileFirebaseSelector,
+    authFirebaseSelector,
+} from '../../selectors/firebase';
+
 // Components
 import { Card, Form, Input, Button, Checkbox } from 'antd';
 import {
@@ -17,8 +24,9 @@ const NormalLoginForm = props => {
 
     const history = useHistory();
     const dispatch = useDispatch();
-    const { isAuthenticated } = useSelector(state => state.auth);
-    const { profile, auth } = useSelector(state => state.firebase);
+    const isAuthenticated = useSelector(isAuthenticatedSelector);
+    const profileFirebase = useSelector(profileFirebaseSelector);
+    const authFirebase = useSelector(authFirebaseSelector);
 
     // mocked login
     useEffect(() => {
@@ -28,7 +36,7 @@ const NormalLoginForm = props => {
             .then(doc => {
                 const data = doc.data();
                 if (data) {
-                    if (!isAuthenticated && profile.isLoaded && auth.isLoaded) {
+                    if (!isAuthenticated && profileFirebase.isLoaded && authFirebase.isLoaded) {
                         dispatch({ type: 'SET_AUTH_LOGIN', payload: data });
                     }
                 }
@@ -47,7 +55,7 @@ const NormalLoginForm = props => {
                     duration: 3
                 })
             });
-    }, [profile, auth, dispatch, isAuthenticated]);
+    }, [profileFirebase, authFirebase, dispatch, isAuthenticated]);
 
     // mocked effect
     useEffect(() => {

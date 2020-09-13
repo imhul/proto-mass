@@ -29,3 +29,13 @@ export const matrixSelector = createSelector(
     mapSelector,
     items => items.matrix
 );
+
+export const userActionSelector = createSelector(
+    mapSelector,
+    items => items.userAction
+);
+
+export const clickPositionSelector = createSelector(
+    mapSelector,
+    items => items.clickPosition
+);

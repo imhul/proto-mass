@@ -3,12 +3,15 @@ import { useSelector } from 'react-redux';
 import { Route } from 'react-router';
 import { Redirect } from "react-router-dom";
 
+// Selectors
+import { isAuthenticatedSelector } from '../../selectors/auth';
+
 // Components
 import Notify from '../Output/Notify';
 
 const AuthContainer = ({ children, ...rest }) => {
 
-    const { isAuthenticated } = useSelector(state => state.auth);
+    const isAuthenticated = useSelector(isAuthenticatedSelector);
 
     useEffect(() => {
         if (!isAuthenticated) Notify({

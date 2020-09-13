@@ -16,6 +16,24 @@ import UserActionInfo from './UserActionInfo';
 import WindowSizeListener from 'react-window-size-listener';
 import Notify from '../../Output/Notify';
 
+// Selectors
+import { 
+    isFullscreenSelector,
+    isFirstResizeSelector,
+} from '../../../selectors/stage';
+
+import { 
+    // isLoadSavedGameSelector,
+    // isGamePausedSelector,
+    isGameStartedSelector,
+    getLoadingPercentSelector,
+    isMapLoadedSelector,
+    isStartOrLoadModalOpenSelector,
+    isGameInitSelector,
+    isGameErrorSelector,
+    isGameLoadedSelector,
+} from '../../../selectors/game';
+
 // Hooks
 import { useDOMState } from '../../../hooks';
 
@@ -36,21 +54,15 @@ const Display = memo(() => {
 
     const dispatch = useDispatch();
     const dom = useDOMState();
-    // const { zoom, isDraggable } = useSelector(state => state.map);
-    const { isFullscreen, isFirstResize } = useSelector(state => state.stage);
-    // const { user } = useSelector(state => state.auth);
-    // const { auth, profile } = useSelector(state => state.firebase);
-    // const { unitList } = useSelector(state => state.unit);
-    const { 
-        isStartOrLoadModalOpen,
-        loadingPercent, 
-        isGameInit, 
-        isMapLoaded, 
-        isGameLoaded, 
-        isGameStarted,
-        error,
-        // isLoadSavedGame,
-    } = useSelector(state => state.game);
+    const isFullscreen = useSelector(isFullscreenSelector);
+    const isFirstResize = useSelector(isFirstResizeSelector);
+    const isStartOrLoadModalOpen = useSelector(isStartOrLoadModalOpenSelector);
+    const loadingPercent = useSelector(getLoadingPercentSelector);
+    const isGameInit = useSelector(isGameInitSelector);
+    const isMapLoaded = useSelector(isMapLoadedSelector);
+    const isGameLoaded = useSelector(isGameLoadedSelector);
+    const isGameStarted = useSelector(isGameStartedSelector);
+    const error = useSelector(isGameErrorSelector);
 
     useEffect(() => {
         if (!document.body.classList.contains('game') && isGameInit) {
@@ -159,13 +171,11 @@ const Display = memo(() => {
 
     useEffect(() => {
         window.addEventListener('contextmenu', prevent);
-        // window.addEventListener('wheel', onWheel);
         window.addEventListener('keydown', onKeydown);
         window.addEventListener('keyup', onKeyup);
 
         return () => {
             window.removeEventListener('contextmenu', prevent);
-            // window.removeEventListener('wheel', onWheel);
             window.removeEventListener('keydown', onKeydown);
             window.removeEventListener('keyup', onKeyup);
         }

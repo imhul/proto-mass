@@ -1,13 +1,20 @@
 import React, { useCallback } from 'react';
 import { useSelector, useDispatch }  from 'react-redux';
 
+// Selectors
+import { 
+    isAuthenticatedSelector, 
+    userSelector,
+} from '../../selectors/auth';
+
 // Components
 import AvatarGenerator from 'react-avatar-generator';
 
 const Avatar = () => {
 
     const dispatch = useDispatch();
-    const { isAuthenticated, user } = useSelector(state => state.auth);
+    const isAuthenticated = useSelector(isAuthenticatedSelector);
+    const user = useSelector(userSelector);
 
     const setAvatar = useCallback(avatar => {
         dispatch({ type: 'SET_AVATAR', payload: avatar })

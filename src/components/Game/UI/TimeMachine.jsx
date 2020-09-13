@@ -5,6 +5,14 @@ import {
     STOP_TIMER
 } from 'redux-timer-middleware';
 
+// Selectors
+import { 
+    isTimeMachineInitSelector,
+    gameHoursSelector,
+    gameDaysSelector,
+    gameYearsSelector,
+} from '../../../selectors/time';
+
 // Components
 import Preloader from './Preloader';
 import GameInfoBlock from './GameInfoBlock';
@@ -13,12 +21,10 @@ const TimeMachine = () => {
 
     const dispatch = useDispatch();
 
-    const { 
-        isTimeMachineInit, 
-        gameHours,
-        gameDays,
-        gameYears,
-    } = useSelector(state => state.time);
+    const isTimeMachineInit = useSelector(isTimeMachineInitSelector);
+    const gameHours = useSelector(gameHoursSelector);
+    const gameDays = useSelector(gameDaysSelector);
+    const gameYears = useSelector(gameYearsSelector);
 
     useEffect(() => {
         if (isTimeMachineInit) dispatch({ 

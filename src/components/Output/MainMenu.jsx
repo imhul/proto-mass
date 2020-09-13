@@ -3,6 +3,13 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useHistory, useLocation } from "react-router-dom";
 import { Menu } from 'antd';
 
+// Selectors
+import { 
+    getLoadingPercentSelector,
+    isGameInitSelector,
+} from '../../selectors/game';
+import { isAuthenticatedSelector } from '../../selectors/auth';
+
 // Components
 import UserMenu from './UserMenu';
 import GameMenu from '../Game/UI/GameMenu';
@@ -12,8 +19,9 @@ const MainMenu = () => {
     const history = useHistory();
     const location = useLocation();
     const dispatch = useDispatch();
-    const { isGameInit, loadingPercent } = useSelector(state => state.game);
-    const { isAuthenticated } = useSelector(state => state.auth);
+    const isGameInit = useSelector(isGameInitSelector);
+    const loadingPercent = useSelector(getLoadingPercentSelector);
+    const isAuthenticated = useSelector(isAuthenticatedSelector);
     const [selectedKeys, setSelectedKeys] = useState([]);
 
     const onWebMenuClick = useCallback(e => {

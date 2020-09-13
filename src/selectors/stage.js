@@ -9,3 +9,8 @@ export const isFirstResizeSelector = createSelector(
     stageSelector,
     items => items.isFirstResize
 );
+
+export const isFullscreenSelector = createSelector(
+    stageSelector,
+    items => items.isFullscreen
+);

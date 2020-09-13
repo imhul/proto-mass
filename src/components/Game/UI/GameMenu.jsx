@@ -1,6 +1,13 @@
 import React, { memo, useState, useCallback, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
+// Selectors
+import { 
+    isGameStartedSelector,
+    isGamePausedSelector,
+} from '../../../selectors/game';
+import { unitsSelector } from '../../../selectors/units';
+
 // Components
 import { Drawer } from 'antd';
 import Notify from '../../Output/Notify';
@@ -8,8 +15,9 @@ import Notify from '../../Output/Notify';
 const GameMenu = memo(() => {
 
     const dispatch = useDispatch();
-    const { isGameStarted, isGamePaused } = useSelector(state => state.game);
-    const { unitList } = useSelector(state => state.unit);
+    const isGameStarted = useSelector(isGameStartedSelector);
+    const isGamePaused = useSelector(isGamePausedSelector);
+    const unitList = useSelector(unitsSelector);
     const [visible, setVisible] = useState(false);
     const closeMenuTimer = useRef(null);
 

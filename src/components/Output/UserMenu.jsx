@@ -4,6 +4,12 @@ import { useHistory } from "react-router-dom";
 import { useCookies, withCookies } from 'react-cookie';
 import { Popover, Button } from 'antd';
 
+// Selectors
+import { 
+    isAuthenticatedSelector, 
+    userSelector,
+} from '../../selectors/auth';
+
 // Components
 import Avatar from './Avatar';
 
@@ -13,7 +19,8 @@ const UserMenu = () => {
     const dispatch = useDispatch();
     const text = () => <span>Hello, voyager!</span>;
     const [cookie, removeCookie] = useCookies(['userId']);
-    const { isAuthenticated, user } = useSelector(state => state.auth);
+    const isAuthenticated = useSelector(isAuthenticatedSelector);
+    const user = useSelector(userSelector);
 
     const LoginPopup = () => {
         return <Button onClick={() => history.push('/login')}>Login</Button>;

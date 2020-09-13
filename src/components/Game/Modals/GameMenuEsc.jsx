@@ -2,6 +2,15 @@ import React, { memo, useCallback, } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from "react-router-dom";
 
+// Selectors
+import { isFullscreenSelector } from '../../../selectors/stage';
+import { unitsSelector } from '../../../selectors/units';
+import { 
+    gameSettingsSelector,
+    startGameFormSelector,
+    isGameMenuOpenSelector,
+} from '../../../selectors/game';
+
 // Components
 import { Card, Row, Col, Form, Checkbox, Button, } from 'antd';
 import Notify from '../../Output/Notify';
@@ -14,9 +23,11 @@ const GameMenuEsc = memo(() => {
     // effects
     const history = useHistory();
     const dispatch = useDispatch();
-    const { clickPosition } = useSelector(state => state.map);
-    const { isFullscreen } = useSelector(state => state.stage);
-    const { isGameMenuOpen, startGameForm, settings } = useSelector(state => state.game);
+    const units = useSelector(unitsSelector);
+    const isFullscreen = useSelector(isFullscreenSelector);
+    const isGameMenuOpen = useSelector(isGameMenuOpenSelector);
+    const startGameForm = useSelector(startGameFormSelector);
+    const gameSettings = useSelector(gameSettingsSelector);
 
     // handlers
     const onLoadGame = useCallback(() => {
@@ -37,15 +48,7 @@ const GameMenuEsc = memo(() => {
         dispatch({ 
             type: 'SAVE_GAME', 
             payload: { 
-                units: [
-                    {
-                        id: '1001',
-                        position: {
-                            x: clickPosition.x,
-                            y: clickPosition.y,
-                        },
-                    }
-                ],
+                units: units
             },
         });
         Notify({
@@ -54,7 +57,7 @@ const GameMenuEsc = memo(() => {
             icon: "save",
             duration: 3
         })
-    }, [dispatch, clickPosition, ]);
+    }, [dispatch, units ]);
 
     const onExitGame = useCallback(() => {
         dispatch({ type: 'EXIT_GAME' })
@@ -91,7 +94,7 @@ const GameMenuEsc = memo(() => {
                 </FormItem>
                 <FormItem
                     name="volume" 
-                    label={`Sound Volume Level is ${settings.volume} out of 1`}
+                    label={`Sound Volume Level is ${gameSettings.volume} out of 1`}
                 >
                     <SoundSlider showResult={false} />
                 </FormItem>

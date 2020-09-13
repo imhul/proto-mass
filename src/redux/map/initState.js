@@ -1,6 +1,7 @@
 export const initState = {
     objectsLimit: 100,
     objectList: [],
+    lootList: [],
     matrix: [],
     map: [],
     isObjectsCreation: false,

@@ -5,6 +5,10 @@ import { Route, Switch } from 'react-router';
 import { Redirect } from "react-router-dom";
 import { Layout } from 'antd';
 
+// Selectors
+import { isGameInitSelector } from '../../selectors/game';
+import { isAppInitSelector } from '../../selectors/app';
+
 // Components
 import MainHeader from './MainHeader';
 import MainFooter from './MainFooter';
@@ -19,8 +23,8 @@ const { Content } = Layout;
 const Output = ({ history }) => {
 
     const dispatch = useDispatch();
-    const { isGameInit } = useSelector(state => state.game);
-    const { isAppInit } = useSelector(state => state.app);
+    const isGameInit = useSelector(isGameInitSelector);
+    const isAppInit = useSelector(isAppInitSelector);
 
     useEffect(() => { 
         if (!isAppInit) dispatch({ type: 'APP_INIT' }) 

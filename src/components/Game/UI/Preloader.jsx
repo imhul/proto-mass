@@ -1,12 +1,15 @@
 import React, { memo } from 'react';
 import { useSelector } from 'react-redux';
 
+// Selectors
+import { preloaderTitleSelector } from '../../../selectors/game';
+
 // Components
 import { Progress } from 'antd';
 
 const Preloader = memo(props => {
 
-    const { preloaderTitle } = useSelector(state => state.game);
+    const preloaderTitle = useSelector(preloaderTitleSelector);
     
     const format = percent => {
         if (props.format === null) {
