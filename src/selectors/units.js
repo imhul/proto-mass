@@ -3,13 +3,18 @@ import { createSelector } from 'reselect';
 // utils
 import memoize from "lodash.memoize";
 
+export const unitSelector = createSelector(
+    state => state.unit,
+    items => items
+);
+
 export const unitsSelector = createSelector(
     state => state.unit,
     items => items.unitList
 );
 
 export const unitsLimitSelector = createSelector(
-    state => state.unit,
+    unitSelector,
     items => items.unitsLimit
 );
 
@@ -24,12 +29,22 @@ export const getUnitByIdSelector = createSelector(
     units => memoize(unitId => units.find(unit => unit.id === unitId))
 );
 
-export const getUnitStatsSelector = createSelector(
-    getUnitByIdSelector,
-    unit => unit.stats
-);
+// export const getUnitStatsSelector = createSelector(
+//     getUnitByIdSelector,
+//     unit => unit.stats
+// );
 
-export const gettUnitDamageSelector = createSelector(
-    getUnitStatsSelector,
-    stats => stats.damage
-);
+// export const gettUnitDamageSelector = createSelector(
+//     getUnitStatsSelector,
+//     stats => stats.damage
+// );
+
+// export const gettUnitHealthSelector = createSelector(
+//     getUnitStatsSelector,
+//     stats => stats.health
+// );
+
+// export const gettUnitHealthPointsSelector = createSelector(
+//     getUnitStatsSelector,
+//     stats => stats.healthPoints
+// );

@@ -210,12 +210,12 @@ const Display = memo(() => {
                             pan={{
                                 velocityEqualToMove: true,
                                 velocity: true,
-                                velocitySensitivity: 4,
+                                velocitySensitivity: 6,
                             }}
                             pinch={{ disabled: false }}
                             doubleClick={{ disabled: false }}
                             wheel={{
-                                step: 20,
+                                step: 30,
                             }}
                         >
                             <TransformComponent>

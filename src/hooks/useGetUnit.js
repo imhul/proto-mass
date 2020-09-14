@@ -22,12 +22,12 @@ export const useGetUnit =  ({ name, isEnemy }) => {
     const isLoadSavedGame = useSelector(isLoadSavedGameSelector);
     
     const onUnitCreated = useCallback(() => {
-        dispatch({ 
+        !isGameStarted && dispatch({ 
             type: 'LOADING_GAME_UPDATE', 
             payload: getRandomInt(51, 81), 
-            meta: "units  is created" 
+            meta: "units is created" 
         });
-    }, [dispatch]);
+    }, [isGameStarted, dispatch]);
 
     const getUnit = useCallback(() => {
 
