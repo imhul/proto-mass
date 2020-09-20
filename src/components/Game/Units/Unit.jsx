@@ -41,18 +41,16 @@ const Unit = memo(({ unitId, height, width }) => {
 
     // effects
 
-   
-
-    // unit actions effects
     const taskSearch = useCallback(() => {
 
         const isUnitMatchTask = task => {
-            const isUnitProfSuitable = unit.professions.find(profession =>
+            const isUnitProfSuitable = unit && unit.professions.find(profession =>
                 profession.name === task.profession &&
-                profession.levelName === task.professionLevel
+                profession.levelName === task.professionLevel &&
+                unit.stats.level === task.level
             );
-            return isUnitProfSuitable && unit.stats.level === task.level
-        };
+            return isUnitProfSuitable;
+        }
 
         if (unitList &&
             unitList.length && 
@@ -77,29 +75,28 @@ const Unit = memo(({ unitId, height, width }) => {
                     }
                 });
                 // New task accepting
-            } else if (
-                pendingList.length === 0 &&
+            } else if (pendingList.length === 0 &&
                 taskBoard.length &&
                 !unit.taskList.length) {
                 const relevantTaskList = taskBoard.filter(task =>
                     isUnitMatchTask(task) &&
                     task.status === "await"
                 );
-                if (relevantTaskList && relevantTaskList.length) {
-                    dispatch({
-                        type: 'UNIT_GET_TASK_LIST', payload: {
-                            taskList: relevantTaskList,
-                            unitId: unit.id
-                        }
-                    });
+                if ((relevantTaskList && relevantTaskList.length) || (unit.taskList && unit.taskList.length)) {
                     dispatch({
                         type: 'TASK_ACCEPTED', payload: {
                             taskList: relevantTaskList,
                             unitId: unit.id
                         }
                     });
+                    dispatch({
+                        type: 'UNIT_GET_TASK_LIST', payload: {
+                            taskList: relevantTaskList,
+                            unitId: unit.id
+                        }
+                    });
                     // Go rest
-                } else {
+                } else if (unit.status === "work") {
                     // TODO: TimeMachine connect needed & stop after minute!
                     dispatch({
                         type: 'UNIT_START_REST', payload: {
@@ -120,6 +117,7 @@ const Unit = memo(({ unitId, height, width }) => {
 
     const walking = useCallback(() => {
 
+        console.info("walking");
         let stepDelay;
         const newTask = unit.taskList.find(task => task.status = "accepted");
         const unitPosX = unit.position.x;
@@ -199,6 +197,7 @@ const Unit = memo(({ unitId, height, width }) => {
     }, [unit, currentTask, matrix, dispatch, getObject]);
 
     const working = useCallback(() => {
+        console.info("working");
 
         let workingDelay;
         const workSpeed = 1000; // TODO: workSpeed must to become a selector
@@ -303,11 +302,17 @@ const Unit = memo(({ unitId, height, width }) => {
         // TODO: Fighting algorithm
     }, [unit]);
 
+    useEffect(() => {
+        if (unitList && unitId && !unit) {
+            const newUnit = unitList.find(uni => uni.id === unitId);
+            // getUnitById(unitId);
+            setUnit(newUnit);
+        }
+    }, [unitList, unitId, unit]);
+    
     // Unit status check
     useEffect(() => {
-        if (unitId && !unit) {
-            setUnit(getUnitById(unitId));
-        } else if (isGameStarted && !isGamePaused && unit) {
+        if (isGameStarted && !isGamePaused && unit) {
             switch (unit.status) {
                 case "search": taskSearch();
                     break;
@@ -322,7 +327,7 @@ const Unit = memo(({ unitId, height, width }) => {
                 default: break;
             }
         }
-    }, [unitId, unit, getUnitById, isGameStarted, isGamePaused, taskSearch, walking, working, rest, attak]);
+    }, [isGameStarted, isGamePaused, unit, taskSearch, walking, working, rest, attak]);
 
     const onAnimatedTextureClick = useCallback((x, y, data) => {
         // playSFX(MapClick, settings.volume);

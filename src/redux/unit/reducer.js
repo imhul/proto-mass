@@ -83,11 +83,10 @@ export default function unitReducer(state = initState, action) {
 
         // WORK
         case types.UNIT_GET_TASK_LIST: 
-            const relevantTaskList = (
-                action.payload && 
+            const relevantTaskList = (action.payload && 
                 action.payload.taskList && 
-                action.payload.unitId && 
-                action.payload.taskList.length
+                action.payload.taskList.length &&
+                action.payload.unitId
             ) && action.payload.taskList.map(currentTask => {
                     return {
                         ...currentTask,

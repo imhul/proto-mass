@@ -38,7 +38,7 @@ const Units = memo(props => {
         position: fakePath[getRandomInt(0, 50)],
     };
 
-    // synthesizing
+    // synthesizing hooks
     useGetUnit(newUnit || newEnemy);
     useGetTask(fakeTask);
 
