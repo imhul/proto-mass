@@ -5,12 +5,6 @@
             "firebase.json",
             "**/.*",
             "**/node_modules/**"
-        ],
-        "rewrites": [
-            {
-                "source": "imhul/proto-mass",
-                "destination": "/"
-            }
         ]
     }
 }
