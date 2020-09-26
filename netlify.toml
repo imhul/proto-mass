@@ -1,2 +1,6 @@
 [context.production]
     environment = { NODE_VERSION = "10.20.1" }
+
+[[redirects]]
+  from = "imhul/proto-mass"
+  to = "/"
