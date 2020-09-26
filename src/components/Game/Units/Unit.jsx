@@ -7,7 +7,7 @@ import { tasksSelector, pendingsSelector } from '../../../selectors/task';
 import { isGameStartedSelector, isGamePausedSelector } from '../../../selectors/game';
 import {
     unitsSelector,
-    getUnitByIdSelector,
+    // getUnitByIdSelector,
 } from '../../../selectors/units';
 import { matrixSelector } from '../../../selectors/map';
 
@@ -30,7 +30,7 @@ const Unit = memo(({ unitId, height, width }) => {
     const taskBoard = useSelector(tasksSelector);
     const pendingList = useSelector(pendingsSelector);
     const unitList = useSelector(unitsSelector);
-    const getUnitById = useSelector(getUnitByIdSelector);
+    // const getUnitById = useSelector(getUnitByIdSelector);
     const getObject = useSelector(getObjectByPositionSelector);
     const matrix = useSelector(matrixSelector);
     // local state

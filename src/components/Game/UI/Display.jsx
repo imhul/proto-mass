@@ -6,7 +6,7 @@ import Fullscreen from "react-full-screen";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import GameMap from '../Map/GameMap';
 import Preloader from './Preloader';
-import TimeMachine from './TimeMachine';
+// import TimeMachine from './TimeMachine';
 import StartOrLoadModal from '../Modals/StartOrLoad';
 import GameMenuEsc from '../Modals/GameMenuEsc';
 import StartInfo from '../Modals/StartInfo';
