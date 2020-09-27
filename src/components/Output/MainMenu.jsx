@@ -14,6 +14,8 @@ import { isAuthenticatedSelector } from '../../selectors/auth';
 import UserMenu from './UserMenu';
 import GameMenu from '../Game/UI/GameMenu';
 
+const MenuItem = Menu.Item;
+
 const MainMenu = () => {
 
     const history = useHistory();
@@ -49,14 +51,26 @@ const MainMenu = () => {
                                 mode="horizontal" 
                                 theme="dark"
                             >
-                                <Menu.Item key="/">
+                                <MenuItem key="/">
                                     <i className="anticon">4</i>
                                     <span>Home</span>
-                                </Menu.Item>
-                                <Menu.Item key="/game" disabled={!isAuthenticated}>
+                                </MenuItem>
+                                <MenuItem key="/game" disabled={!isAuthenticated}>
                                     <i className="anticon">7</i>
                                     <span>Game</span>
-                                </Menu.Item>
+                                </MenuItem>
+                                <MenuItem key="/about">
+                                    <a href="https://github.com/imhul/proto-mass" rel="noopener noreferrer" target="_blank" title="about">
+                                        <i className="anticon">Y</i>
+                                        <span>About</span>
+                                    </a>
+                                </MenuItem>
+                                <MenuItem key="/donate">
+                                    <a href="https://www.patreon.com/protomass" rel="noopener noreferrer" target="_blank" title="donate">
+                                        <i className="anticon">c</i>
+                                        <span>Donate</span>
+                                    </a>
+                                </MenuItem>
                             </Menu>
                             <UserMenu />
                         </>

@@ -6,8 +6,8 @@ import { useHistory } from "react-router-dom";
 import { isFullscreenSelector } from '../../../selectors/stage';
 import { unitsSelector } from '../../../selectors/units';
 import { 
+    colonyNameSelector,
     gameSettingsSelector,
-    startGameFormSelector,
     isGameMenuOpenSelector,
 } from '../../../selectors/game';
 
@@ -26,8 +26,8 @@ const GameMenuEsc = memo(() => {
     const units = useSelector(unitsSelector);
     const isFullscreen = useSelector(isFullscreenSelector);
     const isGameMenuOpen = useSelector(isGameMenuOpenSelector);
-    const startGameForm = useSelector(startGameFormSelector);
     const gameSettings = useSelector(gameSettingsSelector);
+    const colonyName = useSelector(colonyNameSelector);
 
     // handlers
     const onLoadGame = useCallback(() => {
@@ -74,7 +74,12 @@ const GameMenuEsc = memo(() => {
 
             <p className="hello">Hello, voyager!</p>
 
-            <p className="hello">Wellcome{startGameForm.colonyName.length > 0 ? ` to ${startGameForm.colonyName}` : '!'}</p>
+            <p className="hello">
+                Wellcome
+                {
+                    colonyName.length > 0 ? ` to ${colonyName}` : '!'
+                }
+            </p>
 
             <Form
                 name="escGameForm"

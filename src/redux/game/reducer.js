@@ -129,8 +129,14 @@ export default function gameReducer(state = initState, action) {
         case types.START_GAME_FORM_UPDATE:
             return {
                 ...state,
+                save: update(state.save, {
+                        colony: { 
+                            $set: action.payload.colony
+                        }
+                    }
+                ),
                 startGameForm: update(state.startGameForm, 
-                    { $set: action.payload }
+                    { $set: action.payload.colony.name }
                 )
             }
 

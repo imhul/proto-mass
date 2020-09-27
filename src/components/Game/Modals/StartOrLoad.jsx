@@ -70,6 +70,20 @@ const StartOrLoadModal = memo(() => {
             >
                 Exit Game
             </Button>
+            {/* <Button
+                block={true}
+                className="game-btn"
+                href="https://github.com/imhul/proto-mass"
+            >
+                About
+            </Button>
+            <Button
+                block={true}
+                className="game-btn"
+                href="https://www.patreon.com/protomass"
+            >
+                Donate
+            </Button> */}
         </Card>
     )
 });

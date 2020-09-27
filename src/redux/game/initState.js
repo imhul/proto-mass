@@ -1,3 +1,5 @@
+import { set } from "lodash";
+
 export const initState = {
     loadingPercent: 0,
     isLoadSavedGame: false, // loaded or synthesized
@@ -17,17 +19,17 @@ export const initState = {
     settings: {
         volume: 0.5,
     },
-    startGameForm: {
+    startGameForm: set({
         colonyName: "",
-    },
+    }),
     save: {
         // id: "",
         // gameHours: 0,
-        // colony: {
-        //     id: "",
-        //     name: "",
-        //     level: 0,
-        // },
+        colony: {
+            // id: "",
+            name: "Autopia",
+            // level: 0,
+        },
         // settings: {
         //     volume: 0.5,
         //     zoom: 100,

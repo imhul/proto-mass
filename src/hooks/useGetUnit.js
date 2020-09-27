@@ -32,9 +32,9 @@ export const useGetUnit =  ({ name, isEnemy }) => {
     const getUnit = useCallback(() => {
 
         const idLength = new Array(16);
-        const userId = uuidv5(name, idLength);
+        const unitId = uuidv5(name, idLength);
         const unit = {
-            id: userId,
+            id: unitId,
             name: name,
             freeMode: true,
             status: "search", // walk, work, attak, rest, search, dead

@@ -74,3 +74,18 @@ export const isGameErrorSelector = createSelector(
     gameSelector,
     items => items.error
 );
+
+export const gameSaveSelector = createSelector(
+    gameSelector,
+    items => items.save
+);
+
+export const colonySelector = createSelector(
+    gameSaveSelector,
+    save => save.colony
+);
+
+export const colonyNameSelector = createSelector(
+    colonySelector,
+    colony => colony.name
+);

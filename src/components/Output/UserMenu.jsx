@@ -49,7 +49,7 @@ const UserMenu = () => {
                 trigger="click"
             >
                 <span>
-                    { isAuthenticated ? `${ user.login }` : "Wellcome!" }
+                    { isAuthenticated ? `${ user.login }` : "login" }
                 </span>
                 <Avatar />
             </Popover>

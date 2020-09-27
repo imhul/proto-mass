@@ -15,6 +15,9 @@ import {
 import { Card, Row, Col, Form, Input, Checkbox, Button, } from 'antd';
 import SoundSlider from '../../Output/SoundSlider';
 
+// Utils
+import uuidv5 from 'uuid/v5';
+
 const FormItem = Form.Item;
 
 const StartInfo = memo(() => {
@@ -65,11 +68,19 @@ const StartInfo = memo(() => {
             dispatch({ type: 'TIME_MACHINE_INIT' });
             dispatch({ type: 'START_INFO_MODAL_CLOSE' });
             if (startFormFields.length > 0) {
-                const colonyNamed = startFormFields.find(input => input.name[0] === 'colonyName');
+                const idLength = new Array(16);
+                const colonyNameInput = startFormFields.find(input => input.name[0] === 'colonyName');
+                const colonyNewName = colonyNameInput && colonyNameInput.value && colonyNameInput.value.length > 0 ? colonyNameInput.value : colonyName;
+                const colonyId = uuidv5(colonyNewName, idLength);
+                
                 dispatch({
                     type: 'START_GAME_FORM_UPDATE',
                     payload: {
-                        colonyName: colonyNamed && colonyNamed.value && colonyNamed.value.length > 0 ? colonyNamed.value : colonyName
+                        colony: {
+                            id: colonyId,
+                            level: 0,
+                            name: colonyNewName,
+                        }
                     }
                 })
             }

@@ -9,7 +9,7 @@ import {
 const GameInfoBlock = memo(({ children }) => {
 
     const [opacity, setOpacity] = useState(0.5);
-    const [visibility, setVisibility] = useState(false);
+    const [visibility, setVisibility] = useState(true);
 
     return (
         <div 
