@@ -19,7 +19,7 @@
   "engines": {
     "node": "^10"
   },
-  "homepage": "https://github.com/imhul/proto-mass",
+  "homepage": "./",
   "description": "Indirect Control Sandbox Game",
   "bugs": {
     "url": "https://github.com/imhul/proto-mass/issues",
@@ -58,14 +58,13 @@
     "redux-timer-middleware": "^1.0.0",
     "reselect": "^4.0.0",
     "sprite-react": "^0.2.1",
-    "sw-precache": "^5.2.1",
     "uifx": "^2.0.7",
     "uuid": "^3.3.3"
   },
   "scripts": {
     "start": "react-scripts start",
     "init": "firebase init",
-    "build": "react-scripts build && sw-precache --config=sw-precache-config.js",
+    "build": "react-scripts build",
     "deploy": "firebase deploy --only hosting"
   },
   "browserslist": {
