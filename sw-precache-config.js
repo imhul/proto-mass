@@ -1,10 +1,13 @@
 module.exports = {
-    stripPrefix: 'build/',
     staticFileGlobs: [
-      'build/*.html',
-      'build/manifest.json',
-      'build/static/**/!(*map*)'
+        'app/css/**.css',
+        'app/**.html',
+        'app/images/**.*',
+        'app/js/**.js'
     ],
-    dontCacheBustUrlsMatching: /\.\w{8}\./,
-    swFilePath: 'build/service-worker.js'
+    stripPrefix: 'app/',
+    runtimeCaching: [{
+        urlPattern: /this\\.is\\.a\\.regex/,
+        handler: 'networkFirst'
+    }]
 };
