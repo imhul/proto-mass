@@ -11,53 +11,21 @@
 	// cursor: url("../img/cur.gif") !important;
 
 	// space background
+	
+
 	#bg-game {
-		background: url(../img/parallax_3.png) repeat 50% 50%;
-		background-size: cover;
 		position: absolute;
 		top: 0;
 		left: 0;
 		right: 0;
 		bottom: 0;
-	}
+		background-color: #17182f;
 
-	#bg-parallax {
-		background: url(../img/parallax_1.png) repeat 5% 5%;
-		position: absolute;
-		top: 0;
-		left: 0;
-		right: 0;
-		bottom: 0;
-		animation-name: starMove;
-		animation-duration: 700s;
-		animation-timing-function: linear;
-		animation-iteration-count: infinite;
-	}
-
-	#mg-parallax {
-		background: url(../img/parallax_2.png) repeat 20% 20%;
-		position: absolute;
-		top: 0;
-		left: 0;
-		right: 0;
-		bottom: 0;
-		animation-name: starMove;
-		animation-duration: 500s;
-		animation-timing-function: linear;
-		animation-iteration-count: infinite;
-	}
-
-	#fg-parallax {
-		background: url(../img/parallax_1.png) repeat 35% 35%;
-		position: absolute;
-		top: 0;
-		left: 0;
-		right: 0;
-		bottom: 0;
-		animation-name: starMove;
-		animation-duration: 300s;
-		animation-timing-function: linear;
-		animation-iteration-count: infinite;
+		#tsparticles {
+			canvas {
+				min-height: 100vh;
+			}
+		}
 	}
 
 	#starship {

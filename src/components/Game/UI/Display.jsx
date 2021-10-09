@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 
 // Components
 import { FullScreen, useFullScreenHandle } from "react-full-screen";
+import Particles from 'react-particles-js';
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import GameMap from '../Map/GameMap';
 import Preloader from './Preloader';
@@ -17,12 +18,12 @@ import WindowSizeListener from 'react-window-size-listener';
 import Notify from '../../Output/Notify';
 
 // Selectors
-import { 
+import {
     isFullscreenSelector,
     isFirstResizeSelector,
 } from '../../../selectors/stage';
 
-import { 
+import {
     // isLoadSavedGameSelector,
     // isGamePausedSelector,
     isGameStartedSelector,
@@ -38,8 +39,8 @@ import {
 import { useDOMState } from '../../../hooks';
 
 // Utils
-import { 
-    getRandomInt, 
+import {
+    getRandomInt,
     // playSFX,
 } from '../../../utils';
 import _ from 'lodash';
@@ -90,7 +91,7 @@ const Display = memo(() => {
         if (isFullscreen) handleFullScreen.enter();
 
         return () => {
-            handleFullScreen.exit(); 
+            handleFullScreen.exit();
         }
     }, [isFullscreen]);
 
@@ -98,20 +99,20 @@ const Display = memo(() => {
     useEffect(() => {
         let step1, step2;
 
-        if (!isStartOrLoadModalOpen && !isGameInit) {  
+        if (!isStartOrLoadModalOpen && !isGameInit) {
             if (dom.readyState === "complete" && isMapLoaded && loadingPercent !== 99) {
-                step1 = setTimeout(() => 
-                dispatch({ 
-                    type: 'LOADING_GAME_UPDATE', 
-                    payload: 99, 
-                    meta: 'almost all ready' 
-                }), 500);
+                step1 = setTimeout(() =>
+                    dispatch({
+                        type: 'LOADING_GAME_UPDATE',
+                        payload: 99,
+                        meta: 'almost all ready'
+                    }), 500);
             }
             if (isGameLoaded) {
-                step2 = setTimeout(() => 
-                dispatch({ 
-                    type: 'INIT_GAME', 
-                }), 500);
+                step2 = setTimeout(() =>
+                    dispatch({
+                        type: 'INIT_GAME',
+                    }), 500);
             }
         }
 
@@ -120,11 +121,11 @@ const Display = memo(() => {
             clearTimeout(step2);
         }
     }, [
-        dispatch, 
+        dispatch,
         isStartOrLoadModalOpen,
-        isMapLoaded, 
-        isGameLoaded, 
-        isGameInit, 
+        isMapLoaded,
+        isGameLoaded,
+        isGameInit,
         dom.readyState,
         loadingPercent
     ]);
@@ -139,9 +140,9 @@ const Display = memo(() => {
 
     const onWheel = useCallback(e => {
         if (e.deltaY < 0) {
-            dispatch({ type: 'MAP_INCREASE'})
+            dispatch({ type: 'MAP_INCREASE' })
         } else if (e.deltaY > 0) {
-            dispatch({ type: 'MAP_DECREASE'})
+            dispatch({ type: 'MAP_DECREASE' })
         }
     }, [dispatch]);
 
@@ -160,21 +161,21 @@ const Display = memo(() => {
     const onResize = useCallback(output => {
         if (!isFirstResize) {
             if (isMapLoaded) {
-                dispatch({ 
-                    type: 'RESIZE', 
+                dispatch({
+                    type: 'RESIZE',
                     payload: output,
                     meta: true,
                 });
-                !isGameInit && dispatch({ 
-                    type: 'LOADING_GAME_UPDATE', 
+                !isGameInit && dispatch({
+                    type: 'LOADING_GAME_UPDATE',
                     payload: getRandomInt(21, 31),
                     meta: "coordinate calculation"
                 })
             }
         } else {
-            dispatch({ 
-                type: 'RESIZE', 
-                payload: output, 
+            dispatch({
+                type: 'RESIZE',
+                payload: output,
                 meta: false,
             });
         }
@@ -191,66 +192,160 @@ const Display = memo(() => {
             window.removeEventListener('keyup', onKeyup);
         }
     }, [prevent, onWheel, onKeydown, onKeyup]);
-    
+
     return <>
-        { 
+        {
             !isGameInit && isStartOrLoadModalOpen ? <StartOrLoadModal /> :
-            <> 
-                {
-                   !isGameInit && <Preloader percent={loadingPercent} />
-                }
-                <WindowSizeListener
-                    onResize={output => onResize(output)}
-                >
-                    <FullScreen 
-                        handle={handleFullScreen}
-                        onChange={isFull => 
-                            dispatch({ type: 'FULLSCREEN', payload: isFull })
-                        }
+                <>
+                    {
+                        !isGameInit && <Preloader percent={loadingPercent} />
+                    }
+                    <WindowSizeListener
+                        onResize={output => onResize(output)}
                     >
-                        <div id="bg-game"></div>
-                        <div id="bg-parallax"></div>
-                        <div id="mg-parallax"></div>
-                        <div id="fg-parallax"></div>
-                        <div id="starship" style={{backgroundImage: `url(${starship})`}}></div>
-
-                        <TransformWrapper
-                            options={{
-                                limitToWrapper: true,
-                            }}
-                            pan={{
-                                velocityEqualToMove: true,
-                                velocity: true,
-                                velocitySensitivity: 6,
-                            }}
-                            pinch={{ disabled: false }}
-                            doubleClick={{ disabled: false }}
-                            wheel={{
-                                step: 30,
-                            }}
+                        <FullScreen
+                            handle={handleFullScreen}
+                            onChange={isFull =>
+                                dispatch({ type: 'FULLSCREEN', payload: isFull })
+                            }
                         >
-                            <TransformComponent>
-                                <GameMap />
-                            </TransformComponent>
-                        </TransformWrapper>
-                        {
-                            isGameLoaded && isGameInit && !isGameStarted ? <StartInfo /> : null
-                        }
-                        <GameMenuEsc />
-                        {
-                            isGameInit && isGameStarted ? <>
-                                <LeftGameInfoPanel />
+                            <div id="bg-game">
+                                <Particles params={{
+                                    particles: {
+                                        number: {
+                                            value: 400,
+                                            density: {
+                                                enable: true,
+                                                value_area: 500
+                                            }
+                                        },
+                                        color: {
+                                            value: "#ffffff"
+                                        },
+                                        shape: {
+                                            type: "circle",
+                                            stroke: {
+                                                width: 0,
+                                            },
+                                            polygon: {
+                                                nb_sides: 5
+                                            },
+                                        },
+                                        opacity: {
+                                            value: 0.5,
+                                            random: false,
+                                            anim: {
+                                                enable: true,
+                                                speed: 0.3,
+                                                opacity_min: 0.4,
+                                                sync: false
+                                            }
+                                        },
+                                        size: {
+                                            value: 1,
+                                            random: true,
+                                            anim: {
+                                                enable: false,
+                                            }
+                                        },
+                                        line_linked: {
+                                            enable: false,
+                                        },
+                                        move: {
+                                            enable: true,
+                                            speed: 0.5,
+                                            direction: "left",
+                                            random: false,
+                                            straight: true,
+                                            out_mode: "out",
+                                            bounce: false,
+                                            attract: {
+                                                enable: false,
+                                            }
+                                        }
+                                    },
+                                    interactivity: {
+                                        detect_on: "canvas",
+                                        events: {
+                                            onhover: {
+                                                enable: false,
+                                            },
+                                            onclick: {
+                                                enable: false,
+                                            },
+                                            resize: true
+                                        },
+                                        modes: {
+                                            grab: {
+                                                distance: 400,
+                                                line_linked: {
+                                                    opacity: 1
+                                                }
+                                            },
+                                            bubble: {
+                                                distance: 83.91608391608392,
+                                                size: 1,
+                                                duration: 3,
+                                                opacity: 1,
+                                                speed: 3
+                                            },
+                                            repulse: {
+                                                distance: 200,
+                                                duration: 0.4
+                                            },
+                                            push: {
+                                                particles_nb: 4
+                                            },
+                                            remove: {
+                                                particles_nb: 2
+                                            }
+                                        }
+                                    },
+                                    retina_detect: true
+                                }} />
+                            </div>
+                            {/* <div id="bg-parallax"></div>
+                        <div id="mg-parallax"></div>
+                        <div id="fg-parallax"></div> */}
+                            <div id="starship" style={{ backgroundImage: `url(${starship})` }}></div>
 
-                                <RightGameInfoPanel>
-                                    {/* <TimeMachine /> */}
-                                    <UserActionInfo />
-                                </RightGameInfoPanel>
-                                
-                            </> : null 
-                        }
-                    </FullScreen>
-                </WindowSizeListener>
-            </>
+                            <TransformWrapper
+                                options={{
+                                    limitToWrapper: true,
+                                }}
+                                pan={{
+                                    velocityEqualToMove: true,
+                                    velocity: true,
+                                    velocitySensitivity: 6,
+                                }}
+                                pinch={{ disabled: false }}
+                                doubleClick={{ disabled: false }}
+                                wheel={{
+                                    step: 30,
+                                }}
+                            >
+                                <TransformComponent>
+                                    <GameMap />
+                                </TransformComponent>
+                            </TransformWrapper>
+                            {
+                                isGameLoaded && isGameInit && !isGameStarted ? <StartInfo /> : null
+                            }
+                            <GameMenuEsc />
+                            {
+                                isGameInit && isGameStarted ? <>
+                                    <LeftGameInfoPanel />
+
+                                    <RightGameInfoPanel>
+                                        {/* <TimeMachine /> */}
+                                        <UserActionInfo />
+                                    </RightGameInfoPanel>
+
+                                </> : null
+                            }
+                        </FullScreen>
+                    </WindowSizeListener>
+                </>
         }
     </>
 });

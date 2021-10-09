@@ -10340,6 +10340,13 @@ react-lifecycles-compat@^3.0.4:
   resolved "https://registry.yarnpkg.com/react-lifecycles-compat/-/react-lifecycles-compat-3.0.4.tgz#4f1a273afdfc8f3488a8c516bfda78f872352362"
   integrity sha512-fBASbA6LnOU9dOU2eW7aQ8xmYBSXUIWr+UmF9b1efZBazGNO+rcXT/icdKnYm2pTwcRylVUYwW7H1PHfLekVzA==
 
+react-particles-js@^3.5.3:
+  version "3.5.3"
+  resolved "https://registry.yarnpkg.com/react-particles-js/-/react-particles-js-3.5.3.tgz#5fa8912cd3317061e4d31ed7743d331d9d7f2afe"
+  integrity sha512-e9GWBT51WDtPkcaSy0ZLUAT93lBzDvuqrfW81NOf6G69XSurgCtVy4+ZYpUCnLhZgkokzsjrhtVOSj1FxPVyEw==
+  dependencies:
+    lodash "^4.17.11"
+
 react-reconciler@^0.14.0:
   version "0.14.0"
   resolved "https://registry.yarnpkg.com/react-reconciler/-/react-reconciler-0.14.0.tgz#cd8691deb2c2edabfe1a3ce0ffda1e0dd8c28295"
@@ -12083,6 +12090,11 @@ tslib@^2.0.3, tslib@^2.1.0:
   version "2.3.1"
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.3.1.tgz#e8a335add5ceae51aa261d32a490158ef042ef01"
   integrity sha512-77EbyPPpMz+FRFRuAFlWMtmgUWGe9UOG2Z25NqCwiIjRhOf5iKGuzSe5P2w1laq+FkRy4p+PCuVkJSGkzTEKVw==
+
+tsparticles@^1.35.4:
+  version "1.35.4"
+  resolved "https://registry.yarnpkg.com/tsparticles/-/tsparticles-1.35.4.tgz#1748a5a7821211c72cd7aeed79a2b673a031841b"
+  integrity sha512-usrQNLXoQKwBz3oOvtrwQCwCFWEX6mb4kPeJG+o9Zse119Sl/zWnPPLu9owQ3iD4hyQqGlXUjUWRwxvUBY+hPA==
 
 tsutils@^3.17.1, tsutils@^3.21.0:
   version "3.21.0"
