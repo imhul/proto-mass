@@ -15,7 +15,7 @@ import { isMapLoadedSelector } from '../../../selectors/game';
 import { isFirstResizeSelector } from '../../../selectors/stage';
 
 // Utils
-import uuidv5 from 'uuid/v5';
+import { v5 as uuidv5 } from 'uuid';
 import { 
     getRandomInt, 
     getObjectByType,

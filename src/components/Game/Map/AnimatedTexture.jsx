@@ -28,7 +28,7 @@ class AnimatedTexture extends Component {
         };
     }
 
-    componentWillReceiveProps(nextProps) {
+    UNSAFE_componentWillReceiveProps(nextProps) {
         if (nextProps.delay === this.props.delay) {
             return;
         }
@@ -101,7 +101,7 @@ class AnimatedTexture extends Component {
                 {...props}
                 key="img"
                 onClick={this.onClick}
-                src={frames[currentFrame]}
+                src={frames[currentFrame].default}
                 alt=""
             />
         );

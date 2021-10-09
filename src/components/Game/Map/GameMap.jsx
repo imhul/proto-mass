@@ -55,7 +55,7 @@ const GameMap = memo(() => {
 
     const onTileClick = useCallback((x, y, id) => {
         // playSFX(MapClick, settings.volume);
-
+        // console.info('onTileClick id: ', id);
         const props = {
             limit: 1,
             tileId: id,
@@ -91,7 +91,7 @@ const GameMap = memo(() => {
                     x={x}
                     y={y}
                     z={1}
-                    frames={getFrames(true, tileId)}
+                    frames={getFrames(false, tileId)}
                     onClick={() => (isGameStarted && !isGamePaused) && onTileClick(x, y, tileId)}
                 />
             ];

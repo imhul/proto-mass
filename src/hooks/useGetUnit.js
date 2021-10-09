@@ -9,7 +9,7 @@ import { isObjectsCreatedSelector } from '../selectors/map';
 // Utils
 import { getRandomInt } from '../utils';
 import PropTypes from 'prop-types';
-import uuidv5 from 'uuid/v5';
+import { v5 as uuidv5 } from 'uuid';
 import _ from 'lodash';
 
 export const useGetUnit =  ({ name, isEnemy }) => {

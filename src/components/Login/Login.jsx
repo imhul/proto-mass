@@ -20,7 +20,7 @@ import Notify from '../Output/Notify';
 
 const FormItem = Form.Item;
 
-const NormalLoginForm = props => {
+const Login = props => {
 
     const history = useHistory();
     const dispatch = useDispatch();
@@ -33,8 +33,8 @@ const NormalLoginForm = props => {
         firestore.collection('users')
             .doc('N0iQ4vJiMKXOsPKoMOyK')
             .get()
-            .then(doc => {
-                const data = doc.data();
+            .then(response => {
+                const data = response.data();
                 if (data) {
                     if (!isAuthenticated && profileFirebase.isLoaded && authFirebase.isLoaded) {
                         dispatch({ type: 'SET_AUTH_LOGIN', payload: data });
@@ -130,4 +130,4 @@ const NormalLoginForm = props => {
     );
 };
 
-export default NormalLoginForm;
+export default Login;

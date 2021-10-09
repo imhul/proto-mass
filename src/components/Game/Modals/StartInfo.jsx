@@ -16,7 +16,7 @@ import { Card, Row, Col, Form, Input, Checkbox, Button, } from 'antd';
 import SoundSlider from '../../Output/SoundSlider';
 
 // Utils
-import uuidv5 from 'uuid/v5';
+import { v5 as uuidv5 } from 'uuid';
 
 const FormItem = Form.Item;
 

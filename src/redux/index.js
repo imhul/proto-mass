@@ -13,7 +13,6 @@ import taskReducer from './task/reducer';
 import timeReducer from './time/reducer';
 
 export default history => combineReducers({
-  router: connectRouter(history),
   auth: authReducer,
   app: appReducer,
   game: gameReducer,
@@ -24,6 +23,7 @@ export default history => combineReducers({
   time: timeReducer,
   firebase: firebaseReducer,
   firestore: firestoreReducer,
+  router: connectRouter(history),
 });
 
   

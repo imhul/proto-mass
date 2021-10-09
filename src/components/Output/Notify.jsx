@@ -10,7 +10,7 @@ import {
   } from '@ant-design/icons';
 
 // utils
-import uuidv5 from 'uuid/v5';
+import { v5 as uuidv5 } from 'uuid';
 
 const Notify = notify => {
     // const dispatch = useDispatch();

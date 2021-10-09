@@ -2,7 +2,7 @@ import React, { memo, useEffect, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 // Components
-import Fullscreen from "react-full-screen";
+import { FullScreen, useFullScreenHandle } from "react-full-screen";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import GameMap from '../Map/GameMap';
 import Preloader from './Preloader';
@@ -52,6 +52,7 @@ import starship from '../../../assets/img/parallax_starship_1.png';
 
 const Display = memo(() => {
 
+    const handleFullScreen = useFullScreenHandle();
     const dispatch = useDispatch();
     const dom = useDOMState();
     const isFullscreen = useSelector(isFullscreenSelector);
@@ -191,8 +192,8 @@ const Display = memo(() => {
                 <WindowSizeListener
                     onResize={output => onResize(output)}
                 >
-                    <Fullscreen 
-                        enabled={isFullscreen} 
+                    <FullScreen 
+                        handle={handleFullScreen}
                         onChange={isFull => 
                             dispatch({ type: 'FULLSCREEN', payload: isFull })
                         }
@@ -237,7 +238,7 @@ const Display = memo(() => {
                                 
                             </> : null 
                         }
-                    </Fullscreen>
+                    </FullScreen>
                 </WindowSizeListener>
             </>
         }
