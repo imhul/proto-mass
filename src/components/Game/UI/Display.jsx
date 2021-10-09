@@ -84,6 +84,16 @@ const Display = memo(() => {
         })
     }, [error]);
 
+    useEffect(() => {
+        // TODO: Fix fullscreen styles!
+        // TODO: Fix stars animated background
+        if (isFullscreen) handleFullScreen.enter();
+
+        return () => {
+            handleFullScreen.exit(); 
+        }
+    }, [isFullscreen]);
+
     // game loading
     useEffect(() => {
         let step1, step2;
