@@ -7,7 +7,8 @@ import { tasksSelector, pendingsSelector } from '../../../selectors/task';
 import { isGameStartedSelector, isGamePausedSelector } from '../../../selectors/game';
 import {
     unitsSelector,
-    // getUnitByIdSelector,
+    unitsLimitSelector,
+    getUnitByIdSelector,
 } from '../../../selectors/units';
 import { matrixSelector } from '../../../selectors/map';
 
@@ -21,7 +22,7 @@ import Notify from '../../Output/Notify';
 import { getPath, getLevel } from '../../../utils';
 import chillout from 'chillout';
 
-const Unit = memo(({ unitId, height, width }) => {
+const Unit = memo(({ unit, height, width }) => {
 
     // selectors
     const dispatch = useDispatch();
@@ -30,18 +31,22 @@ const Unit = memo(({ unitId, height, width }) => {
     const taskBoard = useSelector(tasksSelector);
     const pendingList = useSelector(pendingsSelector);
     const unitList = useSelector(unitsSelector);
-    // const getUnitById = useSelector(getUnitByIdSelector);
+    const getUnitById = useSelector(getUnitByIdSelector);
     const getObject = useSelector(getObjectByPositionSelector);
+    const unitsLimit = useSelector(unitsLimitSelector);
     const matrix = useSelector(matrixSelector);
     // local state
     const [currentTask, setCurrentTask] = useState(null);
-    const [unit, setUnit] = useState(null);
+    // const [unit, setUnit] = useState(null);
 
     
 
     // effects
 
     const taskSearch = useCallback(() => {
+        console.info('taskSearch');
+
+        
 
         const isUnitMatchTask = task => {
             const isUnitProfSuitable = unit && unit.professions.find(profession =>
@@ -95,6 +100,7 @@ const Unit = memo(({ unitId, height, width }) => {
                             unitId: unit.id
                         }
                     });
+                    // TODO: how to walk?
                     // Go rest
                 } else if (unit.status === "work") {
                     // TODO: TimeMachine connect needed & stop after minute!
@@ -126,7 +132,11 @@ const Unit = memo(({ unitId, height, width }) => {
             newTask.position &&
             (!currentTask || newTask.id !== currentTask.id)
         ) ? newTask.position : currentTask.position;
+
+        console.info("destination: ", destination);
         const newPath = destination && getPath(matrix, unitPosY, unitPosX, destination.y, destination.x);
+
+        console.info("newPath: ", newPath);
 
         if (newTask && newPath && (!currentTask || currentTask.id !== newTask.id)) {
             const target = getObject(newTask.position);
@@ -206,6 +216,7 @@ const Unit = memo(({ unitId, height, width }) => {
         const task = unit.currentTask;
         const currentProfession = unit.professions.find(prof =>
             prof.name === task.profession);
+            
         const currentLevel = getLevel(
             currentProfession.level,
             currentProfession.progress
@@ -303,16 +314,13 @@ const Unit = memo(({ unitId, height, width }) => {
     }, [unit]);
 
     useEffect(() => {
-        if (unitList && unitId && !unit) {
-            const newUnit = unitList.find(uni => uni.id === unitId);
-            // getUnitById(unitId);
-            setUnit(newUnit);
-        }
-    }, [unitList, unitId, unit]);
+        if (unit) getUnitById(unit.id);
+    });
     
     // Unit status check
     useEffect(() => {
         if (isGameStarted && !isGamePaused && unit) {
+            console.info('Unit status check: ', unit);
             switch (unit.status) {
                 case "search": taskSearch();
                     break;
@@ -327,7 +335,7 @@ const Unit = memo(({ unitId, height, width }) => {
                 default: break;
             }
         }
-    }, [isGameStarted, isGamePaused, unit, taskSearch, walking, working, rest, attak]);
+    }, [isGameStarted, isGamePaused, unit]);
 
     const onAnimatedTextureClick = useCallback((x, y, data) => {
         // playSFX(MapClick, settings.volume);
