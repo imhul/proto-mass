@@ -83,13 +83,8 @@ const Display = memo(() => {
     }, [error]);
 
     useEffect(() => {
-        // TODO: Fix fullscreen styles!
         // TODO: Fix stars animated background
         if (isFullscreen) handleFullScreen.enter();
-
-        // return () => {
-        //     handleFullScreen.exit();
-        // }
     }, [isFullscreen]);
 
     // game loading
@@ -151,7 +146,7 @@ const Display = memo(() => {
         if ((e.key === 'Escape' || e.code === 'Escape') && isGameStarted) {
             dispatch({ type: 'TOGGLE_GAME_MENU_ESC' });
             dispatch({ type: 'TOGGLE_PAUSE_GAME' });
-            // console.info("onKeydown event: ", e);
+            if (isFullscreen) handleFullScreen.exit();
         }
     }, [isGameStarted, dispatch]);
 
