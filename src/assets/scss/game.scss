@@ -11,15 +11,13 @@
 	// cursor: url("../img/cur.gif") !important;
 
 	// space background
-	
-
 	#bg-game {
 		position: absolute;
 		top: 0;
 		left: 0;
 		right: 0;
 		bottom: 0;
-		background-color: #17182f;
+		background-color: #00011c;
 
 		#tsparticles {
 			canvas {
@@ -74,6 +72,7 @@
 		--p-center-x: calc((var(--p-map-width) + var(--map-height) - 1) * var(--p-tile-size) / 2);
 		width: calc(var(--p-size-unit) * (var(--p-v-tile-size) * (var(--p-map-width) + var(--p-map-height) + 5) / 2));
 		height: calc(var(--p-size-unit) * (var(--p-map-offset-y) + var(--p-map-max-dimension) * var(--p-v-tile-size)));
+		margin: 0 auto;
 		z-index: 5;
 
 		.react-isometric-map {

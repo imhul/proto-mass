@@ -48,9 +48,6 @@ import _ from 'lodash';
 // Sounds
 // import introSFX from '../../assets/sound/loading.ogg';
 
-// graphic
-import starship from '../../../assets/img/parallax_starship_1.png';
-
 const Display = memo(() => {
 
     const handleFullScreen = useFullScreenHandle();
@@ -90,9 +87,9 @@ const Display = memo(() => {
         // TODO: Fix stars animated background
         if (isFullscreen) handleFullScreen.enter();
 
-        return () => {
-            handleFullScreen.exit();
-        }
+        // return () => {
+        //     handleFullScreen.exit();
+        // }
     }, [isFullscreen]);
 
     // game loading
@@ -213,10 +210,10 @@ const Display = memo(() => {
                                 <Particles params={{
                                     particles: {
                                         number: {
-                                            value: 400,
+                                            value: 100,
                                             density: {
                                                 enable: true,
-                                                value_area: 500
+                                                value_area: 300
                                             }
                                         },
                                         color: {
@@ -228,17 +225,17 @@ const Display = memo(() => {
                                                 width: 0,
                                             },
                                             polygon: {
-                                                nb_sides: 5
+                                                nb_sides: 4
                                             },
                                         },
                                         opacity: {
                                             value: 0.5,
                                             random: false,
                                             anim: {
-                                                enable: true,
-                                                speed: 0.3,
-                                                opacity_min: 0.4,
-                                                sync: false
+                                                enable: false,
+                                                // speed: 0.5,
+                                                // opacity_min: 0.4,
+                                                // sync: false
                                             }
                                         },
                                         size: {
@@ -252,13 +249,13 @@ const Display = memo(() => {
                                             enable: false,
                                         },
                                         move: {
-                                            enable: true,
+                                            enable: isGameInit ? true : false,
                                             speed: 0.5,
                                             direction: "left",
                                             random: false,
                                             straight: true,
                                             out_mode: "out",
-                                            bounce: false,
+                                            bounce: true,
                                             attract: {
                                                 enable: false,
                                             }
@@ -274,40 +271,11 @@ const Display = memo(() => {
                                                 enable: false,
                                             },
                                             resize: true
-                                        },
-                                        modes: {
-                                            grab: {
-                                                distance: 400,
-                                                line_linked: {
-                                                    opacity: 1
-                                                }
-                                            },
-                                            bubble: {
-                                                distance: 83.91608391608392,
-                                                size: 1,
-                                                duration: 3,
-                                                opacity: 1,
-                                                speed: 3
-                                            },
-                                            repulse: {
-                                                distance: 200,
-                                                duration: 0.4
-                                            },
-                                            push: {
-                                                particles_nb: 4
-                                            },
-                                            remove: {
-                                                particles_nb: 2
-                                            }
                                         }
                                     },
                                     retina_detect: true
                                 }} />
                             </div>
-                            {/* <div id="bg-parallax"></div>
-                        <div id="mg-parallax"></div>
-                        <div id="fg-parallax"></div> */}
-                            <div id="starship" style={{ backgroundImage: `url(${starship})` }}></div>
 
                             <TransformWrapper
                                 options={{
