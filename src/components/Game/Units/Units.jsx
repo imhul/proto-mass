@@ -39,8 +39,6 @@ const Units = memo(props => {
         position: fakePath[getRandomInt(0, 50)],
     };
 
-    console.info('unitList: ', unitList);
-
     // synthesizing hooks
     // if (unitList.length < unitsLimit) {
     //     console.info('synthesizing hook');
@@ -48,7 +46,7 @@ const Units = memo(props => {
     useGetTask(fakeTask);
     // }
 
-    return (unitList && unitList.length) && unitList.map(unit => 
+    return (unitList && unitList.length) && unitList.map(unit =>
         <Unit {...props} unit={unit} key={unit.id} />)
 });
 

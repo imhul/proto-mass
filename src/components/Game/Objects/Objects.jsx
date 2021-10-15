@@ -122,6 +122,10 @@ const Objects = memo(() => {
                 item.id !== mineralObject.id
             );
             if (!copies.length &&
+                treeObject.position.x !== 15 &&
+                treeObject.position.y !== 15 &&
+                mineralObject.position.x !== 15 &&
+                mineralObject.position.y !== 15 &&
                 treeObject.position.x !== mineralObject.position.x &&
                 treeObject.position.y !== mineralObject.position.y
             ) {
