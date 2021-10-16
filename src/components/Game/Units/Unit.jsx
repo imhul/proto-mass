@@ -37,16 +37,20 @@ const Unit = memo(({ unit, height, width }) => {
     const matrix = useSelector(matrixSelector);
     // local state
     const [currentTask, setCurrentTask] = useState(null);
-    // const [unit, setUnit] = useState(null);
 
-
+    function sleep(msec) {
+        return new Promise(resolve => setTimeout(resolve, msec));
+    }
 
     // effects
+    useEffect(() => {
+        if (unit) getUnitById(unit.id);
+    });
 
-    const taskSearch = useCallback(() => {
+    // FX Search
+    useEffect(() => {
+        if (!unit || unit.status !== 'search' || !isGameStarted || isGamePaused) return;
         console.info('taskSearch');
-
-
 
         const isUnitMatchTask = task => {
             const isUnitProfSuitable = unit && unit.professions.find(profession =>
@@ -118,42 +122,54 @@ const Unit = memo(({ unit, height, width }) => {
         unitList,
         taskBoard,
         pendingList,
-        dispatch
+        isGameStarted,
+        isGamePaused
     ]);
 
-    const walking = useCallback(async () => {
+    // FX Walk
+    useEffect(async () => {
+        if (!unit || unit.status !== 'walk' || !isGameStarted || isGamePaused) return;
         console.info("walking");
-        let stepDelay;
         const newTask = unit.taskList.find(task => task.status = "accepted");
-        const unitPosX = unit.position.x;
-        const unitPosY = unit.position.y;
         const destination = (newTask &&
             newTask.position &&
             (!currentTask || newTask.id !== currentTask.id)
         ) ? newTask.position : currentTask.position;
 
-        const newPath = await destination && getPath(matrix, unitPosY, unitPosX, destination.y, destination.x);
+        const newPath = (!currentTask && newTask && destination)
+            && getPath(matrix, unit.position.y, unit.position.x, destination.y, destination.x);
 
-        if (newTask && newPath && (!currentTask || currentTask.id !== newTask.id)) {
-            setCurrentTask({
-                ...newTask,
-                path: newPath,
-                target: getObject(newTask.position),
-            });
-        } else clearTimeout(stepDelay);
+        const getCurrentTask = async () => {
+            const target = await getObject(newTask.position);
+            if (!currentTask && newTask && newPath) {
+                setCurrentTask({
+                    ...newTask,
+                    path: newPath,
+                    target:target,
+                });
+                console.info('Current Task Setted!');
+            }
+        }
 
-        function readyToWork() {
-            if (currentTask && currentTask.path.length) {
+        await getCurrentTask();
+
+        const readyToWork = async () => {
+            console.info('Run readyToWork');
+            if (newPath && newPath.length) {
+                const target = await getObject(newTask.position);
                 dispatch({
                     type: 'UNIT_READY_TO_WORK',
                     payload: {
-                        currentTask: currentTask,
+                        currentTask: currentTask ? currentTask : {
+                            ...newTask,
+                            path: newPath,
+                            target:target,
+                        },
                         unitId: unit.id,
-                        unitPosition: unit.position,
-                        unitPath: currentTask.path,
+                        // unitPosition: unit.position,
+                        unitPath: newPath,
                     }
                 });
-                clearTimeout(stepDelay);
                 Notify({
                     type: "success",
                     message: "TADAAAA!",
@@ -162,56 +178,49 @@ const Unit = memo(({ unit, height, width }) => {
                     duration: 20
                 });
             }
+            // setCurrentTask(null);
         }
 
         if (newPath &&
             destination &&
             destination.x &&
-            unitPosX &&
             destination.y &&
-            unitPosY &&
             !unit.currentTask &&
             unit.status === "walk"
         ) {
             // unit ready to go!
-            console.info("unit ready to go!");
-            chillout.forEach(newPath, function ({ x, y }, i) {
-                if (x === unitPosX && y === unitPosY) {
-                    stepDelay = setTimeout(() => dispatch({
-                        type: 'UNIT_WALKING',
-                        payload: {
-                            x: newPath[i + 1] ? newPath[i + 1].x : newPath[i].x,
-                            y: newPath[i + 1] ? newPath[i + 1].y : newPath[i].y,
-                            unitId: unit.id,
-                        }
-                    }), 1000 * unit.stats.speed);
-                }
-            }).then(function () {
-                if (((unitPosX + 1) === destination.x ||
-                    (unitPosX - 1) === destination.x) ||
-                    ((unitPosY + 1) === destination.y ||
-                        (unitPosY - 1) === destination.y)
-                ) {
-                    // unit reached destination!
-                    currentTask && readyToWork();
-                    setCurrentTask(null);
-                }
+            console.info("unit ready to go with newPath: ", newPath);
+            chillout.forEach(newPath, async ({ x, y }, i) => {
+                // if (x === unit.position.x && y === unit.position.y) {
+                await sleep(1000 * unit.stats.speed);
+                dispatch({
+                    type: 'UNIT_WALKING',
+                    payload: {
+                        x: newPath[i + 1] ? newPath[i + 1].x : newPath[i].x, // x
+                        y: newPath[i + 1] ? newPath[i + 1].y : newPath[i].y, // y
+                        unitId: unit.id,
+                    }
+                });
+                // }
+            }).then(() => {
+                // unit reached destination!
+                readyToWork();
             });
         }
+    }, [unit, currentTask, matrix, isGameStarted, isGamePaused, getObject]);
 
-
-
-    }, [unit, currentTask, matrix, dispatch, getObject]);
-
-    const working = useCallback(() => {
-        console.info("working");
+    // FX Work
+    useEffect( () => {
+        if (!unit || unit.status !== 'work' || !isGameStarted || isGamePaused) return;
+        console.info("working unit: ", unit);
 
         let workingDelay;
         const workSpeed = 1000; // TODO: workSpeed must to become a selector
         const unitDamage = 10; // TODO: damage must to become a selector
         const unitXP = 10; // TODO: XP must to become a selector 
         const task = unit.currentTask;
-        const currentProfession = unit.professions.find(prof =>
+        const unitProfessions = Array.isArray(unit.professions) && unit.professions;
+        const currentProfession = unitProfessions.find(prof =>
             prof.name === task.profession);
 
         const currentLevel = getLevel(
@@ -247,13 +256,15 @@ const Unit = memo(({ unit, height, width }) => {
                     }
                 });
                 clearTimeout(workingDelay);
-            } else {
+            } else if (!isTaskComplete && task.status !== "complete" && unit.status !== "walk") {
                 workingDelay = setTimeout(() => {
                     const newTargetStats = {
                         ...task.target.stats,
                         damage: !isTaskComplete ? stats.damage + unitDamage : stats.healthPoints,
                         health: !isTaskComplete ? stats.health - unitDamage : 0,
                     };
+
+                    if (stats.damage >= stats.healthPoints || stats.health < 1) return;
 
                     dispatch({
                         type: 'UNIT_TASK_PERFORMS',
@@ -298,41 +309,21 @@ const Unit = memo(({ unit, height, width }) => {
         ) {
             workStep();
         }
-    }, [unit, dispatch]); // targetHealth, targetDamage, getUnitById, dispatch
+    }, [unit, isGameStarted, isGamePaused]); // targetHealth, targetDamage, getUnitById, dispatch
 
-    const rest = useCallback(() => {
+    // FX Rest
+    useEffect(() => {
+        if (!unit || unit.status !== 'rest' || !isGameStarted || isGamePaused) return;
         console.info("resting unit: ", unit);
         // TODO: Resting algorithm
-    }, [unit]);
+    }, [unit, isGameStarted, isGamePaused]);
 
-    const attak = useCallback(() => {
+    // FX Attak
+    useEffect(() => {
+        if (!unit || unit.status !== 'attak' || !isGameStarted || isGamePaused) return;
         console.info("fighting unit: ", unit);
         // TODO: Fighting algorithm
-    }, [unit]);
-
-    useEffect(() => {
-        if (unit) getUnitById(unit.id);
-    });
-
-    // Unit status check
-    useEffect(() => {
-        if (isGameStarted && !isGamePaused && unit) {
-            console.info('Unit status check: ', unit);
-            switch (unit.status) {
-                case "search": taskSearch();
-                    break;
-                case "walk": walking();
-                    break;
-                case "work": working();
-                    break;
-                case "rest": rest();
-                    break;
-                case "attak": attak();
-                    break;
-                default: break;
-            }
-        }
-    }, [isGameStarted, isGamePaused, unit]);
+    }, [unit, isGameStarted, isGamePaused]);
 
     const onAnimatedTextureClick = useCallback((x, y, data) => {
         // playSFX(MapClick, settings.volume);
