@@ -38,14 +38,17 @@ const Unit = memo(({ unit, height, width }) => {
     // local state
     const [currentTask, setCurrentTask] = useState(null);
 
+    // timer trick for chillout
     function sleep(msec) {
         return new Promise(resolve => setTimeout(resolve, msec));
     }
 
     // effects
+
+    // set global current unit by id
     useEffect(() => {
         if (unit) getUnitById(unit.id);
-    });
+    }, unit);
 
     // FX Search
     useEffect(() => {
@@ -129,14 +132,16 @@ const Unit = memo(({ unit, height, width }) => {
     // FX Walk
     useEffect(async () => {
         if (!unit || unit.status !== 'walk' || !isGameStarted || isGamePaused) return;
-        console.info("walking");
-        const newTask = unit.taskList.find(task => task.status = "accepted");
-        const destination = (newTask &&
-            newTask.position &&
-            (!currentTask || newTask.id !== currentTask.id)
-        ) ? newTask.position : currentTask.position;
 
-        const newPath = (!currentTask && newTask && destination)
+        console.info('New Walking by unit: ', unit);
+
+        const newTask = await unit.currentTask ? unit.currentTask : unit.taskList.find(task => task.status = "accepted");
+
+        const destination = (newTask && newTask.position &&
+            (!currentTask || newTask.id !== currentTask.id))
+            && newTask.position;
+
+        const newPath = await (!currentTask && newTask && destination)
             && getPath(matrix, unit.position.y, unit.position.x, destination.y, destination.x);
 
         const getCurrentTask = async () => {
@@ -166,27 +171,25 @@ const Unit = memo(({ unit, height, width }) => {
                             target: target,
                         },
                         unitId: unit.id,
-                        // unitPosition: unit.position,
+                        // unitPosition: unit.position, // old state
                         unitPath: newPath,
                     }
                 });
                 Notify({
                     type: "success",
-                    message: "TADAAAA!",
+                    message: "Ready to Work!",
                     description: `Destination [x: ${destination.x},y: ${destination.y}]`,
                     icon: "success",
                     duration: 20
                 });
             }
-            // setCurrentTask(null);
+            setCurrentTask(null); // TODO: why?
         }
 
         if (newPath &&
             destination &&
             destination.x &&
-            destination.y &&
-            !unit.currentTask &&
-            unit.status === "walk"
+            destination.y
         ) {
             // unit ready to go!
             console.info("unit ready to go with newPath: ", newPath);
@@ -244,6 +247,7 @@ const Unit = memo(({ unit, height, width }) => {
                     stats.health < 0);
 
             if (isTaskComplete) {
+                clearTimeout(workingDelay);
                 dispatch({
                     type: 'UNIT_TASK_COMPLETE',
                     payload: {
@@ -254,7 +258,14 @@ const Unit = memo(({ unit, height, width }) => {
                         unitId: unit.id,
                     }
                 });
-                clearTimeout(workingDelay);
+                Notify({
+                    type: "success",
+                    message: "Task is Completed!",
+                    description: `Task #${task.id} is Completed By ${unit.name}`,
+                    icon: "success",
+                    duration: 20
+                });
+                console.info('Task Completed by unit: ', unit);
             }
 
             if (stats.damage >= stats.healthPoints || stats.health < 1) return;

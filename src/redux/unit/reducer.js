@@ -108,17 +108,9 @@ export default function unitReducer(state = initState, action) {
             }
 
         case types.UNIT_READY_TO_WORK:
-            // const { unitPath } = action.payload;
-            // const { unitPosition, unitPath } = action.payload;
-            // console.info('unitPosition', unitPosition);
-            // console.info('unitPath', unitPath);
             const updateUnitStatus = update(currentUnit, {
                 currentTask: { $set: action.payload.currentTask },
                 status: { $set: "work" }, // walk, work, attak, rest, search, dead
-                // position: {
-                //     x: { $set: unitPath[unitPath.length - 1].x },
-                //     y: { $set: unitPath[unitPath.length - 1].y },
-                // },
             });
 
             return {
@@ -144,12 +136,17 @@ export default function unitReducer(state = initState, action) {
 
         case types.UNIT_TASK_COMPLETE:
             const { task } = action.payload;
-            const filteredTaskList = currentUnit.taskList.filter(job => 
-                job.id !== task.id && job.status !== "complete");
+            
+            task.status = 'complete';
+            console.info('reducer task: ', task);
+            const newTaskList = currentUnit.taskList.filter(job => job.id !== task.id);
+            // const updateUnitTaskList = update(currentUnit.taskList, {
+            //     $merge: [task]
+            // });
             const updateUnitTaskComplete = update(currentUnit, {
-                status: { $set: filteredTaskList.length ? "walk" : "search" }, // walk, work, attak, rest, search, dead
-                taskList: { $set: filteredTaskList },
-                currentTask: { $set: filteredTaskList.length ? filteredTaskList[0] : null},
+                status: { $set: newTaskList.length ? "walk" : "search" }, // walk, work, attak, rest, search, dead
+                taskList: { $set: newTaskList },
+                currentTask: { $set: newTaskList.length ? newTaskList[0] : null},
             });
 
             return {
