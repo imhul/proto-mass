@@ -145,7 +145,7 @@ const Unit = memo(({ unit, height, width }) => {
                 setCurrentTask({
                     ...newTask,
                     path: newPath,
-                    target:target,
+                    target: target,
                 });
                 console.info('Current Task Setted!');
             }
@@ -163,7 +163,7 @@ const Unit = memo(({ unit, height, width }) => {
                         currentTask: currentTask ? currentTask : {
                             ...newTask,
                             path: newPath,
-                            target:target,
+                            target: target,
                         },
                         unitId: unit.id,
                         // unitPosition: unit.position,
@@ -210,7 +210,7 @@ const Unit = memo(({ unit, height, width }) => {
     }, [unit, currentTask, matrix, isGameStarted, isGamePaused, getObject]);
 
     // FX Work
-    useEffect( () => {
+    useEffect(() => {
         if (!unit || unit.status !== 'work' || !isGameStarted || isGamePaused) return;
         console.info("working unit: ", unit);
 
@@ -233,7 +233,6 @@ const Unit = memo(({ unit, height, width }) => {
         console.info("stats.health: ", stats.health);
 
         const workStep = () => {
-
             const isTaskComplete = task && stats &&
                 task.status !== "complete" &&
                 (task.status === "progress" ||
@@ -256,16 +255,17 @@ const Unit = memo(({ unit, height, width }) => {
                     }
                 });
                 clearTimeout(workingDelay);
-            } else if (!isTaskComplete && task.status !== "complete" && unit.status !== "walk") {
+            }
+
+            if (stats.damage >= stats.healthPoints || stats.health < 1) return;
+
+            if (!isTaskComplete && task.status !== "complete") {
                 workingDelay = setTimeout(() => {
                     const newTargetStats = {
                         ...task.target.stats,
                         damage: !isTaskComplete ? stats.damage + unitDamage : stats.healthPoints,
                         health: !isTaskComplete ? stats.health - unitDamage : 0,
                     };
-
-                    if (stats.damage >= stats.healthPoints || stats.health < 1) return;
-
                     dispatch({
                         type: 'UNIT_TASK_PERFORMS',
                         payload: {
