@@ -8,8 +8,9 @@ import timerMiddleware from 'redux-timer-middleware';
 import rootReducer from '../redux';
 
 const logger = createLogger({
-    timestamp: false,
+    // timestamp: false,
     diff: true,
+    duration: true,
     collapsed: true,
 });
 

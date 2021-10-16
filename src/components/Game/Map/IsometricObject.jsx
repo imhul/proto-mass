@@ -118,6 +118,7 @@ class IsometricObject extends Component {
         return (
             <div className={classes.join(" ")} style={vars}>
                 {
+   
                     (stats && obj.stats.health < obj.stats.healthPoints) && <Stats>
                         <Preloader
                             percent={obj.stats.health}
@@ -128,9 +129,12 @@ class IsometricObject extends Component {
                         />
                     </Stats>
                 }
-                <div className="react-isometric-object" onClick={this.onClick}>
-                    {frames ? <AnimatedTexture frames={frames} delay={delay} /> : null}
-                </div>
+                {
+                    obj.status !== 'dead' && <div className="react-isometric-object" onClick={this.onClick}>
+                        {frames ? <AnimatedTexture frames={frames} delay={delay} /> : null}
+                    </div>
+                }
+                
             </div>
         );
     }

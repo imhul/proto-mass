@@ -35,20 +35,22 @@ export default function mapReducer(state = initState, action) {
         case types.OBJECT_DAMAGE: {
             const { target } = action.payload;
 
-            const updatedObjectList = state.objectList.map(obj => {
-                if (obj.id !== target.id) {
-                    return obj
-                } else {
-                    return {
-                        ...obj,
-                        ...target,
+            const mappedObjectList = state.objectList.map(obj => {
+                    if (obj.id !== target.id) {
+                        return obj
+                    } else {
+                        return {
+                            ...obj,
+                            ...target,
+                        }
                     }
-                }
             });
+
+            const liveObjects = mappedObjectList.filter((obj) => obj.status !== 'dead');
             
             return {
                 ...state,
-                objectList: updatedObjectList,
+                objectList: liveObjects,
             };
         }
 
