@@ -124,7 +124,7 @@ class IsometricObject extends Component {
                             percent={obj.stats.health}
                             class="mini"
                             strokeWidth={4}
-                            strokeColor={{ from: '#811350', to: '#F6D6BD' }}
+                            strokeColor="#FF2700"
                             format={null}
                         />
                     </Stats>

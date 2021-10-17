@@ -136,13 +136,8 @@ export default function unitReducer(state = initState, action) {
 
         case types.UNIT_TASK_COMPLETE:
             const { task } = action.payload;
-            
             task.status = 'complete';
-            console.info('reducer task: ', task);
             const newTaskList = currentUnit.taskList.filter(job => job.id !== task.id);
-            // const updateUnitTaskList = update(currentUnit.taskList, {
-            //     $merge: [task]
-            // });
             const updateUnitTaskComplete = update(currentUnit, {
                 status: { $set: newTaskList.length ? "walk" : "search" }, // walk, work, attak, rest, search, dead
                 taskList: { $set: newTaskList },

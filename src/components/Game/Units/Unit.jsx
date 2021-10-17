@@ -39,11 +39,21 @@ const Unit = memo(({ unit, height, width }) => {
     const [currentTask, setCurrentTask] = useState(null);
 
     // timer trick for chillout
-    function sleep(msec) {
+    const sleep = msec => {
         return new Promise(resolve => setTimeout(resolve, msec));
     }
 
-    // effects
+    const goRest = () => {
+        // TODO: TimeMachine connect needed & stop after minute!
+        dispatch({
+            type: 'UNIT_START_REST', payload: {
+                unitId: unit.id,
+                // TODO: bonus to health restoration
+            }
+        });
+    }
+
+    // EFFECTS
 
     // set global current unit by id
     useEffect(() => {
@@ -55,6 +65,13 @@ const Unit = memo(({ unit, height, width }) => {
         if (!unit || unit.status !== 'search' || !isGameStarted || isGamePaused) return;
         console.info('taskSearch');
 
+         // If tasks is over -> go rest
+         if (!pendingList.length && !taskBoard.length) {
+            console.info('No Tasks!');
+            goRest();
+            return;
+        };
+
         const isUnitMatchTask = task => {
             const isUnitProfSuitable = unit && unit.professions.find(profession =>
                 profession.name === task.profession &&
@@ -64,12 +81,17 @@ const Unit = memo(({ unit, height, width }) => {
             return isUnitProfSuitable;
         }
 
+        // Go work
         if (unitList &&
             unitList.length &&
             !unit.taskList.length
         ) {
             // Continue to work
-            if (pendingList.length) {
+            console.info('Searching. Ready to Work!');
+            if (pendingList && pendingList.length) {
+
+                console.info('Searching. Get tasks from pending list');
+
                 const currentTaskList = pendingList.filter(task =>
                     task.workerId === unit.id &&
                     task.status === "paused"
@@ -86,10 +108,11 @@ const Unit = memo(({ unit, height, width }) => {
                         unitId: unit.id
                     }
                 });
-                // New task accepting
-            } else if (pendingList.length === 0 &&
-                taskBoard.length &&
-                !unit.taskList.length) {
+            } else if (!pendingList.length && taskBoard &&
+                taskBoard.length && !unit.taskList.length) {
+
+                console.info('Searching. Get new tasks from task board');
+
                 const relevantTaskList = taskBoard.filter(task =>
                     isUnitMatchTask(task) &&
                     task.status === "await"
@@ -107,18 +130,16 @@ const Unit = memo(({ unit, height, width }) => {
                             unitId: unit.id
                         }
                     });
-                    // TODO: how to walk?
+                } else {
                     // Go rest
-                } else if (unit.status === "work") {
-                    // TODO: TimeMachine connect needed & stop after minute!
-                    dispatch({
-                        type: 'UNIT_START_REST', payload: {
-                            unitId: unit.id,
-                            // TODO: bonus to health restoration
-                        }
-                    });
+                    goRest();
                 }
+            } else {
+                goRest();
             }
+        } else {
+            // Error
+            console.warn('something wrong!');
         }
     }, [
         unit,
@@ -133,7 +154,7 @@ const Unit = memo(({ unit, height, width }) => {
     useEffect(async () => {
         if (!unit || unit.status !== 'walk' || !isGameStarted || isGamePaused) return;
 
-        console.info('New Walking by unit: ', unit);
+        console.info('New Walking!');
 
         const newTask = await unit.currentTask ? unit.currentTask : unit.taskList.find(task => task.status = "accepted");
 
@@ -183,7 +204,7 @@ const Unit = memo(({ unit, height, width }) => {
                     duration: 20
                 });
             }
-            setCurrentTask(null); // TODO: why?
+            setCurrentTask(null);
         }
 
         if (newPath &&
@@ -194,7 +215,6 @@ const Unit = memo(({ unit, height, width }) => {
             // unit ready to go!
             console.info("unit ready to go with newPath: ", newPath);
             chillout.forEach(newPath, async ({ x, y }, i) => {
-                // if (x === unit.position.x && y === unit.position.y) {
                 await sleep(1000 * unit.stats.speed);
                 dispatch({
                     type: 'UNIT_WALKING',
@@ -204,7 +224,6 @@ const Unit = memo(({ unit, height, width }) => {
                         unitId: unit.id,
                     }
                 });
-                // }
             }).then(() => {
                 // unit reached destination!
                 readyToWork();
@@ -231,9 +250,6 @@ const Unit = memo(({ unit, height, width }) => {
             currentProfession.progress
         );
         const { stats } = task.target;
-
-        console.info("stats.damage: ", stats.damage);
-        console.info("stats.health: ", stats.health);
 
         const workStep = () => {
             const isTaskComplete = task && stats &&
@@ -336,6 +352,7 @@ const Unit = memo(({ unit, height, width }) => {
         // TODO: Fighting algorithm
     }, [unit, isGameStarted, isGamePaused]);
 
+    // handlers
     const onAnimatedTextureClick = useCallback((x, y, data) => {
         // playSFX(MapClick, settings.volume);
         dispatch({
@@ -385,6 +402,7 @@ const Unit = memo(({ unit, height, width }) => {
                             percent={unit.stats.healthPoints}
                             class="mini"
                             strokeWidth={4}
+                            strokeColor="#FF2700"
                             format={null}
                         />
                 }
