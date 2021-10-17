@@ -3,7 +3,7 @@ export const initState = {
     isFirstResize: false,
     size: {
         width: 0,
-        height: 0,
+        height: 0
     },
-    error: {},
+    error: {}
 };

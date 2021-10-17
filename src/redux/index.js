@@ -12,18 +12,17 @@ import unitReducer from './unit/reducer';
 import taskReducer from './task/reducer';
 import timeReducer from './time/reducer';
 
-export default history => combineReducers({
-  auth: authReducer,
-  app: appReducer,
-  game: gameReducer,
-  stage: stageReducer,
-  map: mapReducer,
-  unit: unitReducer,
-  task: taskReducer,
-  time: timeReducer,
-  firebase: firebaseReducer,
-  firestore: firestoreReducer,
-  router: connectRouter(history),
-});
-
-  
+export default history =>
+    combineReducers({
+        auth: authReducer,
+        app: appReducer,
+        game: gameReducer,
+        stage: stageReducer,
+        map: mapReducer,
+        unit: unitReducer,
+        task: taskReducer,
+        time: timeReducer,
+        firebase: firebaseReducer,
+        firestore: firestoreReducer,
+        router: connectRouter(history)
+    });

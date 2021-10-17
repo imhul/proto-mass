@@ -1,7 +1,7 @@
 import { createSelector } from 'reselect';
 
 // utils
-import memoize from "lodash.memoize";
+import memoize from 'lodash.memoize';
 
 export const unitSelector = createSelector(
     state => state.unit,
@@ -13,20 +13,15 @@ export const unitsSelector = createSelector(
     items => items.unitList
 );
 
-export const unitsLimitSelector = createSelector(
-    unitSelector,
-    items => items.unitsLimit
-);
+export const unitsLimitSelector = createSelector(unitSelector, items => items.unitsLimit);
 
-export const selectedUnitSelector = createSelector(
-    unitsSelector,
-    units => units.find(unit => unit.isSelected)
+export const selectedUnitSelector = createSelector(unitsSelector, units =>
+    units.find(unit => unit.isSelected)
 );
 
 // selected by id
-export const getUnitByIdSelector = createSelector(
-    unitsSelector,
-    units => memoize(unitId => units.find(unit => unit.id === unitId))
+export const getUnitByIdSelector = createSelector(unitsSelector, units =>
+    memoize(unitId => units.find(unit => unit.id === unitId))
 );
 
 // export const getUnitStatsSelector = createSelector(

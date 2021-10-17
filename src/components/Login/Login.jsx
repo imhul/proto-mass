@@ -1,27 +1,20 @@
 import React, { useEffect, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useHistory } from "react-router-dom";
+import { useHistory } from 'react-router-dom';
 import { firestore } from '../../redux/api';
 
 // Selectors
 import { isAuthenticatedSelector } from '../../selectors/auth';
-import { 
-    profileFirebaseSelector,
-    authFirebaseSelector,
-} from '../../selectors/firebase';
+import { profileFirebaseSelector, authFirebaseSelector } from '../../selectors/firebase';
 
 // Components
 import { Card, Form, Input, Button, Checkbox } from 'antd';
-import {
-    UserOutlined,
-    LockOutlined,
-} from '@ant-design/icons';
+import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import Notify from '../Output/Notify';
 
 const FormItem = Form.Item;
 
 const Login = props => {
-
     const history = useHistory();
     const dispatch = useDispatch();
     const isAuthenticated = useSelector(isAuthenticatedSelector);
@@ -30,7 +23,8 @@ const Login = props => {
 
     // mocked login
     useEffect(() => {
-        firestore.collection('users')
+        firestore
+            .collection('users')
             .doc('N0iQ4vJiMKXOsPKoMOyK')
             .get()
             .then(response => {
@@ -40,20 +34,22 @@ const Login = props => {
                         dispatch({ type: 'SET_AUTH_LOGIN', payload: data });
                     }
                 }
-            }).catch(error => {
+            })
+            .catch(error => {
                 dispatch({
-                    type: 'SET_AUTH_ERROR', payload: {
+                    type: 'SET_AUTH_ERROR',
+                    payload: {
                         code: `Error: ${error.code ? error.code : 'unknown!'}`,
-                        message: `Description: ${error.message ? error.message : error}`,
+                        message: `Description: ${error.message ? error.message : error}`
                     }
                 });
                 Notify({
-                    type: "warn",
+                    type: 'warn',
                     message: `Error: ${error.code ? error.code : 'unknown!'}`,
                     description: `Description: ${error.message ? error.message : error}`,
-                    icon: "warning",
+                    icon: 'warning',
                     duration: 3
-                })
+                });
             });
     }, [profileFirebase, authFirebase, dispatch, isAuthenticated]);
 
@@ -63,11 +59,14 @@ const Login = props => {
     }, [isAuthenticated, history]);
     // mocked effect end
 
-    const onFinish = useCallback(values => {
-        // TODO: validation!
-        if (isAuthenticated) history.replace('./game');
-        console.log('Received values of form: ', values);
-    }, [isAuthenticated, history]); // dispatch (mocked)
+    const onFinish = useCallback(
+        values => {
+            // TODO: validation!
+            if (isAuthenticated) history.replace('./game');
+            console.log('Received values of form: ', values);
+        },
+        [isAuthenticated, history]
+    ); // dispatch (mocked)
 
     return (
         <Card className="game-modal">
@@ -76,7 +75,7 @@ const Login = props => {
                 name="normal_login"
                 className="login-form"
                 initialValues={{
-                    remember: true,
+                    remember: true
                 }}
                 onFinish={onFinish}
             >
@@ -85,19 +84,22 @@ const Login = props => {
                     rules={[
                         {
                             required: false, // true (mocked)
-                            message: 'Please input your Username!',
-                        },
+                            message: 'Please input your Username!'
+                        }
                     ]}
                 >
-                    <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Username" />
+                    <Input
+                        prefix={<UserOutlined className="site-form-item-icon" />}
+                        placeholder="Username"
+                    />
                 </FormItem>
                 <FormItem
                     name="password"
                     rules={[
                         {
                             required: false, // true (mocked)
-                            message: 'Please input your Password!',
-                        },
+                            message: 'Please input your Password!'
+                        }
                     ]}
                 >
                     <Input
@@ -111,7 +113,12 @@ const Login = props => {
                         <Checkbox>Remember me</Checkbox>
                     </FormItem>
 
-                    <Button type="primary" htmlType="submit" loading={!isAuthenticated} className="game-btn">
+                    <Button
+                        type="primary"
+                        htmlType="submit"
+                        loading={!isAuthenticated}
+                        className="game-btn"
+                    >
                         Login
                     </Button>
                 </FormItem>
@@ -121,7 +128,7 @@ const Login = props => {
                         Forgot password?
                     </a>
                 </FormItem>
-                
+
                 <FormItem>
                     <a href="/register">Registration</a>
                 </FormItem>

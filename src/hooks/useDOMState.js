@@ -13,10 +13,10 @@ export const useDOMState = () => {
 
     useEffect(() => {
         document.addEventListener('DOMContentLoaded', handleDOM);
-        
+
         return () => {
-            document.removeEventListener('DOMContentLoaded', handleDOM)
-        }
+            document.removeEventListener('DOMContentLoaded', handleDOM);
+        };
     }, []);
 
     return readyState;

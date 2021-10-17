@@ -1,9 +1,9 @@
 export const getMin = (a, b) => {
     let min = false;
     if (a < b) {
-        min = a
+        min = a;
     } else if (b < a) {
-        min = b
+        min = b;
     }
     return min;
 };

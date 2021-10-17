@@ -1,16 +1,22 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback } from 'react';
 
 export const useKeydown = () => {
     const [keysPressed, setKeyPressed] = useState(new Set([]));
 
-    const onKeyDown = useCallback(({ key }) => {
-        setKeyPressed(keysPressed.add(key));
-    }, [keysPressed]);
+    const onKeyDown = useCallback(
+        ({ key }) => {
+            setKeyPressed(keysPressed.add(key));
+        },
+        [keysPressed]
+    );
 
-    const onKeyUp = useCallback(({ key }) => {
-        keysPressed.delete(key);
-        setKeyPressed(keysPressed);
-    }, [keysPressed]);
+    const onKeyUp = useCallback(
+        ({ key }) => {
+            keysPressed.delete(key);
+            setKeyPressed(keysPressed);
+        },
+        [keysPressed]
+    );
 
     useEffect(() => {
         window.addEventListener('keyup', onKeyUp);
@@ -22,5 +28,5 @@ export const useKeydown = () => {
         };
     }, [onKeyUp, onKeyDown]);
 
-  return keysPressed
+    return keysPressed;
 };

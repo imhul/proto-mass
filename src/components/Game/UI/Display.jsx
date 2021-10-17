@@ -2,9 +2,9 @@ import React, { memo, useEffect, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 // Components
-import { FullScreen, useFullScreenHandle } from "react-full-screen";
+import { FullScreen, useFullScreenHandle } from 'react-full-screen';
 import Particles from 'react-particles-js';
-import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
+import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch';
 import GameMap from '../Map/GameMap';
 import Preloader from './Preloader';
 // import TimeMachine from './TimeMachine';
@@ -18,10 +18,7 @@ import WindowSizeListener from 'react-window-size-listener';
 import Notify from '../../Output/Notify';
 
 // Selectors
-import {
-    isFullscreenSelector,
-    isFirstResizeSelector,
-} from '../../../selectors/stage';
+import { isFullscreenSelector, isFirstResizeSelector } from '../../../selectors/stage';
 
 import {
     // isLoadSavedGameSelector,
@@ -32,7 +29,7 @@ import {
     isStartOrLoadModalOpenSelector,
     isGameInitSelector,
     isGameErrorSelector,
-    isGameLoadedSelector,
+    isGameLoadedSelector
 } from '../../../selectors/game';
 
 // Hooks
@@ -40,7 +37,7 @@ import { useDOMState } from '../../../hooks';
 
 // Utils
 import {
-    getRandomInt,
+    getRandomInt
     // playSFX,
 } from '../../../utils';
 import _ from 'lodash';
@@ -49,7 +46,6 @@ import _ from 'lodash';
 // import introSFX from '../../assets/sound/loading.ogg';
 
 const Display = memo(() => {
-
     const handleFullScreen = useFullScreenHandle();
     const dispatch = useDispatch();
     const dom = useDOMState();
@@ -69,17 +65,18 @@ const Display = memo(() => {
         }
         return () => {
             document.body.classList.remove('game');
-        }
+        };
     }, [isGameInit]);
 
     // error
     useEffect(() => {
-        if (!_.isEmpty(error)) Notify({
-            type: "error",
-            message: "Game Error!",
-            icon: "warning",
-            duration: 4
-        })
+        if (!_.isEmpty(error))
+            Notify({
+                type: 'error',
+                message: 'Game Error!',
+                icon: 'warning',
+                duration: 4
+            });
     }, [error]);
 
     useEffect(() => {
@@ -92,26 +89,32 @@ const Display = memo(() => {
         let step1, step2;
 
         if (!isStartOrLoadModalOpen && !isGameInit) {
-            if (dom.readyState === "complete" && isMapLoaded && loadingPercent !== 99) {
-                step1 = setTimeout(() =>
-                    dispatch({
-                        type: 'LOADING_GAME_UPDATE',
-                        payload: 99,
-                        meta: 'almost all ready'
-                    }), 500);
+            if (dom.readyState === 'complete' && isMapLoaded && loadingPercent !== 99) {
+                step1 = setTimeout(
+                    () =>
+                        dispatch({
+                            type: 'LOADING_GAME_UPDATE',
+                            payload: 99,
+                            meta: 'almost all ready'
+                        }),
+                    500
+                );
             }
             if (isGameLoaded) {
-                step2 = setTimeout(() =>
-                    dispatch({
-                        type: 'INIT_GAME',
-                    }), 500);
+                step2 = setTimeout(
+                    () =>
+                        dispatch({
+                            type: 'INIT_GAME'
+                        }),
+                    500
+                );
             }
         }
 
         return () => {
             clearTimeout(step1);
             clearTimeout(step2);
-        }
+        };
     }, [
         dispatch,
         isStartOrLoadModalOpen,
@@ -130,48 +133,61 @@ const Display = memo(() => {
         e.preventDefault();
     }, []);
 
-    const onWheel = useCallback(e => {
-        if (e.deltaY < 0) {
-            dispatch({ type: 'MAP_INCREASE' })
-        } else if (e.deltaY > 0) {
-            dispatch({ type: 'MAP_DECREASE' })
-        }
-    }, [dispatch]);
+    const onWheel = useCallback(
+        e => {
+            if (e.deltaY < 0) {
+                dispatch({ type: 'MAP_INCREASE' });
+            } else if (e.deltaY > 0) {
+                dispatch({ type: 'MAP_DECREASE' });
+            }
+        },
+        [dispatch]
+    );
 
-    const onKeydown = useCallback(e => {
-        if (isGameStarted) console.info("onKeydown event: ", e);
-    }, [isGameStarted]);
+    const onKeydown = useCallback(
+        e => {
+            if (isGameStarted) console.info('onKeydown event: ', e);
+        },
+        [isGameStarted]
+    );
 
-    const onKeyup = useCallback(e => {
-        if ((e.key === 'Escape' || e.code === 'Escape') && isGameStarted) {
-            dispatch({ type: 'TOGGLE_GAME_MENU_ESC' });
-            dispatch({ type: 'TOGGLE_PAUSE_GAME' });
-            if (isFullscreen) handleFullScreen.exit();
-        }
-    }, [isGameStarted, dispatch]);
+    const onKeyup = useCallback(
+        e => {
+            if ((e.key === 'Escape' || e.code === 'Escape') && isGameStarted) {
+                dispatch({ type: 'TOGGLE_GAME_MENU_ESC' });
+                dispatch({ type: 'TOGGLE_PAUSE_GAME' });
+                if (isFullscreen) handleFullScreen.exit();
+            }
+        },
+        [isGameStarted, dispatch]
+    );
 
-    const onResize = useCallback(output => {
-        if (!isFirstResize) {
-            if (isMapLoaded) {
+    const onResize = useCallback(
+        output => {
+            if (!isFirstResize) {
+                if (isMapLoaded) {
+                    dispatch({
+                        type: 'RESIZE',
+                        payload: output,
+                        meta: true
+                    });
+                    !isGameInit &&
+                        dispatch({
+                            type: 'LOADING_GAME_UPDATE',
+                            payload: getRandomInt(21, 31),
+                            meta: 'coordinate calculation'
+                        });
+                }
+            } else {
                 dispatch({
                     type: 'RESIZE',
                     payload: output,
-                    meta: true,
+                    meta: false
                 });
-                !isGameInit && dispatch({
-                    type: 'LOADING_GAME_UPDATE',
-                    payload: getRandomInt(21, 31),
-                    meta: "coordinate calculation"
-                })
             }
-        } else {
-            dispatch({
-                type: 'RESIZE',
-                payload: output,
-                meta: false,
-            });
-        }
-    }, [isMapLoaded, isFirstResize, isGameInit, dispatch]);
+        },
+        [isMapLoaded, isFirstResize, isGameInit, dispatch]
+    );
 
     useEffect(() => {
         window.addEventListener('contextmenu', prevent);
@@ -182,135 +198,131 @@ const Display = memo(() => {
             window.removeEventListener('contextmenu', prevent);
             window.removeEventListener('keydown', onKeydown);
             window.removeEventListener('keyup', onKeyup);
-        }
+        };
     }, [prevent, onWheel, onKeydown, onKeyup]);
 
-    return <>
-        {
-            !isGameInit && isStartOrLoadModalOpen ? <StartOrLoadModal /> :
+    return (
+        <>
+            {!isGameInit && isStartOrLoadModalOpen ? (
+                <StartOrLoadModal />
+            ) : (
                 <>
-                    {
-                        !isGameInit && <Preloader percent={loadingPercent} />
-                    }
-                    <WindowSizeListener
-                        onResize={output => onResize(output)}
-                    >
+                    {!isGameInit && <Preloader percent={loadingPercent} />}
+                    <WindowSizeListener onResize={output => onResize(output)}>
                         <FullScreen
                             handle={handleFullScreen}
-                            onChange={isFull =>
-                                dispatch({ type: 'FULLSCREEN', payload: isFull })
-                            }
+                            onChange={isFull => dispatch({ type: 'FULLSCREEN', payload: isFull })}
                         >
                             <div id="bg-game">
-                                <Particles params={{
-                                    particles: {
-                                        number: {
-                                            value: 100,
-                                            density: {
-                                                enable: true,
-                                                value_area: 300
+                                <Particles
+                                    params={{
+                                        particles: {
+                                            number: {
+                                                value: 100,
+                                                density: {
+                                                    enable: true,
+                                                    value_area: 300
+                                                }
+                                            },
+                                            color: {
+                                                value: '#ffffff'
+                                            },
+                                            shape: {
+                                                type: 'circle',
+                                                stroke: {
+                                                    width: 0
+                                                },
+                                                polygon: {
+                                                    nb_sides: 4
+                                                }
+                                            },
+                                            opacity: {
+                                                value: 0.5,
+                                                random: false,
+                                                anim: {
+                                                    enable: false
+                                                    // speed: 0.5,
+                                                    // opacity_min: 0.4,
+                                                    // sync: false
+                                                }
+                                            },
+                                            size: {
+                                                value: 1,
+                                                random: true,
+                                                anim: {
+                                                    enable: false
+                                                }
+                                            },
+                                            line_linked: {
+                                                enable: false
+                                            },
+                                            move: {
+                                                enable: isGameInit ? true : false,
+                                                speed: 0.5,
+                                                direction: 'left',
+                                                random: false,
+                                                straight: true,
+                                                out_mode: 'out',
+                                                bounce: true,
+                                                attract: {
+                                                    enable: false
+                                                }
                                             }
                                         },
-                                        color: {
-                                            value: "#ffffff"
-                                        },
-                                        shape: {
-                                            type: "circle",
-                                            stroke: {
-                                                width: 0,
-                                            },
-                                            polygon: {
-                                                nb_sides: 4
-                                            },
-                                        },
-                                        opacity: {
-                                            value: 0.5,
-                                            random: false,
-                                            anim: {
-                                                enable: false,
-                                                // speed: 0.5,
-                                                // opacity_min: 0.4,
-                                                // sync: false
+                                        interactivity: {
+                                            detect_on: 'canvas',
+                                            events: {
+                                                onhover: {
+                                                    enable: false
+                                                },
+                                                onclick: {
+                                                    enable: false
+                                                },
+                                                resize: true
                                             }
                                         },
-                                        size: {
-                                            value: 1,
-                                            random: true,
-                                            anim: {
-                                                enable: false,
-                                            }
-                                        },
-                                        line_linked: {
-                                            enable: false,
-                                        },
-                                        move: {
-                                            enable: isGameInit ? true : false,
-                                            speed: 0.5,
-                                            direction: "left",
-                                            random: false,
-                                            straight: true,
-                                            out_mode: "out",
-                                            bounce: true,
-                                            attract: {
-                                                enable: false,
-                                            }
-                                        }
-                                    },
-                                    interactivity: {
-                                        detect_on: "canvas",
-                                        events: {
-                                            onhover: {
-                                                enable: false,
-                                            },
-                                            onclick: {
-                                                enable: false,
-                                            },
-                                            resize: true
-                                        }
-                                    },
-                                    retina_detect: true
-                                }} />
+                                        retina_detect: true
+                                    }}
+                                />
                             </div>
 
                             <TransformWrapper
                                 options={{
-                                    limitToWrapper: true,
+                                    limitToWrapper: true
                                 }}
                                 pan={{
                                     velocityEqualToMove: true,
                                     velocity: true,
-                                    velocitySensitivity: 6,
+                                    velocitySensitivity: 6
                                 }}
                                 pinch={{ disabled: false }}
                                 doubleClick={{ disabled: false }}
                                 wheel={{
-                                    step: 30,
+                                    step: 30
                                 }}
                             >
                                 <TransformComponent>
                                     <GameMap />
                                 </TransformComponent>
                             </TransformWrapper>
-                            {
-                                isGameLoaded && isGameInit && !isGameStarted ? <StartInfo /> : null
-                            }
+                            {isGameLoaded && isGameInit && !isGameStarted ? <StartInfo /> : null}
                             <GameMenuEsc />
-                            {
-                                isGameInit && isGameStarted ? <>
+                            {isGameInit && isGameStarted ? (
+                                <>
                                     <LeftGameInfoPanel />
 
                                     <RightGameInfoPanel>
                                         {/* <TimeMachine /> */}
                                         <UserActionInfo />
                                     </RightGameInfoPanel>
-
-                                </> : null
-                            }
+                                </>
+                            ) : null}
                         </FullScreen>
                     </WindowSizeListener>
                 </>
-        }
-    </>
+            )}
+        </>
+    );
 });
 
 export default Display;

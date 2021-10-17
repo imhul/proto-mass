@@ -1,13 +1,10 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useHistory, useLocation } from "react-router-dom";
+import { useHistory, useLocation } from 'react-router-dom';
 import { Menu } from 'antd';
 
 // Selectors
-import { 
-    getLoadingPercentSelector,
-    isGameInitSelector,
-} from '../../selectors/game';
+import { getLoadingPercentSelector, isGameInitSelector } from '../../selectors/game';
 import { isAuthenticatedSelector } from '../../selectors/auth';
 
 // Components
@@ -17,7 +14,6 @@ import GameMenu from '../Game/UI/GameMenu';
 const MenuItem = Menu.Item;
 
 const MainMenu = () => {
-
     const history = useHistory();
     const location = useLocation();
     const dispatch = useDispatch();
@@ -26,29 +22,32 @@ const MainMenu = () => {
     const isAuthenticated = useSelector(isAuthenticatedSelector);
     const [selectedKeys, setSelectedKeys] = useState([]);
 
-    const onWebMenuClick = useCallback(e => {
-        if (e.key !== "game") dispatch({ type: 'EXIT_GAME' });
-        history.push(e.key)
-    }, [dispatch, history]);
+    const onWebMenuClick = useCallback(
+        e => {
+            if (e.key !== 'game') dispatch({ type: 'EXIT_GAME' });
+            history.push(e.key);
+        },
+        [dispatch, history]
+    );
 
     useEffect(() => {
         if (location.pathname !== '/login') {
-            setSelectedKeys([location.pathname])
+            setSelectedKeys([location.pathname]);
         } else {
-            setSelectedKeys(['/'])
+            setSelectedKeys(['/']);
         }
     }, [location.pathname]);
 
     return (
         <>
-            {
-                !isGameInit ? <>
-                    {
-                        loadingPercent < 1 && <>
-                            <Menu 
+            {!isGameInit ? (
+                <>
+                    {loadingPercent < 1 && (
+                        <>
+                            <Menu
                                 selectedKeys={selectedKeys}
-                                onClick={onWebMenuClick} 
-                                mode="horizontal" 
+                                onClick={onWebMenuClick}
+                                mode="horizontal"
                                 theme="dark"
                             >
                                 <MenuItem key="/">
@@ -60,13 +59,23 @@ const MainMenu = () => {
                                     <span>Game</span>
                                 </MenuItem>
                                 <MenuItem key="/about">
-                                    <a href="https://github.com/imhul/proto-mass" rel="noopener noreferrer" target="_blank" title="about">
+                                    <a
+                                        href="https://github.com/imhul/proto-mass"
+                                        rel="noopener noreferrer"
+                                        target="_blank"
+                                        title="about"
+                                    >
                                         <i className="anticon">Y</i>
                                         <span>About</span>
                                     </a>
                                 </MenuItem>
                                 <MenuItem key="/donate">
-                                    <a href="https://www.patreon.com/protomass" rel="noopener noreferrer" target="_blank" title="donate">
+                                    <a
+                                        href="https://www.patreon.com/protomass"
+                                        rel="noopener noreferrer"
+                                        target="_blank"
+                                        title="donate"
+                                    >
                                         <i className="anticon">c</i>
                                         <span>Donate</span>
                                     </a>
@@ -74,12 +83,13 @@ const MainMenu = () => {
                             </Menu>
                             <UserMenu />
                         </>
-                    }
-                    
-                </> : <GameMenu />
-            }
+                    )}
+                </>
+            ) : (
+                <GameMenu />
+            )}
         </>
     );
-}
+};
 
 export default MainMenu;

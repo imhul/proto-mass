@@ -1,9 +1,9 @@
 export const getMax = (a, b) => {
     let max = false;
     if (a < b) {
-        max = b
+        max = b;
     } else if (b < a) {
-        max = a
+        max = a;
     }
     return max;
 };

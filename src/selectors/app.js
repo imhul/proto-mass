@@ -5,8 +5,4 @@ export const appSelector = createSelector(
     items => items
 );
 
-export const isAppInitSelector = createSelector(
-    appSelector,
-    items => items.isAppInit
-);
-
+export const isAppInitSelector = createSelector(appSelector, items => items.isAppInit);

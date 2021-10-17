@@ -12,7 +12,7 @@ export const initState = {
         // objectType: "", // tile, object, unit
         // actionType: "", // click, hover, scroll, context
         // data: {
-        //     id: '', 
+        //     id: '',
         //     name: '', // to show title
         //     status: '', // inactive, grow, damage, attack, repair
         //     blocker: false, // for collisions
@@ -21,5 +21,5 @@ export const initState = {
         //     healthPoints: 0, // total health points
         // },
     },
-    error: {},
+    error: {}
 };

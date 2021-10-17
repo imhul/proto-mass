@@ -6,13 +6,12 @@ import { initState } from './initState';
 
 export default function mapReducer(state = initState, action) {
     switch (action.type) {
-
         // objects actions
         case types.OBJECTS_CREATION_START: {
             return {
                 ...state,
-                isObjectsCreation: true,
-            }
+                isObjectsCreation: true
+            };
         }
 
         case types.OBJECTS_CREATED: {
@@ -20,37 +19,37 @@ export default function mapReducer(state = initState, action) {
                 ...state,
                 objectList: action.payload,
                 isObjectsCreation: false,
-                isObjectsCreated: true,
-            }
+                isObjectsCreated: true
+            };
         }
 
         case types.OBSTACLE_MATRIX_LOADED: {
             return {
                 ...state,
                 map: action.payload.map,
-                matrix: action.payload.matrix,
-            }
+                matrix: action.payload.matrix
+            };
         }
 
         case types.OBJECT_DAMAGE: {
             const { target } = action.payload;
 
             const mappedObjectList = state.objectList.map(obj => {
-                    if (obj.id !== target.id) {
-                        return obj
-                    } else {
-                        return {
-                            ...obj,
-                            ...target,
-                        }
-                    }
+                if (obj.id !== target.id) {
+                    return obj;
+                } else {
+                    return {
+                        ...obj,
+                        ...target
+                    };
+                }
             });
 
-            const liveObjects = mappedObjectList.filter((obj) => obj.status !== 'dead');
-            
+            const liveObjects = mappedObjectList.filter(obj => obj.status !== 'dead');
+
             return {
                 ...state,
-                objectList: liveObjects,
+                objectList: liveObjects
             };
         }
 
@@ -58,11 +57,11 @@ export default function mapReducer(state = initState, action) {
         case types.USER_ACTION: {
             return {
                 ...state,
-                userAction: action.payload,
-            }
+                userAction: action.payload
+            };
         }
 
         default:
-            return state
+            return state;
     }
-};
+}

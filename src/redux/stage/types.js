@@ -1,4 +1,4 @@
 export const types = {
-    RESIZE:         'RESIZE',
-    FULLSCREEN:     'FULLSCREEN',
+    RESIZE: 'RESIZE',
+    FULLSCREEN: 'FULLSCREEN'
 };

@@ -14,7 +14,7 @@
         z-index: 998;
         color: $game-color;
         background: $game-color-dark;
-        font-family: "PressStart2P-Regular";
+        font-family: 'PressStart2P-Regular';
         text-shadow: 2px 2px 0px $game-color-darkest;
         // font-size: 26px;
         .game-menu-hover-box {
@@ -30,12 +30,12 @@
                 max-height: 64px;
                 i {
                     font-size: 36px;
-                    font-family: "PixelIconsCompilation";
+                    font-family: 'PixelIconsCompilation';
                     vertical-align: middle;
                 }
                 span {
                     font-size: 22px;
-                    font-family: "PressStart2P-Regular";
+                    font-family: 'PressStart2P-Regular';
                     vertical-align: middle;
                 }
                 a {
@@ -43,27 +43,33 @@
                 }
                 &:hover {
                     background-color: $game-color;
-                    span, i, a {
+                    span,
+                    i,
+                    a {
                         color: $game-color-darkest;
                         text-shadow: 2px 2px 0px $game-color-warn;
                     }
                 }
                 &.ant-menu-item-selected {
                     background-color: $game-color;
-                    span, i, a {
+                    span,
+                    i,
+                    a {
                         color: $game-color-darkest;
                         text-shadow: 2px 2px 0px $game-color-warn;
                     }
                     &:hover {
                         background: $game-color-dark;
-                        span, i, a {
+                        span,
+                        i,
+                        a {
                             color: $game-color;
                             text-shadow: 2px 2px 0px $game-color-darkest;
                         }
                     }
                 }
             }
-        } 
+        }
         .UserMenu {
             background-color: $game-color-dark;
             box-shadow: 2px 2px 0 $game-color-darkest;

@@ -1,7 +1,7 @@
 @keyframes slideDown {
     from {
         text-shadow: 4px -4px 0 #ff0045, 8px -8px 0 #5500ff;
-        transform: translate(-50%, -50%) scale(.4);
+        transform: translate(-50%, -50%) scale(0.4);
         top: -20%;
     }
     10% {
@@ -57,7 +57,7 @@ main {
         &.ant-layout {
             height: calc(100vh - 133px);
             background: $transparent;
-            transform:perspective(300px) rotateX(20deg);
+            transform: perspective(300px) rotateX(20deg);
             .hero {
                 top: 50%;
                 left: 50%;

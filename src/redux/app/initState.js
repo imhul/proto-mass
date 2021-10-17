@@ -9,7 +9,7 @@ export const initState = {
         icon: '', // string
         duration: 6, // null for non-stop
         placement: 'bottomLeft', // topLeft topRight bottomLeft bottomRight
-        onClose: null,
+        onClose: null
     },
-    notifyArchive: [],
+    notifyArchive: []
 };

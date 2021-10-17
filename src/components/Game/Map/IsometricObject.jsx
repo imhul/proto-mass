@@ -1,10 +1,10 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 // Components
 import Stats from '../UI/Stats';
 import Preloader from '../UI/Preloader';
-import { AnimatedTexture, IsometricMapEvent } from ".";
+import { AnimatedTexture, IsometricMapEvent } from '.';
 
 class IsometricObject extends Component {
     static propTypes = {
@@ -51,12 +51,12 @@ class IsometricObject extends Component {
     onClick = e => {
         const { x, y, onClick, onMouseAction, active } = this.props;
         if (!active) return;
-        const event = new IsometricMapEvent(this, x, y, "click", "object");
+        const event = new IsometricMapEvent(this, x, y, 'click', 'object');
         e.stopPropagation();
-        if (typeof onMouseAction === "function") {
+        if (typeof onMouseAction === 'function') {
             onMouseAction(event);
         }
-        if (typeof onClick === "function") {
+        if (typeof onClick === 'function') {
             onClick(event);
         }
     };
@@ -64,12 +64,12 @@ class IsometricObject extends Component {
     onMouseEnter = e => {
         const { x, y, onEnter, onMouseAction, active } = this.props;
         if (!active) return;
-        const event = new IsometricMapEvent(this, x, y, "enter", "object");
+        const event = new IsometricMapEvent(this, x, y, 'enter', 'object');
         e.stopPropagation();
-        if (typeof onMouseAction === "function") {
+        if (typeof onMouseAction === 'function') {
             onMouseAction(event);
         }
-        if (typeof onEnter === "function") {
+        if (typeof onEnter === 'function') {
             onEnter(event);
         }
     };
@@ -77,49 +77,36 @@ class IsometricObject extends Component {
     onMouseLeave = e => {
         const { x, y, onLeave, onMouseAction, active } = this.props;
         if (!active) return;
-        const event = new IsometricMapEvent(this, x, y, "leave", "object");
+        const event = new IsometricMapEvent(this, x, y, 'leave', 'object');
         e.stopPropagation();
-        if (typeof onMouseAction === "function") {
+        if (typeof onMouseAction === 'function') {
             onMouseAction(event);
         }
-        if (typeof onLeave === "function") {
+        if (typeof onLeave === 'function') {
             onLeave(event);
         }
     };
 
     render() {
-        const {
-            stats,
-            obj,
-            x,
-            y,
-            z,
-            width,
-            height,
-            active,
-            className,
-            style,
-            frames,
-            delay
-        } = this.props;
+        const { stats, obj, x, y, z, width, height, active, className, style, frames, delay } =
+            this.props;
         const vars = {
             ...(style || {}),
-            "--x": x,
-            "--y": y,
-            "--z": z,
-            "--object-width": width,
-            "--object-height": height
+            '--x': x,
+            '--y': y,
+            '--z': z,
+            '--object-width': width,
+            '--object-height': height
         };
-        const classes = ["react-isometric-object-wrapper"];
+        const classes = ['react-isometric-object-wrapper'];
         if (className) classes.push(className);
-        if (active) classes.push("active");
-        if (obj.stats.health === 0 || obj.stats.health < 0) classes.push("dead");
-        
+        if (active) classes.push('active');
+        if (obj.stats.health === 0 || obj.stats.health < 0) classes.push('dead');
+
         return (
-            <div className={classes.join(" ")} style={vars}>
-                {
-   
-                    (stats && obj.stats.health < obj.stats.healthPoints) && <Stats>
+            <div className={classes.join(' ')} style={vars}>
+                {stats && obj.stats.health < obj.stats.healthPoints && (
+                    <Stats>
                         <Preloader
                             percent={obj.stats.health}
                             class="mini"
@@ -128,13 +115,12 @@ class IsometricObject extends Component {
                             format={null}
                         />
                     </Stats>
-                }
-                {
-                    obj.status !== 'dead' && <div className="react-isometric-object" onClick={this.onClick}>
+                )}
+                {obj.status !== 'dead' && (
+                    <div className="react-isometric-object" onClick={this.onClick}>
                         {frames ? <AnimatedTexture frames={frames} delay={delay} /> : null}
                     </div>
-                }
-                
+                )}
             </div>
         );
     }

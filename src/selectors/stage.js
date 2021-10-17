@@ -5,12 +5,6 @@ export const stageSelector = createSelector(
     items => items
 );
 
-export const isFirstResizeSelector = createSelector(
-    stageSelector,
-    items => items.isFirstResize
-);
+export const isFirstResizeSelector = createSelector(stageSelector, items => items.isFirstResize);
 
-export const isFullscreenSelector = createSelector(
-    stageSelector,
-    items => items.isFullscreen
-);
+export const isFullscreenSelector = createSelector(stageSelector, items => items.isFullscreen);

@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { ConnectedRouter } from 'connected-react-router';
 import { Route, Switch } from 'react-router';
-import { Redirect } from "react-router-dom";
+import { Redirect } from 'react-router-dom';
 import { Layout } from 'antd';
 
 // Selectors
@@ -21,21 +21,20 @@ import Display from '../Game';
 const { Content } = Layout;
 
 const Output = ({ history }) => {
-
     const dispatch = useDispatch();
     const isGameInit = useSelector(isGameInitSelector);
     const isAppInit = useSelector(isAppInitSelector);
 
-    useEffect(() => { 
-        if (!isAppInit) dispatch({ type: 'APP_INIT' }) 
-    }, [ isAppInit, dispatch ]);
+    useEffect(() => {
+        if (!isAppInit) dispatch({ type: 'APP_INIT' });
+    }, [isAppInit, dispatch]);
 
     return (
         <ConnectedRouter history={history} noInitialPop>
             <Layout className="Output">
                 <MainHeader />
-                    
-                <Content className={isGameInit ? 'game-active' : '' }>
+
+                <Content className={isGameInit ? 'game-active' : ''}>
                     <Switch>
                         <Route exact path="/">
                             <HomePage />
@@ -52,10 +51,10 @@ const Output = ({ history }) => {
                         <Redirect from="*" to="/error" />
                     </Switch>
                 </Content>
-                { !isGameInit && <MainFooter /> }
+                {!isGameInit && <MainFooter />}
             </Layout>
         </ConnectedRouter>
-    )
+    );
 };
 
 export default Output;

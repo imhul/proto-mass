@@ -1,25 +1,24 @@
-import React, { memo, useCallback, } from 'react';
+import React, { memo, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useHistory } from "react-router-dom";
+import { useHistory } from 'react-router-dom';
 
 // Selectors
 import { isFullscreenSelector } from '../../../selectors/stage';
 import { unitsSelector } from '../../../selectors/units';
-import { 
+import {
     colonyNameSelector,
     gameSettingsSelector,
-    isGameMenuOpenSelector,
+    isGameMenuOpenSelector
 } from '../../../selectors/game';
 
 // Components
-import { Card, Row, Col, Form, Checkbox, Button, } from 'antd';
+import { Card, Row, Col, Form, Checkbox, Button } from 'antd';
 import Notify from '../../Output/Notify';
 import SoundSlider from '../../Output/SoundSlider';
 
 const FormItem = Form.Item;
 
 const GameMenuEsc = memo(() => {
-
     // effects
     const history = useHistory();
     const dispatch = useDispatch();
@@ -32,11 +31,11 @@ const GameMenuEsc = memo(() => {
     // handlers
     const onLoadGame = useCallback(() => {
         Notify({
-            type: "info",
-            message: "Loading Saved Game in development. Coming soon!",
-            icon: "info",
+            type: 'info',
+            message: 'Loading Saved Game in development. Coming soon!',
+            icon: 'info',
             duration: 4
-        })
+        });
     }, []);
 
     const onGameContinued = useCallback(() => {
@@ -45,71 +44,63 @@ const GameMenuEsc = memo(() => {
     }, [dispatch]);
 
     const onSaveGame = useCallback(() => {
-        dispatch({ 
-            type: 'SAVE_GAME', 
-            payload: { 
+        dispatch({
+            type: 'SAVE_GAME',
+            payload: {
                 units: units
-            },
+            }
         });
         Notify({
-            type: "info",
-            message: "Game Saved",
-            icon: "save",
+            type: 'info',
+            message: 'Game Saved',
+            icon: 'save',
             duration: 3
-        })
-    }, [dispatch, units ]);
+        });
+    }, [dispatch, units]);
 
     const onExitGame = useCallback(() => {
-        dispatch({ type: 'EXIT_GAME' })
+        dispatch({ type: 'EXIT_GAME' });
         history.push('/');
     }, [dispatch, history]);
 
-    const onFullscreen = useCallback(checked => {
-        return checked ? dispatch({ type: 'FULLSCREEN', payload: true }) :
-            dispatch({ type: 'FULLSCREEN', payload: false });
-    }, [dispatch]);
+    const onFullscreen = useCallback(
+        checked => {
+            return checked
+                ? dispatch({ type: 'FULLSCREEN', payload: true })
+                : dispatch({ type: 'FULLSCREEN', payload: false });
+        },
+        [dispatch]
+    );
 
     return isGameMenuOpen ? (
         <Card className="game-modal start-game">
-
             <p className="hello">Hello, voyager!</p>
 
             <p className="hello">
                 Wellcome
-                {
-                    colonyName.length > 0 ? ` to ${colonyName}` : '!'
-                }
+                {colonyName.length > 0 ? ` to ${colonyName}` : '!'}
             </p>
 
-            <Form
-                name="escGameForm"
-                layout="vertical"
-            >
+            <Form name="escGameForm" layout="vertical">
                 <FormItem
-                    name="fullscreen" 
+                    name="fullscreen"
                     label="Expand to Fullscreen"
                     valuePropName="checked"
                     labelAlign="left"
                 >
-                    <Checkbox 
-                        onChange={event => onFullscreen(event.target.checked)}
-                    >
-                        <span> { isFullscreen ? "Windowed" : "Fullscreen" }</span>
+                    <Checkbox onChange={event => onFullscreen(event.target.checked)}>
+                        <span> {isFullscreen ? 'Windowed' : 'Fullscreen'}</span>
                     </Checkbox>
                 </FormItem>
                 <FormItem
-                    name="volume" 
+                    name="volume"
                     label={`Sound Volume Level is ${gameSettings.volume} out of 1`}
                 >
                     <SoundSlider showResult={false} />
                 </FormItem>
             </Form>
 
-            <Button
-                block={true}
-                onClick={() => onGameContinued()}
-                className="game-btn"
-            >
+            <Button block={true} onClick={() => onGameContinued()} className="game-btn">
                 Continue
             </Button>
 
@@ -135,18 +126,13 @@ const GameMenuEsc = memo(() => {
                     </Button>
                 </Col>
                 <Col span={8}>
-                    <Button
-                        onClick={() => onExitGame()}
-                        className="game-btn"
-                        block={true}
-                    >
+                    <Button onClick={() => onExitGame()} className="game-btn" block={true}>
                         Exit
                     </Button>
                 </Col>
             </Row>
-
         </Card>
-    ) : null
+    ) : null;
 });
 
 export default GameMenuEsc;

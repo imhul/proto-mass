@@ -2,7 +2,7 @@ import React, { memo, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 
 // Selectors
-import { unitsSelector, unitsLimitSelector } from '../../../selectors/units'
+import { unitsSelector, unitsLimitSelector } from '../../../selectors/units';
 import { fakePathSelector } from '../../../selectors/objects';
 
 // Hooks
@@ -23,20 +23,20 @@ const Units = memo(props => {
     // generators
     const newUnit = {
         name: `bot01101-${unitList.length + 1}`,
-        isEnemy: false,
+        isEnemy: false
     };
 
     const newEnemy = {
         name: `enemy01101-${unitList.length + 1}`,
-        isEnemy: true,
+        isEnemy: true
     };
 
     // mock
     const fakeTask = {
         limit: 5,
-        profession: "collector",
-        type: "collect",
-        position: fakePath[getRandomInt(0, 50)],
+        profession: 'collector',
+        type: 'collect',
+        position: fakePath[getRandomInt(0, 50)]
     };
 
     // synthesizing hooks
@@ -46,8 +46,11 @@ const Units = memo(props => {
     useGetTask(fakeTask);
     // }
 
-    return (unitList && unitList.length) && unitList.map(unit =>
-        <Unit {...props} unit={unit} key={unit.id} />)
+    return (
+        unitList &&
+        unitList.length &&
+        unitList.map(unit => <Unit {...props} unit={unit} key={unit.id} />)
+    );
 });
 
 export default Units;

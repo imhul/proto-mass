@@ -71,7 +71,7 @@ export const initState = {
     //     // backpack
     //     itemsStorage: [],
     //     // wear
-    //     items: [ 
+    //     items: [
     //         {
     //             id: "",
     //             name: "",
@@ -80,5 +80,5 @@ export const initState = {
     //         },
     //     ],
     // },
-    error: {},
+    error: {}
 };

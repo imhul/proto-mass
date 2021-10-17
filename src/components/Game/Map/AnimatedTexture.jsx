@@ -1,5 +1,5 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 class AnimatedTexture extends Component {
     static propTypes = {
@@ -88,7 +88,7 @@ class AnimatedTexture extends Component {
 
     onClick = () => {
         const { onClick } = this.props;
-        if (typeof onClick === "function") {
+        if (typeof onClick === 'function') {
             onClick();
         }
     };

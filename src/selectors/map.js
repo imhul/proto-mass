@@ -15,27 +15,12 @@ export const isObjectsCreationSelector = createSelector(
     items => items.isObjectsCreation
 );
 
-export const objectListSelector = createSelector(
-    mapSelector,
-    items => items.objectList
-);
+export const objectListSelector = createSelector(mapSelector, items => items.objectList);
 
-export const mapArraySelector = createSelector(
-    mapSelector,
-    items => items.map
-);
+export const mapArraySelector = createSelector(mapSelector, items => items.map);
 
-export const matrixSelector = createSelector(
-    mapSelector,
-    items => items.matrix
-);
+export const matrixSelector = createSelector(mapSelector, items => items.matrix);
 
-export const userActionSelector = createSelector(
-    mapSelector,
-    items => items.userAction
-);
+export const userActionSelector = createSelector(mapSelector, items => items.userAction);
 
-export const clickPositionSelector = createSelector(
-    mapSelector,
-    items => items.clickPosition
-);
+export const clickPositionSelector = createSelector(mapSelector, items => items.clickPosition);

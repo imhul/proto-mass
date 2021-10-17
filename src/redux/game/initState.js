@@ -1,10 +1,10 @@
-import { set } from "lodash";
+import { set } from 'lodash';
 
 export const initState = {
     loadingPercent: 0,
     isLoadSavedGame: false, // loaded or synthesized
     isStartInfoModalOpen: false,
-    preloaderTitle: "",
+    preloaderTitle: '',
     isStartOrLoadModalOpen: true,
     isGameMenuOpen: false,
     isMapLoadingStarted: false,
@@ -17,19 +17,19 @@ export const initState = {
     isGameover: false,
     isWin: false,
     settings: {
-        volume: 0.5,
+        volume: 0.5
     },
     startGameForm: set({
-        colonyName: "",
+        colonyName: ''
     }),
     save: {
         // id: "",
         // gameHours: 0,
         colony: {
             // id: "",
-            name: "Autopia",
+            name: 'Autopia'
             // level: 0,
-        },
+        }
         // settings: {
         //     volume: 0.5,
         //     zoom: 100,
@@ -40,5 +40,5 @@ export const initState = {
         // units: [],
         // taskList: [],
     },
-    error: {},
+    error: {}
 };

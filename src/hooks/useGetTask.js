@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 // Selectors
@@ -13,8 +13,7 @@ import { v5 as uuidv5 } from 'uuid';
 import _ from 'lodash';
 
 export const useGetTask = props => {
-
-    const [ count, setCount ] = useState(0);
+    const [count, setCount] = useState(0);
     const dispatch = useDispatch();
     const unitList = useSelector(unitsSelector);
     // const taskBoard = useSelector(tasksSelector);
@@ -24,40 +23,45 @@ export const useGetTask = props => {
     const taskId = uuidv5(`task#${getRandomInt(100, 1001)}`, idLength);
     const task = {
         id: taskId,
-        status: "await",
+        status: 'await',
         level: props && props.level ? props.level : 0,
-        type: props && props.type ? props.type : "collect",
-        workerId: props && props.workerId ? props.workerId : "",
+        type: props && props.type ? props.type : 'collect',
+        workerId: props && props.workerId ? props.workerId : '',
         priority: props && props.priority ? props.priority : 1,
-        profession: props && props.proffession ? props.proffession : "collector",
-        professionLevel: props && props.professionLevel ? props.professionLevel : "trainee",
+        profession: props && props.proffession ? props.proffession : 'collector',
+        professionLevel: props && props.professionLevel ? props.professionLevel : 'trainee',
         limit: props && props.limit ? props.limit : 1,
-        position: props && props.position ? props.position : {
-            x: getRandomInt(1, 31),
-            y: getRandomInt(1, 31)
-        },
+        position:
+            props && props.position
+                ? props.position
+                : {
+                      x: getRandomInt(1, 31),
+                      y: getRandomInt(1, 31)
+                  }
     };
 
     // effects
     const getTask = useCallback(() => {
         setCount(count + 1);
-        dispatch({ 
-            type: 'TASK_ADD', 
-            payload: task,
+        dispatch({
+            type: 'TASK_ADD',
+            payload: task
         });
-    }, [ setCount, count, dispatch, task ]);
+    }, [setCount, count, dispatch, task]);
 
     useEffect(() => {
         // TODO: const summ = props.limit + taskBoard.length; ???
-        if (props && 
-            props.limit && 
-            unitList.length && 
+        if (
+            props &&
+            props.limit &&
+            unitList.length &&
             isGameInit &&
             !isGameStarted &&
-            !_.isEmpty(task) && 
+            !_.isEmpty(task) &&
             count < props.limit
-        ) getTask()
-    }, [ props, isGameStarted, isGameInit, unitList, count, task, getTask ])
+        )
+            getTask();
+    }, [props, isGameStarted, isGameInit, unitList, count, task, getTask]);
 };
 
 useGetTask.propTypes = {

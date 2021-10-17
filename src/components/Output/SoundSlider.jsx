@@ -1,7 +1,6 @@
 import React, { useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
-
 // Selectors
 import { gameSettingsSelector } from '../../selectors/game';
 
@@ -14,17 +13,19 @@ import { playSFX } from '../../utils';
 // Sounds
 import MapClick from '../../assets/sound/map_click.ogg';
 
-const SoundSlider = ({showResult = true}) => {
-
+const SoundSlider = ({ showResult = true }) => {
     const dispatch = useDispatch();
     const gameSettings = useSelector(gameSettingsSelector);
 
-    const setVolume = useCallback(value => {
-        playSFX(MapClick, value);
-        if (gameSettings.volume !== value) {
-            dispatch({ type: 'SET_VOLUME', payload: value });
-        }
-    }, [dispatch, gameSettings.volume]);
+    const setVolume = useCallback(
+        value => {
+            playSFX(MapClick, value);
+            if (gameSettings.volume !== value) {
+                dispatch({ type: 'SET_VOLUME', payload: value });
+            }
+        },
+        [dispatch, gameSettings.volume]
+    );
 
     return (
         <div className="SoundSlider">
@@ -37,8 +38,8 @@ const SoundSlider = ({showResult = true}) => {
                     defaultValue={gameSettings.volume}
                 />
             </div>
-            { 
-                showResult && <div className="input">
+            {showResult && (
+                <div className="input">
                     <span>{gameSettings.volume}</span>
                     {/* <InputNumber
                         readonly
@@ -49,9 +50,9 @@ const SoundSlider = ({showResult = true}) => {
                         onChange={value => dispatch({ type: 'SET_VOLUME', payload: value })}
                     /> */}
                 </div>
-            }
+            )}
         </div>
     );
-}
+};
 
 export default SoundSlider;

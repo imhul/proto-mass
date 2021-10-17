@@ -10,17 +10,8 @@ export const isTimeMachineInitSelector = createSelector(
     items => items.isTimeMachineInit
 );
 
-export const gameHoursSelector = createSelector(
-    timeSelector,
-    items => items.gameHours
-);
+export const gameHoursSelector = createSelector(timeSelector, items => items.gameHours);
 
-export const gameDaysSelector = createSelector(
-    timeSelector,
-    items => items.gameDays
-);
+export const gameDaysSelector = createSelector(timeSelector, items => items.gameDays);
 
-export const gameYearsSelector = createSelector(
-    timeSelector,
-    items => items.gameYears
-);
+export const gameYearsSelector = createSelector(timeSelector, items => items.gameYears);

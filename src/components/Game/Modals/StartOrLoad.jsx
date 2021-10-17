@@ -1,6 +1,6 @@
 import React, { memo, useCallback } from 'react';
 import { useDispatch } from 'react-redux'; // useSelector
-import { useHistory } from "react-router-dom";
+import { useHistory } from 'react-router-dom';
 
 // Components
 import { Card, Button } from 'antd';
@@ -10,7 +10,6 @@ import Notify from '../../Output/Notify';
 // import _ from 'lodash';
 
 const StartOrLoadModal = memo(() => {
-
     const history = useHistory();
     const dispatch = useDispatch();
     // const { user } = useSelector(state => state.auth);
@@ -25,11 +24,11 @@ const StartOrLoadModal = memo(() => {
         // }
         // dispatch({ type: 'START_OR_LOAD_MODAL_CLOSE' })
         Notify({
-            type: "info",
-            message: "Coming soon!",
-            icon: "info",
+            type: 'info',
+            message: 'Coming soon!',
+            icon: 'info',
             duration: 4
-        })
+        });
     }, []); // dispatch, user.save, save
 
     const onStartNewGame = useCallback(() => {
@@ -40,34 +39,22 @@ const StartOrLoadModal = memo(() => {
     const onExitGame = useCallback(() => {
         dispatch({ type: 'START_OR_LOAD_MODAL_CLOSE' });
         dispatch({ type: 'EXIT_GAME' });
-        history.push('/')
+        history.push('/');
     }, [history, dispatch]);
 
     return (
         <Card className="game-modal">
             <p className="hello">Hello, voyager!</p>
 
-            <Button 
-                block={true}
-                className="game-btn"
-                onClick={() => onStartNewGame()}
-            >
+            <Button block={true} className="game-btn" onClick={() => onStartNewGame()}>
                 Start New Game
             </Button>
 
-            <Button
-                block={true}
-                className="game-btn"
-                onClick={() => onLoadSavedGame()}
-            >
+            <Button block={true} className="game-btn" onClick={() => onLoadSavedGame()}>
                 Load Saved Game
             </Button>
 
-            <Button
-                block={true}
-                className="game-btn"
-                onClick={() => onExitGame()}
-            >
+            <Button block={true} className="game-btn" onClick={() => onExitGame()}>
                 Exit Game
             </Button>
             {/* <Button
@@ -85,7 +72,7 @@ const StartOrLoadModal = memo(() => {
                 Donate
             </Button> */}
         </Card>
-    )
+    );
 });
 
 export default StartOrLoadModal;

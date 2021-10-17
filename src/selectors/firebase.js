@@ -5,12 +5,6 @@ export const firebaseSelector = createSelector(
     items => items
 );
 
-export const authFirebaseSelector = createSelector(
-    firebaseSelector,
-    items => items.auth
-);
+export const authFirebaseSelector = createSelector(firebaseSelector, items => items.auth);
 
-export const profileFirebaseSelector = createSelector(
-    firebaseSelector,
-    items => items.profile
-);
+export const profileFirebaseSelector = createSelector(firebaseSelector, items => items.profile);

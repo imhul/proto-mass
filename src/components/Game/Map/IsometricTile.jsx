@@ -1,6 +1,6 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
-import { AnimatedTexture, IsometricMapEvent } from ".";
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { AnimatedTexture, IsometricMapEvent } from '.';
 
 /**
  * A tile is a square on the map. It is composed of a floor and optionally
@@ -58,45 +58,45 @@ class IsometricTile extends Component {
 
     onFloorClick = e => {
         const { onMouseAction, onClick, onFloorClick, x, y } = this.props;
-        const event = new IsometricMapEvent(this, x, y, "click", "floor");
+        const event = new IsometricMapEvent(this, x, y, 'click', 'floor');
         e.stopPropagation();
-        if (typeof onMouseAction === "function") {
+        if (typeof onMouseAction === 'function') {
             onMouseAction(event);
         }
-        if (typeof onClick === "function") {
+        if (typeof onClick === 'function') {
             onClick(event);
         }
-        if (typeof onFloorClick === "function") {
+        if (typeof onFloorClick === 'function') {
             onFloorClick(event);
         }
     };
 
     onFloorMouseEnter = e => {
         const { onMouseAction, onEnter, onFloorEnter, x, y } = this.props;
-        const event = new IsometricMapEvent(this, x, y, "enter", "floor");
+        const event = new IsometricMapEvent(this, x, y, 'enter', 'floor');
         e.stopPropagation();
-        if (typeof onMouseAction === "function") {
+        if (typeof onMouseAction === 'function') {
             onMouseAction(event);
         }
-        if (typeof onEnter === "function") {
+        if (typeof onEnter === 'function') {
             onEnter(event);
         }
-        if (typeof onFloorEnter === "function") {
+        if (typeof onFloorEnter === 'function') {
             onFloorEnter(event);
         }
     };
 
     onFloorMouseLeave = e => {
         const { onMouseAction, onLeave, onFloorLeave, x, y } = this.props;
-        const event = new IsometricMapEvent(this, x, y, "leave", "floor");
+        const event = new IsometricMapEvent(this, x, y, 'leave', 'floor');
         e.stopPropagation();
-        if (typeof onMouseAction === "function") {
+        if (typeof onMouseAction === 'function') {
             onMouseAction(event);
         }
-        if (typeof onLeave === "function") {
+        if (typeof onLeave === 'function') {
             onLeave(event);
         }
-        if (typeof onFloorLeave === "function") {
+        if (typeof onFloorLeave === 'function') {
             onFloorLeave(event);
         }
     };
@@ -146,31 +146,21 @@ class IsometricTile extends Component {
     // }
 
     render() {
-        const {
-            x,
-            y,
-            z,
-            leftZ,
-            rightZ,
-            className,
-            frames,
-            delay,
-            style
-        } = this.props;
+        const { x, y, z, leftZ, rightZ, className, frames, delay, style } = this.props;
         const lz = leftZ === null ? z : leftZ;
         const rz = rightZ === null ? z : rightZ;
         const vars = {
             ...(style || {}),
-            "--x": x,
-            "--y": y,
-            "--z": z,
-            "--left-z": lz,
-            "--right-z": rz
+            '--x': x,
+            '--y': y,
+            '--z': z,
+            '--left-z': lz,
+            '--right-z': rz
         };
-        const classes = ["react-isometric-tile"];
+        const classes = ['react-isometric-tile'];
         if (className) classes.push(className);
         return (
-            <div className={classes.join(" ")} style={vars}>
+            <div className={classes.join(' ')} style={vars}>
                 <div
                     className="floor"
                     onClick={this.onFloorClick}

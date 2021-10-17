@@ -5,12 +5,6 @@ export const authSelector = createSelector(
     items => items
 );
 
-export const isAuthenticatedSelector = createSelector(
-    authSelector,
-    items => items.isAuthenticated
-);
+export const isAuthenticatedSelector = createSelector(authSelector, items => items.isAuthenticated);
 
-export const userSelector = createSelector(
-    authSelector,
-    items => items.user
-);
+export const userSelector = createSelector(authSelector, items => items.user);

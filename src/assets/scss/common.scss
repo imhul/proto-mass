@@ -2,7 +2,7 @@ body {
     background: url('../img/bg.gif') no-repeat 50% 50%;
     background-size: cover;
     overflow: hidden;
-    font-family: "CourierPrime-Regular";
+    font-family: 'CourierPrime-Regular';
     #root {
         overflow: hidden;
         .Output {
@@ -129,7 +129,7 @@ body {
         }
     }
     .game-menu-icon {
-        font-family: "PixelIconsCompilation";
+        font-family: 'PixelIconsCompilation';
         vertical-align: middle;
         font-size: 30px;
         line-height: 30px;
@@ -139,7 +139,7 @@ body {
     }
     .game-menu-text-icon {
         font-size: 30px;
-        font-family: "PressStart2P-Regular";
+        font-family: 'PressStart2P-Regular';
         vertical-align: middle;
         z-index: 999;
         color: $game-color;

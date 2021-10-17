@@ -2,10 +2,7 @@ import React, { memo, useState, useCallback, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 // Selectors
-import { 
-    isGameStartedSelector,
-    isGamePausedSelector,
-} from '../../../selectors/game';
+import { isGameStartedSelector, isGamePausedSelector } from '../../../selectors/game';
 import { unitsSelector } from '../../../selectors/units';
 
 // Components
@@ -13,7 +10,6 @@ import { Drawer } from 'antd';
 import Notify from '../../Output/Notify';
 
 const GameMenu = memo(() => {
-
     const dispatch = useDispatch();
     const isGameStarted = useSelector(isGameStartedSelector);
     const isGamePaused = useSelector(isGamePausedSelector);
@@ -25,7 +21,7 @@ const GameMenu = memo(() => {
         setVisible(false);
         dispatch({ type: 'TOGGLE_GAME_MENU_ESC' });
         dispatch({ type: 'TOGGLE_PAUSE_GAME' });
-    }
+    };
 
     const hideMenu = useCallback(() => {
         closeMenuTimer.current = setTimeout(() => setVisible(false), 6000);
@@ -40,28 +36,28 @@ const GameMenu = memo(() => {
 
     const onDirectControl = useCallback(() => {
         Notify({
-            type: "info",
-            message: "Direct Control Mode in development. Coming soon!",
-            icon: "info",
+            type: 'info',
+            message: 'Direct Control Mode in development. Coming soon!',
+            icon: 'info',
             duration: 4
-        })
+        });
     }, []);
 
     const onUserList = useCallback(() => {
         Notify({
-            type: "info",
-            message: "User List in development. Coming soon!",
-            icon: "info",
+            type: 'info',
+            message: 'User List in development. Coming soon!',
+            icon: 'info',
             duration: 4
-        })
+        });
     }, []);
 
     return (
         <>
-            <div 
-                className="game-menu-hover-box" 
-                onMouseOver={() => (isGameStarted && !isGamePaused) && showMenu()}
-                onMouseOut={() => (isGameStarted && !isGamePaused) && hideMenu()}
+            <div
+                className="game-menu-hover-box"
+                onMouseOver={() => isGameStarted && !isGamePaused && showMenu()}
+                onMouseOut={() => isGameStarted && !isGamePaused && hideMenu()}
             />
             <Drawer
                 placement="top"
@@ -75,17 +71,17 @@ const GameMenu = memo(() => {
                     <i>{unitList.length}</i>
                 </span>
                 <span>
-                    <i 
-                        className="game-menu-btn touchable"
-                        onClick={() => onDirectControl() }>&#x1F591;</i>
-                    
-                    <i 
-                        className="game-menu-btn touchable" 
-                        onClick={() => gameMenuTrigger() }>j</i>
+                    <i className="game-menu-btn touchable" onClick={() => onDirectControl()}>
+                        &#x1F591;
+                    </i>
+
+                    <i className="game-menu-btn touchable" onClick={() => gameMenuTrigger()}>
+                        j
+                    </i>
                 </span>
             </Drawer>
         </>
-    )
+    );
 });
 
 export default GameMenu;

@@ -3,12 +3,11 @@ import { initState } from './initState';
 
 export default function timeReducer(state = initState, action) {
     switch (action.type) {
-
         case types.TIME_MACHINE_INIT:
             return {
                 ...state,
-                isTimeMachineInit: true,
-            }
+                isTimeMachineInit: true
+            };
 
         case types.SET_HOURS: {
             const day = Math.floor(state.gameHours / 24);
@@ -20,11 +19,11 @@ export default function timeReducer(state = initState, action) {
                 ...state,
                 gameHours: state.gameHours + 1,
                 gameDays: days,
-                gameYears: years,
-            }
+                gameYears: years
+            };
         }
 
         default:
-            return state
+            return state;
     }
-};
+}

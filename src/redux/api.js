@@ -7,7 +7,7 @@ import { createFirestoreInstance } from 'redux-firestore';
 const rrfConfig = {
     userProfile: 'users',
     useFirestoreForProfile: true,
-    logErrors: false,
+    logErrors: false
 };
 
 const credentials = {
@@ -21,7 +21,7 @@ const firebaseConfig = {
     databaseURL: process.env.REACT_APP_DATABASE_URL,
     projectId: process.env.REACT_APP_PROJECT_ID,
     storageBucket: process.env.REACT_APP_STORAGE_BUCKET,
-    messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID,
+    messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID
 };
 
 firebase.initializeApp(firebaseConfig);
@@ -30,9 +30,10 @@ export const firestore = firebase.firestore();
 
 firebase.auth().onAuthStateChanged(async user => {
     if (!user) {
-        await firebase.auth()
+        await firebase
+            .auth()
             .signInWithEmailAndPassword(credentials.email, credentials.pass)
-            .then(data => console.info('data: ', data)) // signInAnonymously();
+            .then(data => console.info('data: ', data)); // signInAnonymously();
     }
 });
 

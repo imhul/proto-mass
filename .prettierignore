@@ -1,0 +1,7 @@
+.cache/**
+.vscode/**
+static/**
+dist/**
+development
+coverage
+node_modules/**
