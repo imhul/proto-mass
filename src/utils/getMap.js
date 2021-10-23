@@ -1,3 +1,34 @@
+// const side = 30;
+// const rowArr = new Array(side);
+
+// const sizeMultiplier = {
+//     min: 0.1,
+//     mid: 0.2,
+//     max: 0.3
+// };
+
+// const resourceMultipliers = {
+//     name: 'titanum'
+// }
+
+// const params = {
+//     resourceMultipliers,
+//     sizeMultiplier: sizeMultiplier.mid,
+// }
+
+// const getMap = () => {
+//     const map = rowArr;
+// }
+
+// const getRow = async () => {
+//     const row = rowArr.map((row) => {
+//         return {
+
+//         }
+//     });
+//     getMap();
+// }
+
 export const getMap = [
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
