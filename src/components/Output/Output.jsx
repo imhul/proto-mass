@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { ConnectedRouter } from 'connected-react-router';
 import { Route, Switch } from 'react-router';
@@ -16,14 +16,35 @@ import HomePage from '../HomePage';
 import AuthContainer from '../AuthContainer';
 import NoFound from '../NoFound';
 import Login from '../Login';
-import Display from '../Game';
+// import Display from '../Game';
+
+import Phaser from 'phaser';
+import { IonPhaser } from '@ion-phaser/react'
+import scene from './Scene';
 
 const { Content } = Layout;
+
+const game = {
+    width: 800,
+    height: 600,
+    type: Phaser.AUTO,
+    // pixelArt: true,
+    scene: scene
+  }
 
 const Output = ({ history }) => {
     const dispatch = useDispatch();
     const isGameInit = useSelector(isGameInitSelector);
     const isAppInit = useSelector(isAppInitSelector);
+
+    const gameRef = useRef(null)
+    const [initialize, setInitialize] = useState(false)
+    const destroy = () => {
+        if (gameRef.current) {
+        gameRef.current.destroy()
+        }
+        setInitialize(false)
+    }
 
     useEffect(() => {
         if (!isAppInit) dispatch({ type: 'APP_INIT' });
@@ -46,7 +67,10 @@ const Output = ({ history }) => {
                             <NoFound />
                         </Route>
                         <AuthContainer path="/game">
-                            <Display />
+                            {/* <Display /> */}
+                            <IonPhaser ref={gameRef} game={game} initialize={initialize} />
+                            <button onClick={() => setInitialize(true)}>Init</button>
+                            <button onClick={destroy}>Destroy</button>
                         </AuthContainer>
                         <Redirect from="*" to="/error" />
                     </Switch>
