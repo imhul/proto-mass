@@ -28,8 +28,8 @@ const game = {
     width: 800,
     height: 600,
     type: Phaser.AUTO,
-    // pixelArt: true,
-    scene: scene
+    pixelArt: true,
+    scene: scene,
   }
 
 const Output = ({ history }) => {

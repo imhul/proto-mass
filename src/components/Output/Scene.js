@@ -2,7 +2,7 @@ import React from 'react';
 import IsoPlugin, { IsoPhysics } from 'phaser3-plugin-isometric';
 
 const scene = {
-    preload() {
+    preload: function() {
         console.info('preload');
         this.cameras.main.setBackgroundColor('#24252A');
         this.load.image('cube', '../../assets/sprites/isometric_pixel_1.png');
@@ -19,7 +19,7 @@ const scene = {
         });
     },
 
-    create() {
+    create: function() {
         this.isoGroup = this.add.group();
 
         // Apply some gravity on our cubes
@@ -31,7 +31,7 @@ const scene = {
         this.spawnCubes();
     },
 
-    update() {
+    update: function() {
         // Collide cubes against each other
         this.isoPhysics.world.collide(this.isoGroup);
 
@@ -41,7 +41,7 @@ const scene = {
         }
     },
 
-    spawnCubes() {
+    spawnCubes: function() {
         let cube;
         for (let xx = 256; xx > 0; xx -= 64) {
             for (let yy = 256; yy > 0; yy -= 64) {
